@@ -1,0 +1,60 @@
+{
+  "local_models": "D:\\prj2026\\20060818must5\\training_runs\\unet_curriculum_v2",
+  "output_dir": "D:\\prj2026\\20060818must5\\training_runs\\global_policy_v4",
+  "init_checkpoint": "D:\\prj2026\\20060818must5\\training_runs\\global_v3\\global.pt",
+  "games": 80,
+  "sizes": "6,10,16",
+  "max_moves": 64,
+  "max_positions": 4000,
+  "tactical_positions": 0,
+  "teacher_depth": 5,
+  "teacher_seconds": 0.06,
+  "teacher_nodes": 512,
+  "teacher_width": 8,
+  "teacher_engine": "python",
+  "teacher_forcing_seconds": 0.0,
+  "teacher_forcing_nodes": 10000,
+  "teacher_forcing_depth": 24,
+  "value_supervision": "proven_or_terminal",
+  "epochs": 15,
+  "batch_size": 32,
+  "threads": 4,
+  "learning_rate": 0.0001,
+  "auxiliary_dropout": 0.3,
+  "value_weight": 0.0,
+  "input_mode": "relative_rgb",
+  "seed": 20260908,
+  "reuse_data": false,
+  "data_source": "D:\\prj2026\\20060818must5\\training_runs\\global_v3",
+  "policy_constraints": [
+    "D:\\prj2026\\20060818must5\\exports\\browser\\policy_improvement\\verified_constraints\\prefix19.jsonl",
+    "D:\\prj2026\\20060818must5\\exports\\browser\\policy_improvement\\stars_source_mining\\constraints.jsonl",
+    "D:\\prj2026\\20060818must5\\exports\\browser\\policy_improvement\\formal_game6_mining\\constraints.jsonl"
+  ],
+  "constraint_repeats": 16,
+  "tactical_regression_limit": 0.02,
+  "searched_policy_weight": 0.1,
+  "extra_positions": [],
+  "initialization": {
+    "path": "D:\\prj2026\\20060818must5\\training_runs\\global_v3\\global.pt",
+    "sha256": "01fd05fbf734d46dfadc90ae1bbcf78931c3a28f76057fbd430bba4140fb7418",
+    "format": "gomoku_global_v1",
+    "role": "global",
+    "input_mode": "relative_rgb",
+    "architecture": {
+      "base_channels": 16,
+      "token_dim": 32,
+      "attention_heads": 4
+    },
+    "local_model_role_sha256": {
+      "opponent.pt": "127fcde6a6d7f70a21a1ce08c4a058f67e1ded3e509cc6be2f392e3da1a00c53",
+      "play.pt": "36018e0eb6abbe605636cfca3f0d3a0a48ad38b24d6c3dfea5a0f785c724f56a"
+    },
+    "source_best_epoch": 96,
+    "mode": "weights_only",
+    "optimizer_restored": false,
+    "scheduler_restored": false,
+    "interpretation": "Initialize model weights only; optimizer, learning-rate schedule, epoch numbering and checkpoint selection start fresh."
+  },
+  "checkpoint_selection": "heldout_constraint_quality_then_legacy_policy_with_tactical_guard"
+}

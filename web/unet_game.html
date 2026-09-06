@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>局部与大局 · 人机对弈</title>
+<style>
+:root{font-family:"Microsoft YaHei","Segoe UI",sans-serif;color:#24372a;background:#efeee7;color-scheme:light}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:disabled,select:disabled{opacity:.5;cursor:wait}
+header{background:#233f30;color:#f9fbf5;padding:25px max(24px,calc((100vw - 1240px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px}
+.kicker{font-size:10px;font-weight:700;letter-spacing:3px;color:#bccfba}h1{margin:7px 0 3px;font-size:25px;letter-spacing:.5px}header p{margin:0;font-size:12px;color:#c6d5c1}
+.badge{font-size:12px;border:1px solid #7d9479;border-radius:30px;padding:9px 15px;white-space:nowrap}
+main{max-width:1240px;margin:25px auto;padding:0 22px 32px;display:grid;grid-template-columns:minmax(0,1fr) 295px;gap:22px}
+.panel{background:#fff;border:1px solid #dedfd4;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #2b38240a}
+.board-head{padding:19px 22px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.board-head h2{font-size:19px;margin:0 0 6px}.subtle{font-size:12px;line-height:1.65;color:#78816f}
+.turn-dot{display:inline-block;width:10px;height:10px;margin-right:7px;border-radius:50%;background:#263c2a;vertical-align:middle;border:1px solid #89987e}
+.scroller{overflow:auto;max-height:75vh;background:#ead6ac;border-top:1px solid #e8e1d1;border-bottom:1px solid #e8e1d1;overscroll-behavior:contain}
+canvas{display:block;margin-inline:auto;touch-action:manipulation;cursor:crosshair}
+.strategy-note{padding:0 22px 15px;font-size:13px;line-height:1.8;color:#456144}.strategy-note strong{color:#254a32}.panel:first-of-type{align-self:start}
+.board-footer{padding:13px 20px 18px}.hover{font-size:12px;min-height:38px;line-height:1.8;color:#526249;word-break:break-word}
+.swatches{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#738066;margin-top:8px}.swatch{width:10px;height:10px;display:inline-block;border-radius:50%;margin-right:4px;vertical-align:middle}
+aside{display:flex;flex-direction:column;gap:15px}.card{padding:18px 19px}.card h3{margin:0 0 15px;font-size:15px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:6px;font-size:11px;color:#65705e}
+.field input,.field select{width:100%;border:1px solid #d5dacd;border-radius:7px;padding:9px;background:#fcfdf9;color:#273e2c;font-size:13px}
+.full{grid-column:1/-1}.buttons{display:grid;gap:9px;margin-top:14px}.primary,.secondary{border-radius:8px;padding:10px 12px;font-size:12px;font-weight:600}.primary{border:1px solid #385e40;background:#385e40;color:#fff}.secondary{border:1px solid #cdd6c5;color:#47653d;background:#f6f9f2}
+.radios{display:flex;flex-direction:column;gap:10px;font-size:12px}.radios label{display:flex;align-items:center;gap:7px;cursor:pointer}input[type=radio],input[type=checkbox]{accent-color:#407049}
+.levelbar{height:10px;background:linear-gradient(90deg,#fff4dc,#14b450);margin:15px 0 5px;display:grid;grid-template-columns:repeat(25,1fr);border:1px solid #d4dcca}.levelbar i{border-right:1px solid #ffffff88}.scale-caption{display:flex;justify-content:space-between;font-size:10px;color:#7f8a74}
+.info{font-size:12px;line-height:1.8;color:#617057;white-space:pre-line;overflow-wrap:anywhere}.move-list{font-size:12px;line-height:1.9;color:#637459;max-height:170px;overflow:auto}
+.error{background:#fff0e7;color:#8c4623;border:1px solid #ecc8b1;border-radius:9px;padding:12px 15px;grid-column:1/-1;font-size:13px;line-height:1.6}.draft-note{background:#fff6d8;color:#856b30;padding:11px 21px;font-size:12px;line-height:1.7}
+.busy-indicator{display:none;width:14px;height:14px;border:2px solid #b9c9b1;border-top-color:#38643c;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px}.busy .busy-indicator{display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}[hidden]{display:none!important}
+@media(max-width:950px){main{grid-template-columns:minmax(0,1fr)}aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.source-card{grid-column:1/-1}.scroller{max-height:70vh}}
+@media(max-width:580px){header{padding:19px 17px;align-items:flex-start}.badge{display:none}h1{font-size:22px}main{margin:14px auto;padding:0 10px 20px;gap:14px}aside{display:flex}.card{padding:16px}.board-head{padding:16px}.strategy-note{padding:0 22px 15px;font-size:13px;line-height:1.8;color:#456144}.strategy-note strong{color:#254a32}.panel:first-of-type{align-self:start}
+.board-footer{padding:12px 15px}}
+</style>
+</head>
+<body>
+<header><div><div class="kicker">LOCAL PLAY / DUAL U-NET</div><h1>落子之间</h1><p id="modelHeadline">训练模型 + 全盘战术检查与有限搜索</p></div><div class="badge" id="headerBadge">本地人机对弈</div></header>
+<main id="main">
+<div class="error" id="error" role="alert" hidden></div>
+<section class="panel">
+<div class="board-head"><div><h2><span class="turn-dot" id="turnDot"></span><span id="turnTitle">正在读取棋局…</span></h2><div class="subtle" id="boardDetail">默认 AI 黑棋先手，人执白棋</div></div><span class="subtle"><span class="busy-indicator"></span><span id="activity">本地模型</span></span></div>
+<div class="draft-note" id="draftNote" hidden>正在编辑下一局：点击格子切换灰色禁下标记。当前棋局仍保存在服务器，按“开始新局”后设置才生效。</div>
+<div class="strategy-note"><strong>AI 棋意</strong> · <span id="moveSummary">等待棋局</span><div class="subtle" id="valueSummary"></div></div>
+<div class="scroller" id="scroller"><canvas id="board" role="img" aria-label="棋盘；点击空格落子"></canvas></div>
+<div class="board-footer"><div class="hover" id="hover">将鼠标移到格子上查看坐标和原始概率。大棋盘可横向、纵向滚动。</div><div class="swatches"><span><i class="swatch" style="background:#181b21"></i>黑棋</span><span><i class="swatch" style="background:white;border:1px solid #88937c"></i>白棋</span><span><i class="swatch" style="background:#808080;border-radius:2px"></i>禁下</span><span><i class="swatch" style="background:#b2853e"></i>上一手</span></div></div>
+</section>
+<aside>
+<section class="panel card"><h3>新的一局</h3><div class="fields">
+<label class="field">行数<input id="rows" type="number" min="6" max="64" value="16"></label>
+<label class="field">列数<input id="cols" type="number" min="6" max="64" value="16"></label>
+<label class="field full">执子与先后手<select id="first"><option value="ai">AI 黑棋先手 · 我执白</option><option value="human">我执黑先手 · AI 执白</option></select></label>
+</div><div class="buttons"><button class="secondary" id="edit">编辑下一局禁下格</button><button class="secondary" id="clear" hidden>清空禁下标记</button><button class="primary" id="new">开始新局</button></div><p class="subtle" id="sizeHelp">支持大于 5×5 的矩形棋盘。AI 先手时落在棋盘中心。</p></section>
+<section class="panel card"><h3>看见模型的判断</h3><div class="radios">
+<label><input type="radio" name="heat" value="none" checked> 只看棋子</label>
+<label><input type="radio" name="heat" value="red"> <span style="color:#bd3940">红图：AI 当前假设落点</span></label>
+<label><input type="radio" name="heat" value="green"> <span style="color:#2c8751">绿图：当前我方综合建议</span></label>
+<label><input type="radio" name="heat" value="global" id="globalHeat" disabled> <span style="color:#6263b8">紫图：纯大局策略</span></label>
+<label><input type="radio" name="heat" value="raw"> <span style="color:#2c8751">绿图：仅局部原始策略</span></label>
+<label style="margin-top:3px"><input type="checkbox" id="relative" checked> 按本图最大值显示深浅</label>
+</div><div class="levelbar" id="levelbar" aria-label="25级色带"></div><div class="scale-caption"><span>1 级 · 浅</span><span>25 级 · 深</span></div>
+<p class="subtle" id="heatNote">25 级只改变颜色，悬停显示原始概率。所有建议图属于当前人的回合。加载大局模型时，综合图优先标出立即成五或唯一必防点，其余采用 70% 大局策略与 30% 局部原始策略；AI 的实际行动再由战术检查和有限搜索选择。</p></section>
+<section class="panel card"><h3>全盘局势估计</h3><div class="info" id="globalValue">未启用大局模型</div><p class="subtle">估计值范围 −1 到 +1，正值偏向当前行动方，负值偏向对方。这是网络的局势判断，不是胜率或必胜证明。</p></section>
+<section class="panel card"><h3>当前组合威胁</h3><div class="info" id="threatsText">等待分析</div><p class="subtle">双三、双四用于识别与防守，黑白规则相同。共享杀点可能一手封堵；这些棋形不是禁手，也不等于已证明必胜。</p></section>
+<section class="panel card"><h3>这一手</h3><div class="info" id="analysisText">等待分析</div><div class="move-list" id="history"></div></section>
+<section class="panel card source-card"><h3>模型与局面</h3><div class="info" id="source">正在连接…</div><p class="subtle">红图是假设 AI 现在就在当前棋盘落子，并非我方未来一步之后的应手。5×5 窗口以双方棋子为中心重叠覆盖，缺口补窗；每次实际落子后重新计算当前局面。</p></section>
+</aside>
+</main>
+<script>
+'use strict';
+const byId = function(id){return document.getElementById(id);};
+const canvas=byId('board'), context=canvas.getContext('2d');
+let state=null, busy=false, drafting=false, draft=null;
+let logicalWidth=608, logicalHeight=608;
+const cell=34, padding=32;
+const colors={empty:[255,244,220],red:[230,35,45],green:[20,180,80],global:[92,99,220],raw:[20,180,80]};
+for(let i=0;i<25;i++){byId('levelbar').appendChild(document.createElement('i'));}
+function columnLabel(column){let value=column+1,result='';while(value){value--;result=String.fromCharCode(65+value%26)+result;value=Math.floor(value/26);}return result;}
+function coordinate(row,col){return columnLabel(col)+(row+1)+' ('+row+','+col+')';}
+function percent(value){return (100*Number(value||0)).toLocaleString('zh-CN',{maximumSignificantDigits:4})+'%';}
+function message(value){byId('error').textContent=value||'';byId('error').hidden=!value;}
+function setBusy(value,text){busy=value;byId('main').classList.toggle('busy',value);byId('activity').textContent=value?(text||'正在计算…'):'本地模型';['rows','cols','first','edit','clear','new'].forEach(function(id){byId(id).disabled=value;});}
+function currentHeat(){return document.querySelector('input[name="heat"]:checked').value;}
+function displayBoard(){return drafting&&draft?draft:state?state.board:null;}
+function probabilities(kind){
+ if(!state||!state.analysis||drafting||kind==='none')return null;
+ const a=state.analysis;
+ if(kind==='red')return a.opponent_policy;
+ if(kind==='global')return a.global_policy||null;
+ if(kind==='raw')return a.raw_play_policy;
+ return a.play_policy;
+}
+function maximum(values,board){let highest=0;if(values)board.forEach(function(row,r){row.forEach(function(value,c){if(value===0)highest=Math.max(highest,values[r][c]);});});return highest;}
+function level(value,max){if(value<=0)return 0;let scaled=byId('relative').checked?(max>0?value/max:0):value;return Math.max(1,Math.min(25,Math.ceil(scaled*25-1e-6)));}
+function rgb(kind,shade){const alpha=shade/25;return 'rgb('+colors.empty.map(function(v,i){return Math.round(v*(1-alpha)+colors[kind][i]*alpha);}).join(',')+')';}
+function draw(){
+ const board=displayBoard();if(!board)return;
+ const rows=board.length,cols=board[0].length,dpr=Math.min(window.devicePixelRatio||1,2);
+ logicalWidth=cols*cell+padding*2;logicalHeight=rows*cell+padding*2;
+ canvas.width=Math.round(logicalWidth*dpr);canvas.height=Math.round(logicalHeight*dpr);
+ canvas.style.width=logicalWidth+'px';canvas.style.height=logicalHeight+'px';
+ context.setTransform(dpr,0,0,dpr,0,0);context.fillStyle='#ead6ac';context.fillRect(0,0,logicalWidth,logicalHeight);
+ const kind=currentHeat(),values=probabilities(kind),max=maximum(values,board);
+ context.font='10px "Microsoft YaHei",sans-serif';context.textAlign='center';context.textBaseline='middle';context.fillStyle='#807052';
+ for(let c=0;c<cols;c++)context.fillText(columnLabel(c),padding+c*cell+cell/2,padding/2);
+ for(let r=0;r<rows;r++)context.fillText(String(r+1),padding/2,padding+r*cell+cell/2);
+ board.forEach(function(row,r){row.forEach(function(value,c){
+  const left=padding+c*cell,top=padding+r*cell,cx=left+cell/2,cy=top+cell/2;
+  context.fillStyle=value===3?'#808080':values&&value===0?rgb(kind,level(values[r][c],max)):'#f1dfb9';
+  context.fillRect(left,top,cell,cell);context.strokeStyle='#b8a681';context.lineWidth=.65;context.strokeRect(left+.2,top+.2,cell,cell);
+  if(value===3){context.beginPath();context.moveTo(cx-6,cy-6);context.lineTo(cx+6,cy+6);context.moveTo(cx+6,cy-6);context.lineTo(cx-6,cy+6);context.strokeStyle='#fff';context.lineWidth=1.7;context.stroke();}
+  else if(value===1||value===2){
+   const gradient=context.createRadialGradient(cx-4,cy-5,1,cx,cy,13);
+   gradient.addColorStop(0,value===1?'#535752':'#ffffff');gradient.addColorStop(1,value===1?'#141916':'#e2e4dc');
+   context.beginPath();context.arc(cx,cy,12.8,0,Math.PI*2);context.fillStyle=gradient;context.fill();context.strokeStyle=value===1?'#121b16':'#818b7b';context.lineWidth=.9;context.stroke();
+  }
+  if(!drafting&&state.last_move&&state.last_move.row===r&&state.last_move.col===c){
+   context.beginPath();context.arc(cx,cy,3.3,0,Math.PI*2);context.fillStyle='#be903f';context.fill();
+  }
+ });});
+ Array.from(byId('levelbar').children).forEach(function(band,index){band.style.background=rgb(kind==='none'?'green':kind,index+1);});
+}
+function threatLines(threats){
+ const lines=[];
+ [['self','我方'],['opponent','AI']].forEach(function(item){
+  const t=threats&&threats[item[0]];if(!t)return;
+  const tags=[];if(t.double_three)tags.push('双三');if(t.double_four)tags.push('双四');if(t.double_kill)tags.push('多个立即成五点');
+  lines.push(item[1]+'：'+t.four_count+' 个四形 · '+t.three_count+' 个三形'+(tags.length?'（'+tags.join('、')+'）':''));
+  const points=function(items){return items.map(function(p){return coordinate(p[0],p[1]);}).join('、');};
+  if(t.four_defense_cells&&t.four_defense_cells.length)lines.push('  封堵'+item[1]+'四形：'+points(t.four_defense_cells));
+  if(t.shared_completion_cells&&t.shared_completion_cells.length)lines.push('  共享杀点：'+points(t.shared_completion_cells));
+  if(t.three_defense_cells&&t.three_defense_cells.length)lines.push('  封堵'+item[1]+'当前三形升级：'+points(t.three_defense_cells));
+ });
+ return lines.length?lines.join('\n'):'当前未提供组合威胁分析';
+}
+function refreshText(){
+ if(!state)return;
+ const humanName=state.human_side===1?'黑':'白';
+ const title=drafting?'设置下一局':state.finished?(state.winner===0?'本局和棋':state.winner===state.human_side?'你赢了这一局':'AI 赢了这一局'):'轮到你 · '+humanName+'棋';
+ byId('turnTitle').textContent=title;byId('turnDot').style.background=state.human_side===1?'#233729':'#fff';
+ byId('boardDetail').textContent=(drafting?draft.length+' × '+draft[0].length:state.rows+' × '+state.cols)+'  ·  '+(drafting?'禁下只在开始新局后生效':'已下 '+state.move_count+' 手 · 你执'+humanName+'，AI 执'+(state.ai_side===1?'黑':'白'));
+ const models=state.models||{},globalModel=models.global||{loaded:false},hasGlobal=!!globalModel.loaded;
+ byId('headerBadge').textContent=state.rows+' × '+state.cols+' · '+(hasGlobal?'局部 + 大局':'局部策略');
+ byId('modelHeadline').textContent=(hasGlobal?'局部 U-Net + 独立大局模型':'局部 U-Net')+' · 全盘战术检查与有限搜索';
+ byId('globalHeat').disabled=!hasGlobal;
+ if(!hasGlobal&&currentHeat()==='global')document.querySelector('input[name="heat"][value="none"]').checked=true;
+ const statuses=[['opponent','局部对手模型'],['play','局部落子模型'],['global','独立大局模型']].map(function(pair){
+  const m=models[pair[0]]||(pair[0]==='global'?{loaded:false}:{loaded:true,trained:state.trained,source:state.model_source});
+  return pair[1]+'：'+(!m.loaded?'未加载':m.trained?'已训练':'尚未标记训练完成')+(m.loaded&&m.source?'\n'+m.source:'');
+ });
+ const engineNames={python:'Python 搜索',native:'原生搜索 + 独立 VCF',guarded:'原生搜索 + 对手连续冲四复核（共用总预算）'};
+ statuses.push('搜索引擎：'+(engineNames[state.engine]||state.engine||'未报告'));
+ if(state.engine==='guarded'&&state.search_configuration){
+  const config=state.search_configuration;
+  statuses.push('共用搜索总预算：'+config.search_seconds+' 秒 / '+config.search_nodes+' 节点');
+  statuses.push('布局危险检查：最多 '+config.guard_threat_seconds+' 秒 / '+config.guard_threat_nodes+' 节点 / '+config.guard_threat_width+' 个候选（计入总预算）');
+ }
+ byId('source').textContent=statuses.join('\n')+'\n'+(state.analysis?'当前局面 '+state.analysis.window_count+' 个局部重叠窗口':'');
+ const value=state.analysis&&state.analysis.value;
+ byId('globalValue').textContent=drafting?'开始新局后评估局势。':!hasGlobal?'未启用独立大局模型；当前使用局部策略。':state.finished?'棋局已结束，不再运行局势估计。':Number.isFinite(value)?'当前行动方：你（'+humanName+'棋）\n网络估计 '+(value>=0?'+':'')+value.toFixed(3):'当前没有可用的大局估计';
+ byId('sizeHelp').textContent='行列均支持 6–'+state.max_size+'。16×16 默认 AI 先手落在 (8,8)。禁下不按黑白区别。';
+ if(hasGlobal&&globalModel.value_used_in_search===false&&!drafting&&!state.finished)byId('globalValue').textContent+='\n仅展示估计；当前原生引擎不使用价值叶评估。';
+ const analysis=state.analysis, lines=[];
+ if(analysis&&analysis.move&&!state.finished)lines.push('当前我方建议：'+coordinate(analysis.move[0],analysis.move[1]));
+ if(analysis&&analysis.reason)lines.push('建议依据：'+analysis.reason);
+ if(state.last_ai_reason)lines.push('AI 上一手：'+state.last_ai_reason);
+ if(state.last_ai_search&&state.last_ai_search.nodes!==undefined)lines.push('AI 搜索：完成 '+state.last_ai_search.completed_depth+' 层 · '+state.last_ai_search.nodes+' 节点'+(state.last_ai_search.value_evaluations!==undefined?' · '+state.last_ai_search.value_evaluations+' 次大局价值评估':''));
+ byId('threatsText').textContent=state.finished?'棋局已结束。':drafting?'开始新局后分析禁下设置。':threatLines(analysis&&analysis.threats);
+ byId('analysisText').textContent=drafting?'正在设置下一局；开始新局后再显示落子建议。':state.finished?'棋局已结束。'+(state.last_ai_reason?'\nAI 上一手：'+state.last_ai_reason:'')+'\n可以修改设置后开始新局。':lines.join('\n');
+ byId('moveSummary').textContent=drafting?'开始新局后显示。':state.last_ai_reason||'等待 AI 落子';
+ byId('valueSummary').textContent=!drafting&&hasGlobal&&!state.finished&&Number.isFinite(value)?'大局估计（你执'+humanName+'）：'+(value>=0?'+':'')+value.toFixed(3)+' · 正值偏向你，负值偏向 AI':hasGlobal?'局部与大局模型已接入全盘搜索':'局部模型已接入全盘搜索';
+ byId('history').textContent=state.history.slice(-8).map(function(move,index){return (state.history.length-Math.min(8,state.history.length)+index+1)+'. '+(move.by==='ai'?'AI':'你')+' '+(move.side===1?'黑':'白')+' '+coordinate(move.row,move.col);}).join('\n');
+ byId('history').style.whiteSpace='pre-line';
+ byId('draftNote').hidden=!drafting;byId('clear').hidden=!drafting;byId('edit').textContent=drafting?'返回当前棋局':'编辑下一局禁下格';
+}
+function receive(value,resetControls){
+ state=value;
+ if(resetControls){byId('rows').value=state.rows;byId('cols').value=state.cols;byId('first').value=state.human_side===1?'human':'ai';drafting=false;draft=null;}
+ byId('rows').max=state.max_size;byId('cols').max=state.max_size;
+ refreshText();draw();
+}
+async function api(path,payload){
+ const options=payload===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)};
+ const response=await fetch(path,options);let value;
+ try{value=await response.json();}catch(error){throw new Error('服务返回了无法读取的响应');}
+ if(!response.ok){const error=new Error(value.error||'请求失败');error.status=response.status;throw error;}
+ return value;
+}
+async function sync(reset){receive(await api('/api/state'),reset);}
+function beginDraft(){
+ if(!state)return false;
+ const rows=Number(byId('rows').value),cols=Number(byId('cols').value);
+ if(!Number.isInteger(rows)||!Number.isInteger(cols)||rows<6||cols<6||rows>state.max_size||cols>state.max_size){message('行列数必须是6到'+state.max_size+'的整数');return false;}
+ const source=drafting&&draft?draft:state.board;
+ draft=Array.from({length:rows},function(_,r){return Array.from({length:cols},function(_,c){return source[r]&&source[r][c]===3?3:0;});});
+ drafting=true;message('');refreshText();draw();return true;
+}
+function point(event){
+ const box=canvas.getBoundingClientRect(),x=(event.clientX-box.left)*logicalWidth/box.width,y=(event.clientY-box.top)*logicalHeight/box.height;
+ const row=Math.floor((y-padding)/cell),col=Math.floor((x-padding)/cell),board=displayBoard();
+ return board&&row>=0&&row<board.length&&col>=0&&col<board[0].length?[row,col]:null;
+}
+canvas.addEventListener('pointermove',function(event){
+ const p=point(event);if(!p)return;const r=p[0],c=p[1],value=displayBoard()[r][c],names=['空位','黑棋','白棋','禁下'];
+ let text=coordinate(r,c)+' · '+names[value];
+ if(drafting)text+=' · 点击切换下一局禁下标记';
+ else if(value===0&&state.analysis){
+  text+=' · 红 '+percent(state.analysis.opponent_policy[r][c])+' · 综合绿 '+percent(state.analysis.play_policy[r][c])+' · 局部原始 '+percent(state.analysis.raw_play_policy[r][c]);
+  if(state.analysis.global_policy)text+=' · 纯大局 '+percent(state.analysis.global_policy[r][c])+' · 融合原始 '+percent(state.analysis.combined_policy[r][c]);
+  const kind=currentHeat(),v=probabilities(kind);if(v)text+=' · '+level(v[r][c],maximum(v,state.board))+'/25级（'+(byId('relative').checked?'相对本图最大值':'绝对概率')+'）';
+ }
+ byId('hover').textContent=text;
+});
+canvas.addEventListener('click',async function(event){
+ if(busy||!state)return;const p=point(event);if(!p)return;const r=p[0],c=p[1];
+ if(drafting){
+  if(byId('first').value==='ai'&&r===Math.floor(draft.length/2)&&c===Math.floor(draft[0].length/2)){message('AI 黑棋先手需要中心可落；可改为人先手后再设置中心禁下。');return;}
+  draft[r][c]=draft[r][c]===3?0:3;message('');draw();return;
+ }
+ if(state.finished){message('棋局已结束，请开始新局。');return;}
+ if(state.board[r][c]!==0){message(state.board[r][c]===3?'该格为禁下，不能落子。':'该格已有棋子。');return;}
+ message('');setBusy(true,'AI 正在计算…');
+ try{receive(await api('/api/move',{row:r,col:c,revision:state.revision}),false);}
+ catch(error){message(error.message);try{await sync(false);}catch(ignored){}}
+ finally{setBusy(false);}
+});
+byId('edit').addEventListener('click',function(){if(drafting){drafting=false;draft=null;message('');refreshText();draw();}else beginDraft();});
+byId('clear').addEventListener('click',function(){if(draft){draft.forEach(function(row){row.fill(0);});message('');draw();}});
+['rows','cols','first'].forEach(function(id){byId(id).addEventListener('change',beginDraft);});
+byId('new').addEventListener('click',async function(){
+ if(busy||!state)return;if(!beginDraft())return;
+ const forbidden=[];draft.forEach(function(row,r){row.forEach(function(value,c){if(value===3)forbidden.push([r,c]);});});
+ setBusy(true,'准备新局…');message('');
+ try{receive(await api('/api/new',{rows:draft.length,cols:draft[0].length,human_first:byId('first').value==='human',forbidden:forbidden,revision:state.revision}),true);}
+ catch(error){message(error.message);if(error.status===409){try{await sync(false);}catch(ignored){}}}
+ finally{setBusy(false);}
+});
+document.querySelectorAll('input[name="heat"]').forEach(function(input){input.addEventListener('change',draw);});
+byId('relative').addEventListener('change',draw);
+window.addEventListener('resize',draw);
+setBusy(true,'读取棋局…');sync(true).catch(function(error){message('连接本地服务失败：'+error.message);}).finally(function(){setBusy(false);});
+</script>
+</body>
+</html>

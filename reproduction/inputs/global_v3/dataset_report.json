@@ -1,0 +1,2916 @@
+{
+  "records": 9228,
+  "unique_board_actor_keys": 9228,
+  "unique_physical_boards": 9228,
+  "constructed_cases": 2052,
+  "constructed_records": 3584,
+  "real_game_records": 5644,
+  "record_groups": {
+    "real_games": 5644,
+    "constructed": 3584
+  },
+  "games_started": 160,
+  "games_terminal": 142,
+  "games_truncated": 18,
+  "sizes": {
+    "16x16": 9228
+  },
+  "sides": {
+    "2": 4585,
+    "1": 4643
+  },
+  "policy_sources": {
+    "searched_move": 4471,
+    "forced_block": 1058,
+    "immediate_win_set": 694,
+    "all_legal_proved_loss": 1792,
+    "vcf_proof_move": 445,
+    "strategic_proof_move": 768
+  },
+  "value_sources": {
+    "terminal": 3982,
+    "unknown": 1657,
+    "search_proof": 3589
+  },
+  "value_supervision_modes": {
+    "proven_or_terminal": 9228
+  },
+  "terminal_values": {
+    "1": 2025,
+    "-1": 1957
+  },
+  "teacher_engines": {
+    "native": 5644,
+    "python_forcing": 2048,
+    "external_proof": 1536
+  },
+  "search_engines": {
+    "native_freestanding_v1": 5644,
+    "continuous_four_proof": 2048,
+    "recursive_whole_board_threat_certificate": 1536
+  },
+  "teacher_fingerprints": [
+    {
+      "engine": "native_freestanding_v1",
+      "source_sha256": "618c3a9fd47ff449c158b5c03a3a47dd1f3b1b84a4d478456a670473016d73e5",
+      "binary_sha256": "d2455bce6236bdacb68744b81cab4c1d8a4633e2d412c0b5f226ac50cceeed84",
+      "binary_path": "D:\\prj2026\\20060818must5\\exports\\native_search\\618c3a9fd47ff449\\native_board.dll",
+      "wrapper_sha256": "af1b6443736c4ce3baf3f197b911ebfafb6fdbf8d18e935e7667c57f7cdabd9b",
+      "forcing_source_sha256": "56e814a0a40744522920fe069d9f16e96fe6a402c7c41119b764abd0caede8c9"
+    },
+    {
+      "engine": "continuous_four_proof",
+      "source_sha256": "56e814a0a40744522920fe069d9f16e96fe6a402c7c41119b764abd0caede8c9",
+      "generator_sha256": "b4c6e7ffa3ff061242bcce087c19b87904646b49091d1aa02a35e217198f426a",
+      "binary_sha256": null,
+      "binary_path": null
+    },
+    {
+      "engine": "external_proof",
+      "source_sha256": "3aac1ba2061ccc723f4b582da9b3d9022e59080688761026725eb62cbe9ac818",
+      "proof_source": "recursive_whole_board_threat_certificate"
+    },
+    {
+      "engine": "external_proof",
+      "source_sha256": "50c5ea12e37d0b7a2acfa284115422a7c3ca7c74b782556f350bd8a7d7631985",
+      "proof_source": "recursive_whole_board_threat_certificate"
+    }
+  ],
+  "valid_values": {
+    "1": 3820,
+    "-1": 3751
+  },
+  "invalid_values": 1657,
+  "completed_depths": {
+    "5": 2456,
+    "4": 393,
+    "6": 1439,
+    "7": 370,
+    "9": 110,
+    "0": 2388,
+    "8": 83,
+    "3": 4,
+    "1": 448,
+    "2": 1,
+    "None": 1536
+  },
+  "requested_depths": {
+    "9": 5644,
+    "16": 2048,
+    "None": 1536
+  },
+  "generation": {
+    "requested_games": 160,
+    "seed": 20260908,
+    "duplicate_actor": 0,
+    "duplicate_physical_owner": 1354,
+    "considered_positions": 6998,
+    "teacher_engine": "native",
+    "forcing_seconds": 0.03,
+    "forcing_nodes": 10000,
+    "forcing_depth": 24,
+    "value_supervision": "proven",
+    "teacher_fingerprint": {
+      "engine": "native_freestanding_v1",
+      "source_sha256": "618c3a9fd47ff449c158b5c03a3a47dd1f3b1b84a4d478456a670473016d73e5",
+      "binary_sha256": "d2455bce6236bdacb68744b81cab4c1d8a4633e2d412c0b5f226ac50cceeed84",
+      "binary_path": "D:\\prj2026\\20060818must5\\exports\\native_search\\618c3a9fd47ff449\\native_board.dll",
+      "wrapper_sha256": "af1b6443736c4ce3baf3f197b911ebfafb6fdbf8d18e935e7667c57f7cdabd9b",
+      "forcing_source_sha256": "56e814a0a40744522920fe069d9f16e96fe6a402c7c41119b764abd0caede8c9"
+    },
+    "elapsed_seconds": 209.4884990999999
+  },
+  "games": [
+    {
+      "game_id": "global-20260908-00000",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 50,
+      "opening_moves": 1,
+      "recorded_positions": 49,
+      "search_calls": 49,
+      "search_nodes": 165044,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00001",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 46,
+      "opening_moves": 2,
+      "recorded_positions": 44,
+      "search_calls": 44,
+      "search_nodes": 134844,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00002",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 71,
+      "opening_moves": 4,
+      "recorded_positions": 67,
+      "search_calls": 67,
+      "search_nodes": 212040,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00003",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 17,
+      "opening_moves": 4,
+      "recorded_positions": 13,
+      "search_calls": 13,
+      "search_nodes": 25876,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00004",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 19,
+      "search_calls": 20,
+      "search_nodes": 44692,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00005",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 92,
+      "opening_moves": 4,
+      "recorded_positions": 88,
+      "search_calls": 88,
+      "search_nodes": 285745,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00006",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 2,
+      "recorded_positions": 94,
+      "search_calls": 94,
+      "search_nodes": 383904,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00007",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 3,
+      "recorded_positions": 1,
+      "search_calls": 18,
+      "search_nodes": 48436,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00008",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 66,
+      "opening_moves": 1,
+      "recorded_positions": 59,
+      "search_calls": 65,
+      "search_nodes": 208661,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00009",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 2,
+      "recorded_positions": 21,
+      "search_calls": 21,
+      "search_nodes": 49238,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00010",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 40,
+      "opening_moves": 4,
+      "recorded_positions": 36,
+      "search_calls": 36,
+      "search_nodes": 107553,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00011",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 17,
+      "opening_moves": 2,
+      "recorded_positions": 15,
+      "search_calls": 15,
+      "search_nodes": 29268,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00012",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 70,
+      "opening_moves": 1,
+      "recorded_positions": 31,
+      "search_calls": 69,
+      "search_nodes": 184284,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00013",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 39,
+      "opening_moves": 4,
+      "recorded_positions": 35,
+      "search_calls": 35,
+      "search_nodes": 79953,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00014",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 25,
+      "opening_moves": 3,
+      "recorded_positions": 22,
+      "search_calls": 22,
+      "search_nodes": 63316,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00015",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 2,
+      "recorded_positions": 21,
+      "search_calls": 21,
+      "search_nodes": 36246,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00016",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 65,
+      "opening_moves": 1,
+      "recorded_positions": 57,
+      "search_calls": 64,
+      "search_nodes": 189349,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00017",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 29,
+      "opening_moves": 2,
+      "recorded_positions": 27,
+      "search_calls": 27,
+      "search_nodes": 53304,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00018",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 33,
+      "opening_moves": 3,
+      "recorded_positions": 30,
+      "search_calls": 30,
+      "search_nodes": 83635,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00019",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 31,
+      "opening_moves": 4,
+      "recorded_positions": 27,
+      "search_calls": 27,
+      "search_nodes": 41788,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00020",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 66,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 65,
+      "search_nodes": 197141,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00021",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 29,
+      "opening_moves": 4,
+      "recorded_positions": 25,
+      "search_calls": 25,
+      "search_nodes": 56349,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00022",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 63,
+      "opening_moves": 4,
+      "recorded_positions": 59,
+      "search_calls": 59,
+      "search_nodes": 160900,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00023",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 61,
+      "opening_moves": 4,
+      "recorded_positions": 57,
+      "search_calls": 57,
+      "search_nodes": 110308,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00024",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 9,
+      "search_calls": 20,
+      "search_nodes": 40436,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00025",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 57,
+      "opening_moves": 2,
+      "recorded_positions": 55,
+      "search_calls": 55,
+      "search_nodes": 122052,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00026",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 371296,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00027",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 2,
+      "recorded_positions": 20,
+      "search_calls": 21,
+      "search_nodes": 34332,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00028",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 2,
+      "search_calls": 20,
+      "search_nodes": 49748,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00029",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 78,
+      "opening_moves": 2,
+      "recorded_positions": 76,
+      "search_calls": 76,
+      "search_nodes": 237277,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00030",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 329600,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00031",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 29,
+      "opening_moves": 2,
+      "recorded_positions": 27,
+      "search_calls": 27,
+      "search_nodes": 60486,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00032",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 43220,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00033",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 17,
+      "opening_moves": 2,
+      "recorded_positions": 15,
+      "search_calls": 15,
+      "search_nodes": 27476,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00034",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 300576,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00035",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 51,
+      "opening_moves": 3,
+      "recorded_positions": 48,
+      "search_calls": 48,
+      "search_nodes": 108326,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00036",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 25,
+      "opening_moves": 1,
+      "recorded_positions": 21,
+      "search_calls": 24,
+      "search_nodes": 67188,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00037",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 25,
+      "opening_moves": 4,
+      "recorded_positions": 21,
+      "search_calls": 21,
+      "search_nodes": 56244,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00038",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 3,
+      "recorded_positions": 93,
+      "search_calls": 93,
+      "search_nodes": 332928,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00039",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 39,
+      "opening_moves": 3,
+      "recorded_positions": 36,
+      "search_calls": 36,
+      "search_nodes": 67149,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00040",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 43028,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00041",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 68,
+      "opening_moves": 2,
+      "recorded_positions": 66,
+      "search_calls": 66,
+      "search_nodes": 163109,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00042",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 27,
+      "opening_moves": 2,
+      "recorded_positions": 25,
+      "search_calls": 25,
+      "search_nodes": 42372,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00043",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 25,
+      "opening_moves": 3,
+      "recorded_positions": 22,
+      "search_calls": 22,
+      "search_nodes": 38532,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00044",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 70,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 69,
+      "search_nodes": 206332,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00045",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 3,
+      "recorded_positions": 20,
+      "search_calls": 20,
+      "search_nodes": 50964,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00046",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 41,
+      "opening_moves": 2,
+      "recorded_positions": 39,
+      "search_calls": 39,
+      "search_nodes": 117408,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00047",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 31,
+      "opening_moves": 4,
+      "recorded_positions": 27,
+      "search_calls": 27,
+      "search_nodes": 68568,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00048",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 60,
+      "opening_moves": 1,
+      "recorded_positions": 12,
+      "search_calls": 59,
+      "search_nodes": 165484,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00049",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 30,
+      "opening_moves": 4,
+      "recorded_positions": 26,
+      "search_calls": 26,
+      "search_nodes": 33187,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00050",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 305248,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00051",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 29,
+      "opening_moves": 3,
+      "recorded_positions": 26,
+      "search_calls": 26,
+      "search_nodes": 58933,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00052",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 46,
+      "opening_moves": 1,
+      "recorded_positions": 44,
+      "search_calls": 45,
+      "search_nodes": 122155,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00053",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 41,
+      "opening_moves": 4,
+      "recorded_positions": 37,
+      "search_calls": 37,
+      "search_nodes": 103958,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00054",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 75,
+      "opening_moves": 2,
+      "recorded_positions": 73,
+      "search_calls": 73,
+      "search_nodes": 233511,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00055",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 2,
+      "recorded_positions": 0,
+      "search_calls": 21,
+      "search_nodes": 44118,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00056",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 66,
+      "opening_moves": 1,
+      "recorded_positions": 58,
+      "search_calls": 65,
+      "search_nodes": 149105,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00057",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 42,
+      "opening_moves": 4,
+      "recorded_positions": 38,
+      "search_calls": 38,
+      "search_nodes": 110822,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00058",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 314208,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00059",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 56,
+      "opening_moves": 2,
+      "recorded_positions": 54,
+      "search_calls": 54,
+      "search_nodes": 104515,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00060",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 93,
+      "opening_moves": 1,
+      "recorded_positions": 73,
+      "search_calls": 92,
+      "search_nodes": 279561,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00061",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 31,
+      "opening_moves": 3,
+      "recorded_positions": 28,
+      "search_calls": 28,
+      "search_nodes": 76591,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00062",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 35,
+      "opening_moves": 4,
+      "recorded_positions": 31,
+      "search_calls": 31,
+      "search_nodes": 88278,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00063",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 27,
+      "opening_moves": 3,
+      "recorded_positions": 24,
+      "search_calls": 24,
+      "search_nodes": 51877,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00064",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 70,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 69,
+      "search_nodes": 220028,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00065",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 42,
+      "opening_moves": 3,
+      "recorded_positions": 39,
+      "search_calls": 39,
+      "search_nodes": 83355,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00066",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 2,
+      "recorded_positions": 21,
+      "search_calls": 21,
+      "search_nodes": 58100,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00067",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 2,
+      "recorded_positions": 0,
+      "search_calls": 21,
+      "search_nodes": 41500,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00068",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 70,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 69,
+      "search_nodes": 194108,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00069",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 66,
+      "opening_moves": 4,
+      "recorded_positions": 62,
+      "search_calls": 62,
+      "search_nodes": 207284,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00070",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 42,
+      "opening_moves": 4,
+      "recorded_positions": 38,
+      "search_calls": 38,
+      "search_nodes": 128632,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00071",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 333731,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00072",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 70,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 69,
+      "search_nodes": 196284,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00073",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 26,
+      "opening_moves": 3,
+      "recorded_positions": 23,
+      "search_calls": 23,
+      "search_nodes": 49163,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00074",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 2,
+      "recorded_positions": 94,
+      "search_calls": 94,
+      "search_nodes": 309185,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00075",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 25,
+      "opening_moves": 3,
+      "recorded_positions": 22,
+      "search_calls": 22,
+      "search_nodes": 51959,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00076",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 49716,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00077",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 2,
+      "recorded_positions": 21,
+      "search_calls": 21,
+      "search_nodes": 36662,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00078",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 27,
+      "opening_moves": 4,
+      "recorded_positions": 23,
+      "search_calls": 23,
+      "search_nodes": 62580,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00079",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 4,
+      "recorded_positions": 17,
+      "search_calls": 17,
+      "search_nodes": 43156,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00080",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 62,
+      "opening_moves": 1,
+      "recorded_positions": 56,
+      "search_calls": 61,
+      "search_nodes": 195570,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00081",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 2,
+      "recorded_positions": 94,
+      "search_calls": 94,
+      "search_nodes": 318848,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00082",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 50,
+      "opening_moves": 4,
+      "recorded_positions": 46,
+      "search_calls": 46,
+      "search_nodes": 92783,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00083",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 31,
+      "opening_moves": 2,
+      "recorded_positions": 29,
+      "search_calls": 29,
+      "search_nodes": 44301,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00084",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 37876,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00085",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 56,
+      "opening_moves": 3,
+      "recorded_positions": 53,
+      "search_calls": 53,
+      "search_nodes": 129108,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00086",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 313056,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00087",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 70,
+      "opening_moves": 2,
+      "recorded_positions": 2,
+      "search_calls": 68,
+      "search_nodes": 201916,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00088",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 60,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 59,
+      "search_nodes": 150572,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00089",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 19,
+      "opening_moves": 4,
+      "recorded_positions": 15,
+      "search_calls": 15,
+      "search_nodes": 29716,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00090",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 33,
+      "opening_moves": 3,
+      "recorded_positions": 30,
+      "search_calls": 30,
+      "search_nodes": 56271,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00091",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 31,
+      "opening_moves": 4,
+      "recorded_positions": 27,
+      "search_calls": 27,
+      "search_nodes": 49846,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00092",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 42420,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00093",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 3,
+      "recorded_positions": 18,
+      "search_calls": 18,
+      "search_nodes": 37012,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00094",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 33,
+      "opening_moves": 3,
+      "recorded_positions": 30,
+      "search_calls": 30,
+      "search_nodes": 60099,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00095",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 40,
+      "opening_moves": 2,
+      "recorded_positions": 38,
+      "search_calls": 38,
+      "search_nodes": 86710,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00096",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 70,
+      "opening_moves": 1,
+      "recorded_positions": 5,
+      "search_calls": 69,
+      "search_nodes": 201116,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00097",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 27,
+      "opening_moves": 3,
+      "recorded_positions": 24,
+      "search_calls": 24,
+      "search_nodes": 53315,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00098",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 2,
+      "recorded_positions": 94,
+      "search_calls": 94,
+      "search_nodes": 411008,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00099",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 56,
+      "opening_moves": 2,
+      "recorded_positions": 31,
+      "search_calls": 54,
+      "search_nodes": 123871,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00100",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 1,
+      "recorded_positions": 1,
+      "search_calls": 22,
+      "search_nodes": 46006,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00101",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 64,
+      "opening_moves": 2,
+      "recorded_positions": 61,
+      "search_calls": 62,
+      "search_nodes": 175341,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00102",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 49,
+      "opening_moves": 4,
+      "recorded_positions": 45,
+      "search_calls": 45,
+      "search_nodes": 125418,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00103",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 83,
+      "opening_moves": 4,
+      "recorded_positions": 79,
+      "search_calls": 79,
+      "search_nodes": 226120,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00104",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 66,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 65,
+      "search_nodes": 206165,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00105",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 2,
+      "recorded_positions": 94,
+      "search_calls": 94,
+      "search_nodes": 380384,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00106",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 42,
+      "opening_moves": 3,
+      "recorded_positions": 39,
+      "search_calls": 39,
+      "search_nodes": 83434,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00107",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 2,
+      "recorded_positions": 14,
+      "search_calls": 19,
+      "search_nodes": 37777,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00108",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 46932,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00109",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 19,
+      "opening_moves": 4,
+      "recorded_positions": 15,
+      "search_calls": 15,
+      "search_nodes": 36180,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00110",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 27,
+      "opening_moves": 2,
+      "recorded_positions": 25,
+      "search_calls": 25,
+      "search_nodes": 52345,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00111",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 55,
+      "opening_moves": 3,
+      "recorded_positions": 52,
+      "search_calls": 52,
+      "search_nodes": 135700,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00112",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 13,
+      "search_calls": 20,
+      "search_nodes": 48628,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00113",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 2,
+      "recorded_positions": 14,
+      "search_calls": 19,
+      "search_nodes": 43019,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00114",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 29,
+      "opening_moves": 3,
+      "recorded_positions": 26,
+      "search_calls": 26,
+      "search_nodes": 50743,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00115",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 27,
+      "opening_moves": 4,
+      "recorded_positions": 23,
+      "search_calls": 23,
+      "search_nodes": 48842,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00116",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 70,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 69,
+      "search_nodes": 212060,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00117",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 26,
+      "opening_moves": 4,
+      "recorded_positions": 22,
+      "search_calls": 22,
+      "search_nodes": 60340,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00118",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 51,
+      "opening_moves": 2,
+      "recorded_positions": 49,
+      "search_calls": 49,
+      "search_nodes": 171487,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00119",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 31,
+      "opening_moves": 4,
+      "recorded_positions": 27,
+      "search_calls": 27,
+      "search_nodes": 75883,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00120",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 62,
+      "opening_moves": 1,
+      "recorded_positions": 50,
+      "search_calls": 61,
+      "search_nodes": 162473,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00121",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 3,
+      "recorded_positions": 18,
+      "search_calls": 18,
+      "search_nodes": 41812,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00122",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 2,
+      "recorded_positions": 94,
+      "search_calls": 94,
+      "search_nodes": 360704,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00123",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 2,
+      "recorded_positions": 89,
+      "search_calls": 94,
+      "search_nodes": 351840,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00124",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 66,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 65,
+      "search_nodes": 201429,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00125",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 29,
+      "opening_moves": 2,
+      "recorded_positions": 27,
+      "search_calls": 27,
+      "search_nodes": 68982,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00126",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 4,
+      "recorded_positions": 19,
+      "search_calls": 19,
+      "search_nodes": 53012,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00127",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 17,
+      "opening_moves": 2,
+      "recorded_positions": 0,
+      "search_calls": 15,
+      "search_nodes": 28724,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00128",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 36724,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00129",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 27,
+      "opening_moves": 3,
+      "recorded_positions": 24,
+      "search_calls": 24,
+      "search_nodes": 33968,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00130",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 85,
+      "opening_moves": 4,
+      "recorded_positions": 81,
+      "search_calls": 81,
+      "search_nodes": 243854,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00131",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 26,
+      "opening_moves": 3,
+      "recorded_positions": 16,
+      "search_calls": 23,
+      "search_nodes": 44348,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00132",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 38516,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00133",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 4,
+      "recorded_positions": 17,
+      "search_calls": 17,
+      "search_nodes": 36788,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00134",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 2,
+      "recorded_positions": 19,
+      "search_calls": 19,
+      "search_nodes": 40084,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00135",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 37,
+      "opening_moves": 3,
+      "recorded_positions": 34,
+      "search_calls": 34,
+      "search_nodes": 103732,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00136",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 63,
+      "opening_moves": 1,
+      "recorded_positions": 18,
+      "search_calls": 62,
+      "search_nodes": 179298,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00137",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 71,
+      "opening_moves": 3,
+      "recorded_positions": 68,
+      "search_calls": 68,
+      "search_nodes": 209994,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00138",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 4,
+      "recorded_positions": 17,
+      "search_calls": 17,
+      "search_nodes": 37588,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00139",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 42,
+      "opening_moves": 3,
+      "recorded_positions": 39,
+      "search_calls": 39,
+      "search_nodes": 77542,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00140",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 21,
+      "opening_moves": 1,
+      "recorded_positions": 0,
+      "search_calls": 20,
+      "search_nodes": 37460,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00141",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 17,
+      "opening_moves": 3,
+      "recorded_positions": 14,
+      "search_calls": 14,
+      "search_nodes": 24628,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00142",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 35,
+      "opening_moves": 2,
+      "recorded_positions": 33,
+      "search_calls": 33,
+      "search_nodes": 61554,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00143",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 52,
+      "opening_moves": 3,
+      "recorded_positions": 46,
+      "search_calls": 49,
+      "search_nodes": 77035,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00144",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 1,
+      "recorded_positions": 10,
+      "search_calls": 22,
+      "search_nodes": 35172,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00145",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 23,
+      "opening_moves": 4,
+      "recorded_positions": 19,
+      "search_calls": 19,
+      "search_nodes": 33238,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00146",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 24,
+      "opening_moves": 4,
+      "recorded_positions": 20,
+      "search_calls": 20,
+      "search_nodes": 31941,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00147",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 29,
+      "opening_moves": 3,
+      "recorded_positions": 26,
+      "search_calls": 26,
+      "search_nodes": 51270,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00148",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 88,
+      "opening_moves": 1,
+      "recorded_positions": 71,
+      "search_calls": 87,
+      "search_nodes": 266597,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00149",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 31,
+      "opening_moves": 2,
+      "recorded_positions": 29,
+      "search_calls": 29,
+      "search_nodes": 65142,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00150",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 34,
+      "opening_moves": 3,
+      "recorded_positions": 31,
+      "search_calls": 31,
+      "search_nodes": 81605,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00151",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 49,
+      "opening_moves": 3,
+      "recorded_positions": 46,
+      "search_calls": 46,
+      "search_nodes": 124372,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00152",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 1,
+      "recorded_positions": 88,
+      "search_calls": 95,
+      "search_nodes": 289568,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00153",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 27,
+      "opening_moves": 4,
+      "recorded_positions": 23,
+      "search_calls": 23,
+      "search_nodes": 56052,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00154",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 307136,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00155",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 1,
+      "termination": "win",
+      "moves": 29,
+      "opening_moves": 2,
+      "recorded_positions": 27,
+      "search_calls": 27,
+      "search_nodes": 68918,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00156",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 66,
+      "opening_moves": 1,
+      "recorded_positions": 25,
+      "search_calls": 65,
+      "search_nodes": 199349,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00157",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "edge",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 66,
+      "opening_moves": 4,
+      "recorded_positions": 62,
+      "search_calls": 62,
+      "search_nodes": 192303,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00158",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "random",
+      "terminal": false,
+      "winner": null,
+      "termination": "move_limit",
+      "moves": 96,
+      "opening_moves": 4,
+      "recorded_positions": 92,
+      "search_calls": 92,
+      "search_nodes": 360032,
+      "teacher_engine": "native"
+    },
+    {
+      "game_id": "global-20260908-00159",
+      "shape": [
+        16,
+        16
+      ],
+      "mask_kind": "none",
+      "terminal": true,
+      "winner": 2,
+      "termination": "win",
+      "moves": 26,
+      "opening_moves": 4,
+      "recorded_positions": 22,
+      "search_calls": 22,
+      "search_nodes": 46838,
+      "teacher_engine": "native"
+    }
+  ],
+  "constructed_generation": {
+    "constructed_cases": 2048,
+    "requested_count": 2048,
+    "attempts": 2248,
+    "max_attempts": 61440,
+    "excluded_physical_keys": 5644,
+    "seed": 20260909,
+    "elapsed_seconds": 3.2901780000102008,
+    "values": {
+      "1": 1024,
+      "-1": 1024
+    },
+    "actors": {
+      "1": 1036,
+      "2": 1012
+    },
+    "kinds": {
+      "own_open_four": 521,
+      "enemy_open_four": 1024,
+      "own_open_three": 503
+    },
+    "masks": {
+      "none": 686,
+      "edge": 696,
+      "random": 666
+    },
+    "interpretation": "Independent constructed, reachable, full-board positions; not completed games."
+  },
+  "local_model_sha256": {
+    "D:\\prj2026\\20060818must5\\training_runs\\unet_curriculum_v2\\opponent.pt": "127fcde6a6d7f70a21a1ce08c4a058f67e1ded3e509cc6be2f392e3da1a00c53",
+    "D:\\prj2026\\20060818must5\\training_runs\\unet_curriculum_v2\\play.pt": "36018e0eb6abbe605636cfca3f0d3a0a48ad38b24d6c3dfea5a0f785c724f56a"
+  },
+  "value_supervision": "proven_or_terminal",
+  "sources": {
+    "whole_board_search": 5644,
+    "constructed_verified_full_board": 2048,
+    "extra_verified_full_board": 1536
+  },
+  "extra_position_records": 1536,
+  "extra_position_groups": 4,
+  "cached_value_supervision": "proven",
+  "data_source": {
+    "path": "D:\\prj2026\\20060818must5\\training_runs\\global_v2\\dataset.jsonl.gz",
+    "sha256": "7aeae19ac7af7ed8b73356c69931c67bfe4cf65ecee292e8036a7335b0ad0d1f",
+    "report_sha256": "ca585a10597aee380f45823611cd4a9da4d18b4d475284f05c6a8512d087c377"
+  },
+  "extra_positions_import": {
+    "records": 1536,
+    "groups": 4,
+    "duplicates_skipped": 0,
+    "proof_sources": {
+      "recursive_whole_board_threat_certificate": 1536
+    },
+    "files": [
+      {
+        "path": "D:\\prj2026\\20060818must5\\training_runs\\strategic_v3\\positions.jsonl.gz",
+        "sha256": "3aac1ba2061ccc723f4b582da9b3d9022e59080688761026725eb62cbe9ac818",
+        "rows": 1024,
+        "accepted": 1024,
+        "duplicates": 0
+      },
+      {
+        "path": "D:\\prj2026\\20060818must5\\training_runs\\strategic_v3_more\\positions.jsonl.gz",
+        "sha256": "50c5ea12e37d0b7a2acfa284115422a7c3ca7c74b782556f350bd8a7d7631985",
+        "rows": 512,
+        "accepted": 512,
+        "duplicates": 0
+      }
+    ],
+    "proof_verification": "External proof provenance and label consistency checked; certificates not replayed."
+  }
+}

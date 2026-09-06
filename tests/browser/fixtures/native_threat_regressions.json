@@ -1,0 +1,285 @@
+{
+  "format": "native_threat_regression_fixtures_v1",
+  "scope": "Self-contained rule positions from saved real trajectories and an existing fully checked DAG. No test run, search or new label generation during fixture extraction.",
+  "sources": {
+    "layout": {
+      "path": "web_acceptance/browser_local_integration/games/game_000002/result.json",
+      "sha256": "813e6084a4abba78020580b965f8d8f4e01a32bce7999126ab7856997c2b7b32",
+      "fixture_sha256": "1570050e444d6deedd88b7a143a78ad33221fc510b8c26b018a2ceb3d958b0cd",
+      "n": 16,
+      "history": [
+        [
+          8,
+          8
+        ],
+        [
+          9,
+          9
+        ],
+        [
+          10,
+          7
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          9,
+          7
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          10,
+          9
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          10,
+          6
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          7,
+          7
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          9,
+          8
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          7,
+          10
+        ],
+        [
+          7,
+          11
+        ],
+        [
+          6,
+          11
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          8,
+          4
+        ]
+      ]
+    },
+    "policy_v4": {
+      "path": "web_acceptance/browser_local_policy_v4_integration/games/game_000002/result.json",
+      "sha256": "a41d68b8d8e95d7ed79e1438b16bd744631c38862df8db555d363096c5cafbe8",
+      "n": 16,
+      "history": [
+        [
+          8,
+          8
+        ],
+        [
+          9,
+          7
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          11,
+          8
+        ],
+        [
+          9,
+          9
+        ],
+        [
+          11,
+          7
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          11,
+          9
+        ],
+        [
+          11,
+          10
+        ],
+        [
+          10,
+          10
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          10,
+          9
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          11,
+          5
+        ]
+      ]
+    }
+  },
+  "positive_cases": [
+    {
+      "name": "layout_prefix20",
+      "source": "layout",
+      "prefix_plies": 20,
+      "side": 1,
+      "quiet": 1,
+      "total": 21,
+      "max_nodes": 100000
+    },
+    {
+      "name": "layout_prefix22",
+      "source": "layout",
+      "prefix_plies": 22,
+      "side": 1,
+      "quiet": 1,
+      "total": 21,
+      "max_nodes": 100000
+    },
+    {
+      "name": "policy_v4_prefix12",
+      "source": "policy_v4",
+      "prefix_plies": 12,
+      "side": 1,
+      "quiet": 2,
+      "total": 64,
+      "max_nodes": 100000
+    },
+    {
+      "name": "policy_v4_prefix14",
+      "source": "policy_v4",
+      "prefix_plies": 14,
+      "side": 1,
+      "quiet": 2,
+      "total": 64,
+      "max_nodes": 100000
+    }
+  ],
+  "zero_quiet_mandatory": {
+    "name": "layout_last_quiet_counter_four",
+    "board_rows": [
+      "0000000000000000",
+      "0000000000000000",
+      "0000000000000000",
+      "0000000000000000",
+      "0000000000000000",
+      "0000000000001000",
+      "0000000002020000",
+      "0000021222210000",
+      "0000211112000000",
+      "0000000122000000",
+      "0000002111000000",
+      "0000000010000000",
+      "0000000000000000",
+      "0000000000000000",
+      "0000000000000000",
+      "0000000000000000"
+    ],
+    "side": 1,
+    "unique_block": [
+      5,
+      9
+    ],
+    "quiet": 0,
+    "total": 19,
+    "source_proof": "exports/browser/layout_diagnostic/composed_zero_prefix20_certificate.json",
+    "source_proof_sha256": "627c1747d85e59b3e8dda8fcfd68c706820bf0607dcc94e6b2605374357508c8",
+    "source_node_index": 0,
+    "description": "Position before an actual mandatory defender-block node after the quiet allowance was spent; original complete DAG supplies its winning continuation."
+  },
+  "diagnostic_only": [
+    {
+      "name": "defense_v4_prefix8_after_white_11_9",
+      "source_file": "web_acceptance/browser_local_defense_v4_integration/games/game_000002/result.json",
+      "source_sha256": "5fd75f7bb9efec191e10d9adf359a644fca2eabec2fb87b3a2d72c5a94601b80",
+      "n": 16,
+      "history": [
+        [
+          8,
+          8
+        ],
+        [
+          9,
+          7
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          11,
+          8
+        ],
+        [
+          9,
+          9
+        ],
+        [
+          11,
+          7
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          11,
+          9
+        ]
+      ],
+      "side": 1,
+      "origin_prefix_plies": 7,
+      "actual_action": [
+        11,
+        9
+      ],
+      "status": "unknown_not_a_positive_test",
+      "description": "No expected win assertion; reserve for one separately budgeted diagnostic after CPU authorization."
+    }
+  ]
+}

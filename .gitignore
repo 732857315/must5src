@@ -1,0 +1,42 @@
+# Reference checkout has its own Git history.
+/.repo/
+
+# Python environments and caches.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local configuration and disposable outputs.
+.env
+.env.*
+!.env.example
+/exports/
+/training_runs/
+/runs/
+/train_data.pkl
+/solve_data.pkl
+*.log
+*.tmp
+
+# Frozen browser match runs contain models, profiles, and per-move screenshots.
+/web_acceptance/
+
+/node_modules/
+/web/browser/vendor/
+/web/browser/models/
+/web/browser/search.wasm
+/web/browser/assets.json
+/web/browser/sw.js
+
+# Fixed inputs are versioned; new reproduction results are disposable.
+!/reproduction/
+!/reproduction/inputs/
+!/reproduction/inputs/**
+/reproduction/runs/
+/reproduction/outputs/
+/reproduction/prepared/
+/reproduction/prepared_v2/

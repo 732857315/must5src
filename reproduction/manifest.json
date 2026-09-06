@@ -1,0 +1,328 @@
+{
+  "format": "must5_reproduction_v1",
+  "provenance": {
+    "original_plan_sha256": "c16618269466fc820c0bf1fe81cc68db835496717381a9e02e6460067d42a5de",
+    "original_training_git_commit": null,
+    "original_training_source_identity": "Original plan source_files SHA-256; no Git commit was recorded by that experiment.",
+    "packaging_source_commit": "99a82e76e7acc9b1eaaf08e740eabdc27039e3e4",
+    "upstream": {
+      "url": "https://github.com/732857315/Gomoku-AI.git",
+      "commit": "bdfe39fa5aee404483976bfdfd03f13cfc6e585a",
+      "license": "BSD-3-Clause",
+      "copyright": "Copyright (c) 2024, whyb(張小凡)"
+    }
+  },
+  "files": [
+    {
+      "path": "reproduction/inputs/global_v3/global.pt",
+      "sha256": "01fd05fbf734d46dfadc90ae1bbcf78931c3a28f76057fbd430bba4140fb7418",
+      "bytes": 130533,
+      "role": "initial_checkpoint",
+      "original_path": "training_runs/global_v3/global.pt",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/global_v3/dataset.jsonl.gz",
+      "sha256": "d9ea90961e265715370f8ddc30211e831c22d83b884c1e23cc7f1d95149a34a2",
+      "bytes": 35109936,
+      "role": "training_cache",
+      "original_path": "training_runs/global_v3/dataset.jsonl.gz",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/global_v3/dataset_report.json",
+      "sha256": "484029e0d60e5693195657d7f309082c588ee3cfa2754b838fed2930faeaa3ad",
+      "bytes": 67998,
+      "role": "training_cache_report",
+      "original_path": "training_runs/global_v3/dataset_report.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/global_v3/split.json",
+      "sha256": "73fde3c5e0bd2d680ec6cb0e5116c9a134609e2c44c91901393e29ad9827616d",
+      "bytes": 165222,
+      "role": "fixed_split",
+      "original_path": "training_runs/global_v3/split.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/unet_curriculum_v2/opponent.pt",
+      "sha256": "127fcde6a6d7f70a21a1ce08c4a058f67e1ded3e509cc6be2f392e3da1a00c53",
+      "bytes": 487015,
+      "role": "local_checkpoint",
+      "original_path": "training_runs/unet_curriculum_v2/opponent.pt",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/unet_curriculum_v2/play.pt",
+      "sha256": "36018e0eb6abbe605636cfca3f0d3a0a48ad38b24d6c3dfea5a0f785c724f56a",
+      "bytes": 484811,
+      "role": "local_checkpoint",
+      "original_path": "training_runs/unet_curriculum_v2/play.pt",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/constraints/old_integration.jsonl",
+      "sha256": "605e0d294b3af36806c9f8d96ff0481883559c6209a94439579c137db5634c7b",
+      "bytes": 1430,
+      "role": "constraint_original",
+      "original_path": "exports/browser/policy_improvement/verified_constraints/prefix19.jsonl",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/constraints/stars.jsonl",
+      "sha256": "f39197a8d35546c9bfba01ae8f2ba28d5398a6148b2d0487976b1e7c0e353807",
+      "bytes": 2176,
+      "role": "constraint_original",
+      "original_path": "exports/browser/policy_improvement/stars_source_mining/constraints.jsonl",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/constraints/formal_game6.jsonl",
+      "sha256": "070f7d5159a4280bbb03e9acea5370c743809780cac8dd0e4b056d4c8d14df5d",
+      "bytes": 1073,
+      "role": "constraint_original",
+      "original_path": "exports/browser/policy_improvement/formal_game6_mining/constraints.jsonl",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/source_games/old_integration_game2.json",
+      "sha256": "813e6084a4abba78020580b965f8d8f4e01a32bce7999126ab7856997c2b7b32",
+      "bytes": 64811,
+      "role": "source_game",
+      "original_path": "web_acceptance/browser_local_integration/games/game_000002/result.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/proofs/old_integration_prefix20.json",
+      "sha256": "627c1747d85e59b3e8dda8fcfd68c706820bf0607dcc94e6b2605374357508c8",
+      "bytes": 340455,
+      "role": "proof",
+      "original_path": "exports/browser/layout_diagnostic/composed_zero_prefix20_certificate.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/source_games/stars_game2.json",
+      "sha256": "b329e6e61e3707c3b63bcfc6364d4adafa8896d94ef0ba531bf04cd3130a8c37",
+      "bytes": 47959,
+      "role": "source_game",
+      "original_path": "web_acceptance/browser_local_stars_integration/games/game_000002/result.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/proofs/stars_prefix17.json",
+      "sha256": "8451210414528680cc13951a0e6d926774d33d4fc9b49f997132124620f7cb68",
+      "bytes": 1316561,
+      "role": "proof",
+      "original_path": "exports/browser/policy_improvement/stars_source_mining/prefix17_actual_bad.proof.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/proofs/stars_prefix21.json",
+      "sha256": "1c7d2f0435ef9f45b5cc4f14b17de4450e6d8b11340c872c9de4a1d92cea4f93",
+      "bytes": 266652,
+      "role": "proof",
+      "original_path": "exports/browser/policy_improvement/stars_source_mining/prefix21_actual_bad.proof.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/source_games/formal_game6.json",
+      "sha256": "5159469b05d839864d4e39fce03d3d1a1323d1afe7067425c3ef4670582e5bd3",
+      "bytes": 67985,
+      "role": "source_game",
+      "original_path": "web_acceptance/browser_local_v1_formal/games/game_000006/result.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/proofs/formal_game6_prefix19.json",
+      "sha256": "221dc5764bc12f08e12ae8cc79e24034d3c2c94c86d0995e211395ae843dbf63",
+      "bytes": 2536946,
+      "role": "proof",
+      "original_path": "exports/browser/policy_improvement/formal_game6_mining/prefix19_actual_bad.proof.json",
+      "original_plan_input": true
+    },
+    {
+      "path": "reproduction/inputs/global_policy_v4/global.pt",
+      "sha256": "064464d6f43476f6b20d7f8a0e9c5e1c028d43a4052e203ef6d36904c8ca66ee",
+      "bytes": 132773,
+      "role": "target_checkpoint",
+      "original_path": "training_runs/global_policy_v4/global.pt",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/global_policy_v4/config.json",
+      "sha256": "4fc68c532ee5a645ab2ae579afd154d062df329f9df16fe0fdd4a7efc14b7f8e",
+      "bytes": 2412,
+      "role": "target_metadata",
+      "original_path": "training_runs/global_policy_v4/config.json",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/global_policy_v4/summary.json",
+      "sha256": "43d39c2053ff39627961e6387fb3e40d5222417381d3079ade697d31034b6d5c",
+      "bytes": 237129,
+      "role": "target_metadata",
+      "original_path": "training_runs/global_policy_v4/summary.json",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/global_policy_v4/initial_validation.json",
+      "sha256": "947872ae7aec2433c114fac629c4a65fc1fc73144cd6d355a923a1e5cccea273",
+      "bytes": 23045,
+      "role": "target_metadata",
+      "original_path": "training_runs/global_policy_v4/initial_validation.json",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/global_policy_v4/split.json",
+      "sha256": "7898d49a4ef0dbd9614a114a59d0b1050f1c9e0f58662f3abac025c8759456a6",
+      "bytes": 165732,
+      "role": "target_metadata",
+      "original_path": "training_runs/global_policy_v4/split.json",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/unet_curriculum_v2/stage1_base.jsonl.gz",
+      "sha256": "62b5696a3592f6ceb4bd298216d596b48159a0139e691b21ef04f11cf36e970b",
+      "bytes": 312582,
+      "role": "unet_training_reference",
+      "original_path": "training_runs/unet_curriculum_v2/stage1_base.jsonl.gz",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/unet_curriculum_v2/stage2_base.jsonl.gz",
+      "sha256": "23cc9255034acbbd876e16ba3ca2377d9db8aa5b75e7ff73811c397a44d16df8",
+      "bytes": 218714,
+      "role": "unet_training_reference",
+      "original_path": "training_runs/unet_curriculum_v2/stage2_base.jsonl.gz",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/unet_curriculum_v2/stage3_base.jsonl.gz",
+      "sha256": "037682e8b98b4e35456330dc5d34b71a4cb672bb364a58a64209257b0ddf96bb",
+      "bytes": 212809,
+      "role": "unet_training_reference",
+      "original_path": "training_runs/unet_curriculum_v2/stage3_base.jsonl.gz",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/unet_curriculum_v2/config.json",
+      "sha256": "63f0cdb222a30fe92cf35c87e2cac174529b4f09f35c13ef20ab555266b552f5",
+      "bytes": 266,
+      "role": "unet_training_reference",
+      "original_path": "training_runs/unet_curriculum_v2/config.json",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/unet_curriculum_v2/summary.json",
+      "sha256": "19a18270c78ed0caee0771c517ded20c17dbcecf0539bf66df65f8503e471e03",
+      "bytes": 61411,
+      "role": "unet_training_reference",
+      "original_path": "training_runs/unet_curriculum_v2/summary.json",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/provenance/original_plan.json",
+      "sha256": "c16618269466fc820c0bf1fe81cc68db835496717381a9e02e6460067d42a5de",
+      "bytes": 15630,
+      "role": "original_experiment_metadata",
+      "original_path": "training_runs/global_policy_v4_source_verified/plan.json",
+      "original_plan_input": false
+    },
+    {
+      "path": "reproduction/inputs/provenance/original_run.json",
+      "sha256": "f8548aab9c766e39634575de014cdbabca0ca2e212f83b1a4ac27235d1b00573",
+      "bytes": 397,
+      "role": "original_experiment_metadata",
+      "original_path": "training_runs/global_policy_v4_source_verified/run.json",
+      "original_plan_input": false
+    }
+  ],
+  "training_source_sha256": {
+    "board_forcing.py": "56e814a0a40744522920fe069d9f16e96fe6a402c7c41119b764abd0caede8c9",
+    "board_rules.py": "ec806dfd356ad75a574b2d9ec71dba610fc537577b41bcdfb4553c90fde694e6",
+    "board_search.py": "75d535b53301cd2f9d26972fc7aa7b2fac8ffbc7699f17e28a4a9fafb92e9aa8",
+    "board_threats.py": "548693c7f9bba88a0c7e2df7d7e111a8d50d0395653057842b0eb67be98949de",
+    "game.py": "a9906da0c1b15fde5898665f5feabd3d4c0a4423fe31c4338aafe79287896b34",
+    "global_data.py": "76aad5cee2531ce8bf6f338f87c4c89e36e438d7625a40fef54d9ec512f2de3c",
+    "global_model.py": "96af9f0df3c7a976e75a307584c466a6f6a6d94e0c8deb7652e3f49011d2c0d7",
+    "global_policy_constraints.py": "063fa65e5e363cb242c2f2afec6071881d0fa30a1b3bec384de961d181d37674",
+    "global_policy_training.py": "728f74c956392dd062af26608cc79efaa376c2f0138d4249644e8161fb3e533e",
+    "global_tactics_data.py": "b4c6e7ffa3ff061242bcce087c19b87904646b49091d1aa02a35e217198f426a",
+    "native_search.py": "af1b6443736c4ce3baf3f197b911ebfafb6fdbf8d18e935e7667c57f7cdabd9b",
+    "train_global.py": "bda90c432fbf4e4267224fc10219e79fc8240b222ae8f43e96bba491619c5139",
+    "unet_board.py": "2bd2a4449aa031e230dad6c22d3be3c58510d52d0a6dbdaa30613072e043ee67",
+    "unet_codec.py": "4db32aab7eb5a5b0e13858363f78446ad5d5f3404962998d66850cc79525120b",
+    "unet_models.py": "b5e1028176da4c2224d8d0ca94a2eb8f68b22f566f914d6281f4782cd14e5354",
+    "unet_pipeline.py": "852d9131e423e5b69ae6895df131417eba8a2d230e84c2c87853afee42289ebd",
+    "unet_visuals.py": "7ac88d25d213dbc290bf07118a07d4ecd823e848b4514067d79cd8326c4ecd98",
+    "windows.py": "eced4cc97f809b99aefbd8260d1417d749c8eae8c29951a8a94846478deb60c0"
+  },
+  "training": {
+    "entrypoint": "train_global.py",
+    "initial_checkpoint": "reproduction/inputs/global_v3/global.pt",
+    "data_source": "reproduction/inputs/global_v3",
+    "local_models": "reproduction/inputs/unet_curriculum_v2",
+    "constraints": [
+      "reproduction/inputs/constraints/old_integration.jsonl",
+      "reproduction/inputs/constraints/stars.jsonl",
+      "reproduction/inputs/constraints/formal_game6.jsonl"
+    ],
+    "arguments": [
+      "--input-mode",
+      "relative_rgb",
+      "--value-supervision",
+      "proven_or_terminal",
+      "--value-weight",
+      "0",
+      "--epochs",
+      "15",
+      "--learning-rate",
+      "0.0001",
+      "--batch-size",
+      "32",
+      "--threads",
+      "4",
+      "--auxiliary-dropout",
+      "0.3",
+      "--seed",
+      "20260908",
+      "--searched-policy-weight",
+      "0.1",
+      "--constraint-repeats",
+      "16",
+      "--tactical-regression-limit",
+      "0.02"
+    ],
+    "expected": {
+      "unique_records": 9232,
+      "train_records": 6973,
+      "validation_records": 2259,
+      "train_constraint_records": 3,
+      "validation_constraint_records": 1,
+      "train_constraint_source_groups": 2,
+      "validation_constraint_source_groups": 1,
+      "train_exposures_per_epoch": 7018
+    },
+    "deployment_gate": {
+      "heldout_quality": "must exceed initialization on pure and combined policies",
+      "tactical": "pure and combined, each immediate_win_set and forced_block accuracy drop <= 0.02",
+      "old_validation": "report all policy source changes; no automatic deployment",
+      "next": "Only a later separately frozen actual browser match can assess strength"
+    }
+  },
+  "published_checkpoints": {
+    "opponent": "reproduction/inputs/unet_curriculum_v2/opponent.pt",
+    "play": "reproduction/inputs/unet_curriculum_v2/play.pt",
+    "global_model": "reproduction/inputs/global_policy_v4/global.pt"
+  },
+  "limitations": [
+    "Three related source games, four proved losing actions; unknown alternatives are not safe or winning labels.",
+    "Source-file holdout with overlapping openings is a small method experiment, not independent opening generalization.",
+    "No independent test game or formal match included.",
+    "Do not redraw the split or change the 15-epoch configuration based on outcomes.",
+    "Retraining is not promised to produce byte-identical checkpoint or ONNX files across platforms and library versions.",
+    "This kit reproduces v4 from its fixed v3 initialization and dataset; it does not regenerate every historical search game.",
+    "Original historical dependency versions were not locked; requirements-repro.txt documents the currently checked environment."
+  ]
+}

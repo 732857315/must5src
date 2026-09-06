@@ -1,0 +1,24 @@
+{
+  "format": "must5_reproduction_verification_v1",
+  "verified_utc": "2026-09-06T11:53:57.890151+00:00",
+  "environment": "Windows x64, Python 3.14.5, torch 2.13.0+cpu; see requirements-repro.txt and REPRODUCE.md",
+  "training": {
+    "epochs_completed": 15,
+    "selected_epoch": 12,
+    "dataset_records": 9232,
+    "parameters": 26322,
+    "tensors": 46,
+    "exact_tensors": 46,
+    "atol": 0,
+    "rtol": 0,
+    "passed": true,
+    "same_training_validation_split": true,
+    "manifest_sha256": "8c8536d9b6a26fe9130c00437f6b5e2a70c1415fd19d9e109eab07c5e40a283e"
+  },
+  "browser_build": {
+    "asset_version": "524ed5d1199b38a531d3",
+    "numerical_checks": 25,
+    "all_runtime_assets_match_published_build": true
+  },
+  "scope": "Independent directory in the recorded environment. Fixed inputs and weights. This does not promise cross-platform bit equality or winning strength."
+}

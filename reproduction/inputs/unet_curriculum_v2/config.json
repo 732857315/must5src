@@ -1,0 +1,12 @@
+{
+  "output_dir": "training_runs/unet_curriculum_v2",
+  "samples_per_stage": 4096,
+  "epochs": 60,
+  "batch_size": 128,
+  "base_channels": 16,
+  "threads": 4,
+  "learning_rate": 0.002,
+  "teacher_temperature": 0.025,
+  "patience": 16,
+  "seed": 20260906
+}

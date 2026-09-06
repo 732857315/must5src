@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#173c30" />
+    <link rel="manifest" href="./app.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <title>五子棋 · 浏览器 AI</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <span class="eyebrow">LOCAL GOMOKU</span>
+          <h1>五子棋 · 浏览器 AI</h1>
+          <p>大局网络 × 双 5×5 U-Net</p>
+        </div>
+        <span class="badge" id="offline">准备本地模型</span>
+      </header>
+      <div class="layout">
+        <section class="play-panel" aria-label="棋局">
+          <div class="board-heading">
+            <strong id="turn">准备棋局</strong
+            ><button id="zoom" type="button" class="subtle">放大棋盘</button>
+          </div>
+          <div id="board-scroll">
+            <div id="board" role="grid" aria-label="五子棋棋盘"></div>
+          </div>
+          <div class="legend">
+            <span><i class="black"></i>黑棋</span
+            ><span><i class="white"></i>白棋</span
+            ><span><i class="gray"></i>禁下</span
+            ><span id="legend-policy">绿：推荐落子</span>
+          </div>
+          <p id="message" role="status" aria-live="polite">
+            正在载入模型，首次加载需要稍等。
+          </p>
+          <button id="retry-save" type="button" hidden>重试保存</button>
+          <div class="actions">
+            <button id="start" disabled>开始对局</button
+            ><button id="undo" class="secondary" disabled>悔棋</button
+            ><button id="new" class="secondary">新棋局</button>
+          </div>
+        </section>
+        <aside>
+          <section class="card">
+            <h2>对局设置</h2>
+            <label
+              >AI 推算时间
+              <span class="field"
+                ><input
+                  id="seconds"
+                  type="number"
+                  min="0.1"
+                  max="30"
+                  step="0.1"
+                  value="1"
+                  inputmode="decimal"
+                /><span>秒 / 步</span></span
+              ></label
+            >
+            <div class="presets">
+              <button data-time="0.5">0.5 秒</button
+              ><button data-time="1">1 秒</button
+              ><button data-time="3">3 秒</button
+              ><button data-time="5">5 秒</button>
+            </div>
+            <p class="hint">
+              默认 1 秒，范围 0.1–30
+              秒。包含本步网络推理和搜索，慢设备可能略超时。
+            </p>
+            <label
+              >执棋
+              <select id="human">
+                <option value="1">我执黑，先手</option>
+                <option value="2">AI 执黑，先手</option>
+              </select></label
+            >
+            <label
+              >纵向（高）
+              <span class="field"
+                ><input
+                  id="size"
+                  type="number"
+                  min="5"
+                  max="32"
+                  step="1"
+                  value="15"
+                  inputmode="numeric"
+                /><span>行</span></span
+              ></label
+            >
+            <label
+              >横向（宽）
+              <span class="field"><input id="cols" type="number" min="5" max="32" step="1" value="15" inputmode="numeric" /><span>列</span></span>
+            </label>
+            <p class="hint">星位对称分布；横纵均为奇数时显示中央天元。</p>
+            <label
+              >边界禁下
+              <select id="edge">
+                <option value="none">无</option>
+                <option value="top">上边</option>
+                <option value="bottom">下边</option>
+                <option value="left">左边</option>
+                <option value="right">右边</option>
+                <option value="all">四边</option>
+              </select></label
+            >
+            <label class="toggle"
+              ><input id="edit" type="checkbox" />点击空格设置 / 取消禁下</label
+            >
+            <p class="hint">
+              先设置棋盘，再开始对局。黑白规则相同；双三、双四作为组合威胁处理。
+            </p>
+          </section>
+          <section class="card">
+            <h2>看 AI 的判断</h2>
+            <label
+              >棋盘叠加
+              <select id="overlay">
+                <option value="combined">绿色 · 综合推荐</option>
+                <option value="opponent">红色 · 对手下一步</option>
+                <option value="global">绿色 · 大局网络</option>
+                <option value="play">绿色 · 5×5 网络</option>
+                <option value="none">只看棋子</option>
+              </select></label
+            >
+            <div class="scale" id="scale"></div>
+            <p class="hint">
+              25 级色阶，按本图最高偏好缩放。越深越推荐；显示偏好并非校准胜率。
+            </p>
+            <dl>
+              <div>
+                <dt>当前分析耗时</dt>
+                <dd id="elapsed">—</dd>
+              </div>
+              <div>
+                <dt>局部窗口</dt>
+                <dd id="windows">—</dd>
+              </div>
+              <div>
+                <dt>搜索</dt>
+                <dd id="search">—</dd>
+              </div>
+              <div>
+                <dt>大局评估</dt>
+                <dd id="value">—</dd>
+              </div>
+            </dl>
+            <p class="hint">
+              评估值仅展示，暂不参与搜索。当前模型尚未通过 2000 局胜率验收。
+            </p>
+          </section>
+          <section class="card compact">
+            <h2>在设备上运行</h2>
+            <p>
+              模型和搜索在当前浏览器内计算。棋局自动保存在本机，可关闭网页后继续。
+            </p>
+            <p id="cache-note">正在准备离线资源。</p>
+            <button id="export" class="secondary">导出棋谱</button>
+          </section>
+        </aside>
+      </div>
+      <footer>
+        首次访问完成离线准备后，可断网重新打开此网页。手机首次访问需要 HTTPS
+        地址。
+      </footer>
+    </main>
+    <script type="module" src="./app.mjs"></script>
+  </body>
+</html>

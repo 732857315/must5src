@@ -1,0 +1,14 @@
+{
+  "name": "must5-browser",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "start": "python tools/browser/serve.py --open",
+    "serve:browser": "python tools/browser/serve.py",
+    "build:browser": "python tools/browser/build.py --local-models reproduction/inputs/unet_curriculum_v2 --global-checkpoint reproduction/inputs/global_policy_v4/global.pt",
+    "test:browser": "node --test --test-concurrency=1 tests/browser/core.test.mjs tests/browser/app_storage.test.mjs tests/browser/star_points.test.mjs tests/browser/inference_lifecycle.test.mjs tests/browser/search_schedule.test.mjs tests/browser/native_threat.test.mjs"
+  },
+  "dependencies": {
+    "onnxruntime-web": "1.29.0"
+  }
+}

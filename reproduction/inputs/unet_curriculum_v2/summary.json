@@ -1,0 +1,2215 @@
+{
+  "config": {
+    "output_dir": "training_runs/unet_curriculum_v2",
+    "samples_per_stage": 4096,
+    "epochs": 60,
+    "batch_size": 128,
+    "base_channels": 16,
+    "threads": 4,
+    "learning_rate": 0.002,
+    "teacher_temperature": 0.025,
+    "patience": 16,
+    "seed": 20260906
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "base_distribution": {
+        "count": 4096,
+        "side": {
+          "1": 2026,
+          "2": 2070
+        },
+        "source": {
+          "pattern": 1464,
+          "tactical_win": 527,
+          "tactical_block": 520,
+          "exact_endgame": 919,
+          "random_position": 333,
+          "tactical_loss": 308,
+          "tactical_random": 25
+        },
+        "outcome": {
+          "unknown": 2234,
+          "win": 784,
+          "draw": 755,
+          "loss": 323
+        },
+        "value_kind": {
+          "heuristic": 2234,
+          "exact": 1862
+        },
+        "pattern": {
+          "edge_three_local": 56,
+          "broken_three": 223,
+          "None": 2632,
+          "open_three_local": 57,
+          "four_one_empty": 169,
+          "closed_three_local": 256,
+          "broken_three_blocked": 532,
+          "blocked_four": 171
+        },
+        "forbidden_count": {
+          "0": 4096
+        }
+      },
+      "pattern_coverage": {
+        "covered": [
+          "p_00111",
+          "p_01011",
+          "p_01101",
+          "p_01110",
+          "p_01111",
+          "p_01112",
+          "p_01121",
+          "p_01211",
+          "p_02111",
+          "p_10011",
+          "p_10101",
+          "p_10111",
+          "p_10112",
+          "p_10121",
+          "p_10211",
+          "p_11011",
+          "p_11012",
+          "p_11021",
+          "p_11102",
+          "p_11112",
+          "p_11121",
+          "p_11122",
+          "p_11211",
+          "p_11212",
+          "p_11221",
+          "p_12112",
+          "p_12121",
+          "p_21112"
+        ],
+        "covered_count": 28,
+        "feasible_count": 28,
+        "missing": []
+      },
+      "training_base_with_replay": 3243,
+      "validation_base": 853,
+      "training_actor_labels": 6486,
+      "validation_actor_labels": 1706,
+      "opponent": {
+        "stage": 1,
+        "role": "opponent",
+        "best_epoch": 59,
+        "epochs_run": 60,
+        "elapsed_seconds": 52.14541619998636,
+        "initial_validation": {
+          "count": 1706,
+          "expert_top1": 0.2866354044548652,
+          "cross_entropy": 2.4394715047525493,
+          "source_balanced_top1": 0.2644630155957005,
+          "by_source": {
+            "pattern": {
+              "correct": 97,
+              "count": 576,
+              "accuracy": 0.1684027777777778
+            },
+            "exact_endgame": {
+              "correct": 300,
+              "count": 382,
+              "accuracy": 0.7853403141361257
+            },
+            "tactical_block": {
+              "correct": 11,
+              "count": 236,
+              "accuracy": 0.046610169491525424
+            },
+            "tactical_random": {
+              "correct": 2,
+              "count": 6,
+              "accuracy": 0.3333333333333333
+            },
+            "tactical_loss": {
+              "correct": 26,
+              "count": 144,
+              "accuracy": 0.18055555555555555
+            },
+            "tactical_win": {
+              "correct": 18,
+              "count": 226,
+              "accuracy": 0.07964601769911504
+            },
+            "random_position": {
+              "correct": 35,
+              "count": 136,
+              "accuracy": 0.25735294117647056
+            }
+          },
+          "by_side": {
+            "1": {
+              "correct": 250,
+              "count": 853,
+              "accuracy": 0.29308323563892147
+            },
+            "2": {
+              "correct": 239,
+              "count": 853,
+              "accuracy": 0.2801875732708089
+            }
+          },
+          "by_outcome": {
+            "unknown": {
+              "correct": 145,
+              "count": 909,
+              "accuracy": 0.15951595159515952
+            },
+            "draw": {
+              "correct": 271,
+              "count": 304,
+              "accuracy": 0.8914473684210527
+            },
+            "win": {
+              "correct": 60,
+              "count": 418,
+              "accuracy": 0.14354066985645933
+            },
+            "loss": {
+              "correct": 13,
+              "count": 75,
+              "accuracy": 0.17333333333333334
+            }
+          },
+          "by_stage": {
+            "1": {
+              "correct": 489,
+              "count": 1706,
+              "accuracy": 0.2866354044548652
+            }
+          },
+          "by_pattern": {
+            "broken_three": {
+              "correct": 13,
+              "count": 90,
+              "accuracy": 0.14444444444444443
+            },
+            "closed_three_local": {
+              "correct": 10,
+              "count": 64,
+              "accuracy": 0.15625
+            },
+            "None": {
+              "correct": 392,
+              "count": 1130,
+              "accuracy": 0.34690265486725663
+            },
+            "four_one_empty": {
+              "correct": 1,
+              "count": 62,
+              "accuracy": 0.016129032258064516
+            },
+            "blocked_four": {
+              "correct": 23,
+              "count": 66,
+              "accuracy": 0.3484848484848485
+            },
+            "broken_three_blocked": {
+              "correct": 46,
+              "count": 242,
+              "accuracy": 0.19008264462809918
+            },
+            "open_three_local": {
+              "correct": 1,
+              "count": 32,
+              "accuracy": 0.03125
+            },
+            "edge_three_local": {
+              "correct": 3,
+              "count": 20,
+              "accuracy": 0.15
+            }
+          }
+        },
+        "best_validation": {
+          "count": 1706,
+          "expert_top1": 0.8089097303634232,
+          "cross_entropy": 1.2683300985960162,
+          "source_balanced_top1": 0.8774684721183412,
+          "by_source": {
+            "pattern": {
+              "correct": 307,
+              "count": 576,
+              "accuracy": 0.5329861111111112
+            },
+            "exact_endgame": {
+              "correct": 376,
+              "count": 382,
+              "accuracy": 0.9842931937172775
+            },
+            "tactical_block": {
+              "correct": 236,
+              "count": 236,
+              "accuracy": 1.0
+            },
+            "tactical_random": {
+              "correct": 6,
+              "count": 6,
+              "accuracy": 1.0
+            },
+            "tactical_loss": {
+              "correct": 144,
+              "count": 144,
+              "accuracy": 1.0
+            },
+            "tactical_win": {
+              "correct": 226,
+              "count": 226,
+              "accuracy": 1.0
+            },
+            "random_position": {
+              "correct": 85,
+              "count": 136,
+              "accuracy": 0.625
+            }
+          },
+          "by_side": {
+            "1": {
+              "correct": 704,
+              "count": 853,
+              "accuracy": 0.8253223915592028
+            },
+            "2": {
+              "correct": 676,
+              "count": 853,
+              "accuracy": 0.7924970691676436
+            }
+          },
+          "by_outcome": {
+            "unknown": {
+              "correct": 590,
+              "count": 909,
+              "accuracy": 0.6490649064906491
+            },
+            "draw": {
+              "correct": 303,
+              "count": 304,
+              "accuracy": 0.9967105263157895
+            },
+            "win": {
+              "correct": 412,
+              "count": 418,
+              "accuracy": 0.9856459330143541
+            },
+            "loss": {
+              "correct": 75,
+              "count": 75,
+              "accuracy": 1.0
+            }
+          },
+          "by_stage": {
+            "1": {
+              "correct": 1380,
+              "count": 1706,
+              "accuracy": 0.8089097303634232
+            }
+          },
+          "by_pattern": {
+            "broken_three": {
+              "correct": 42,
+              "count": 90,
+              "accuracy": 0.4666666666666667
+            },
+            "closed_three_local": {
+              "correct": 22,
+              "count": 64,
+              "accuracy": 0.34375
+            },
+            "None": {
+              "correct": 1073,
+              "count": 1130,
+              "accuracy": 0.9495575221238938
+            },
+            "four_one_empty": {
+              "correct": 62,
+              "count": 62,
+              "accuracy": 1.0
+            },
+            "blocked_four": {
+              "correct": 40,
+              "count": 66,
+              "accuracy": 0.6060606060606061
+            },
+            "broken_three_blocked": {
+              "correct": 112,
+              "count": 242,
+              "accuracy": 0.4628099173553719
+            },
+            "open_three_local": {
+              "correct": 17,
+              "count": 32,
+              "accuracy": 0.53125
+            },
+            "edge_three_local": {
+              "correct": 12,
+              "count": 20,
+              "accuracy": 0.6
+            }
+          }
+        }
+      },
+      "play": {
+        "stage": 1,
+        "role": "play",
+        "best_epoch": 60,
+        "epochs_run": 60,
+        "elapsed_seconds": 50.89837310000439,
+        "initial_validation": {
+          "count": 1706,
+          "expert_top1": 0.27256740914419697,
+          "cross_entropy": 2.3995351836102787,
+          "source_balanced_top1": 0.21002981592216383,
+          "by_source": {
+            "pattern": {
+              "correct": 78,
+              "count": 576,
+              "accuracy": 0.13541666666666666
+            },
+            "exact_endgame": {
+              "correct": 304,
+              "count": 382,
+              "accuracy": 0.7958115183246073
+            },
+            "tactical_block": {
+              "correct": 7,
+              "count": 236,
+              "accuracy": 0.029661016949152543
+            },
+            "tactical_random": {
+              "correct": 0,
+              "count": 6,
+              "accuracy": 0.0
+            },
+            "tactical_loss": {
+              "correct": 28,
+              "count": 144,
+              "accuracy": 0.19444444444444445
+            },
+            "tactical_win": {
+              "correct": 13,
+              "count": 226,
+              "accuracy": 0.05752212389380531
+            },
+            "random_position": {
+              "correct": 35,
+              "count": 136,
+              "accuracy": 0.25735294117647056
+            }
+          },
+          "by_side": {
+            "1": {
+              "correct": 235,
+              "count": 853,
+              "accuracy": 0.27549824150058616
+            },
+            "2": {
+              "correct": 230,
+              "count": 853,
+              "accuracy": 0.2696365767878077
+            }
+          },
+          "by_outcome": {
+            "unknown": {
+              "correct": 120,
+              "count": 909,
+              "accuracy": 0.132013201320132
+            },
+            "draw": {
+              "correct": 274,
+              "count": 304,
+              "accuracy": 0.9013157894736842
+            },
+            "win": {
+              "correct": 59,
+              "count": 418,
+              "accuracy": 0.14114832535885166
+            },
+            "loss": {
+              "correct": 12,
+              "count": 75,
+              "accuracy": 0.16
+            }
+          },
+          "by_stage": {
+            "1": {
+              "correct": 465,
+              "count": 1706,
+              "accuracy": 0.27256740914419697
+            }
+          },
+          "by_pattern": {
+            "broken_three": {
+              "correct": 8,
+              "count": 90,
+              "accuracy": 0.08888888888888889
+            },
+            "closed_three_local": {
+              "correct": 11,
+              "count": 64,
+              "accuracy": 0.171875
+            },
+            "None": {
+              "correct": 387,
+              "count": 1130,
+              "accuracy": 0.3424778761061947
+            },
+            "four_one_empty": {
+              "correct": 3,
+              "count": 62,
+              "accuracy": 0.04838709677419355
+            },
+            "blocked_four": {
+              "correct": 12,
+              "count": 66,
+              "accuracy": 0.18181818181818182
+            },
+            "broken_three_blocked": {
+              "correct": 41,
+              "count": 242,
+              "accuracy": 0.16942148760330578
+            },
+            "open_three_local": {
+              "correct": 0,
+              "count": 32,
+              "accuracy": 0.0
+            },
+            "edge_three_local": {
+              "correct": 3,
+              "count": 20,
+              "accuracy": 0.15
+            }
+          }
+        },
+        "best_validation": {
+          "count": 1706,
+          "expert_top1": 0.8030480656506448,
+          "cross_entropy": 1.2775854612989974,
+          "source_balanced_top1": 0.870472469092349,
+          "by_source": {
+            "pattern": {
+              "correct": 306,
+              "count": 576,
+              "accuracy": 0.53125
+            },
+            "exact_endgame": {
+              "correct": 372,
+              "count": 382,
+              "accuracy": 0.9738219895287958
+            },
+            "tactical_block": {
+              "correct": 236,
+              "count": 236,
+              "accuracy": 1.0
+            },
+            "tactical_random": {
+              "correct": 6,
+              "count": 6,
+              "accuracy": 1.0
+            },
+            "tactical_loss": {
+              "correct": 144,
+              "count": 144,
+              "accuracy": 1.0
+            },
+            "tactical_win": {
+              "correct": 226,
+              "count": 226,
+              "accuracy": 1.0
+            },
+            "random_position": {
+              "correct": 80,
+              "count": 136,
+              "accuracy": 0.5882352941176471
+            }
+          },
+          "by_side": {
+            "1": {
+              "correct": 687,
+              "count": 853,
+              "accuracy": 0.8053927315357562
+            },
+            "2": {
+              "correct": 683,
+              "count": 853,
+              "accuracy": 0.8007033997655334
+            }
+          },
+          "by_outcome": {
+            "unknown": {
+              "correct": 583,
+              "count": 909,
+              "accuracy": 0.6413641364136413
+            },
+            "draw": {
+              "correct": 304,
+              "count": 304,
+              "accuracy": 1.0
+            },
+            "win": {
+              "correct": 408,
+              "count": 418,
+              "accuracy": 0.9760765550239234
+            },
+            "loss": {
+              "correct": 75,
+              "count": 75,
+              "accuracy": 1.0
+            }
+          },
+          "by_stage": {
+            "1": {
+              "correct": 1370,
+              "count": 1706,
+              "accuracy": 0.8030480656506448
+            }
+          },
+          "by_pattern": {
+            "broken_three": {
+              "correct": 49,
+              "count": 90,
+              "accuracy": 0.5444444444444444
+            },
+            "closed_three_local": {
+              "correct": 22,
+              "count": 64,
+              "accuracy": 0.34375
+            },
+            "None": {
+              "correct": 1064,
+              "count": 1130,
+              "accuracy": 0.9415929203539823
+            },
+            "four_one_empty": {
+              "correct": 62,
+              "count": 62,
+              "accuracy": 1.0
+            },
+            "blocked_four": {
+              "correct": 30,
+              "count": 66,
+              "accuracy": 0.45454545454545453
+            },
+            "broken_three_blocked": {
+              "correct": 114,
+              "count": 242,
+              "accuracy": 0.47107438016528924
+            },
+            "open_three_local": {
+              "correct": 19,
+              "count": 32,
+              "accuracy": 0.59375
+            },
+            "edge_three_local": {
+              "correct": 10,
+              "count": 20,
+              "accuracy": 0.5
+            }
+          }
+        }
+      }
+    },
+    {
+      "stage": 2,
+      "base_distribution": {
+        "count": 4096,
+        "side": {
+          "1": 2036,
+          "2": 2060
+        },
+        "source": {
+          "pattern": 1571,
+          "tactical_win": 457,
+          "tactical_block": 445,
+          "exact_endgame": 1281,
+          "random_position": 339,
+          "tactical_random": 3
+        },
+        "outcome": {
+          "unknown": 2279,
+          "win": 579,
+          "draw": 1238
+        },
+        "value_kind": {
+          "heuristic": 2279,
+          "exact": 1817
+        },
+        "pattern": {
+          "edge_three_local": 45,
+          "broken_three": 176,
+          "None": 2525,
+          "open_three_local": 44,
+          "four_one_empty": 127,
+          "closed_three_local": 403,
+          "broken_three_blocked": 598,
+          "blocked_four": 178
+        },
+        "forbidden_count": {
+          "10": 1740,
+          "5": 2356
+        }
+      },
+      "pattern_coverage": {
+        "covered": [
+          "p_00111",
+          "p_01011",
+          "p_01101",
+          "p_01110",
+          "p_01111",
+          "p_01112",
+          "p_01113",
+          "p_01121",
+          "p_01211",
+          "p_02111",
+          "p_10011",
+          "p_10101",
+          "p_10111",
+          "p_10112",
+          "p_10113",
+          "p_10121",
+          "p_10211",
+          "p_11011",
+          "p_11012",
+          "p_11013",
+          "p_11021",
+          "p_11102",
+          "p_11103",
+          "p_11112",
+          "p_11113",
+          "p_11121",
+          "p_11122",
+          "p_11123",
+          "p_11133",
+          "p_11211",
+          "p_11212",
+          "p_11213",
+          "p_11221",
+          "p_12112",
+          "p_12113",
+          "p_12121",
+          "p_21112",
+          "p_21113"
+        ],
+        "covered_count": 38,
+        "feasible_count": 38,
+        "missing": []
+      },
+      "training_base_with_replay": 4878,
+      "validation_base": 1697,
+      "training_actor_labels": 9756,
+      "validation_actor_labels": 3394,
+      "opponent": {
+        "stage": 2,
+        "role": "opponent",
+        "best_epoch": 2,
+        "epochs_run": 24,
+        "elapsed_seconds": 31.159374800001387,
+        "initial_validation": {
+          "count": 3394,
+          "expert_top1": 0.8367707719505009,
+          "cross_entropy": 1.5248941814611432,
+          "source_balanced_top1": 0.8930621331815345,
+          "by_source": {
+            "exact_endgame": {
+              "correct": 896,
+              "count": 908,
+              "accuracy": 0.986784140969163
+            },
+            "pattern": {
+              "correct": 833,
+              "count": 1258,
+              "accuracy": 0.6621621621621622
+            },
+            "tactical_win": {
+              "correct": 367,
+              "count": 386,
+              "accuracy": 0.9507772020725389
+            },
+            "tactical_block": {
+              "correct": 411,
+              "count": 422,
+              "accuracy": 0.9739336492890995
+            },
+            "random_position": {
+              "correct": 183,
+              "count": 270,
+              "accuracy": 0.6777777777777778
+            },
+            "tactical_random": {
+              "correct": 6,
+              "count": 6,
+              "accuracy": 1.0
+            },
+            "tactical_loss": {
+              "correct": 144,
+              "count": 144,
+              "accuracy": 1.0
+            }
+          },
+          "by_side": {
+            "2": {
+              "correct": 1354,
+              "count": 1697,
+              "accuracy": 0.797878609310548
+            },
+            "1": {
+              "correct": 1486,
+              "count": 1697,
+              "accuracy": 0.8756629345904537
+            }
+          },
+          "by_outcome": {
+            "draw": {
+              "correct": 811,
+              "count": 814,
+              "accuracy": 0.9963144963144963
+            },
+            "win": {
+              "correct": 615,
+              "count": 639,
+              "accuracy": 0.9624413145539906
+            },
+            "unknown": {
+              "correct": 1339,
+              "count": 1866,
+              "accuracy": 0.717577706323687
+            },
+            "loss": {
+              "correct": 75,
+              "count": 75,
+              "accuracy": 1.0
+            }
+          },
+          "by_stage": {
+            "2": {
+              "correct": 1460,
+              "count": 1688,
+              "accuracy": 0.8649289099526066
+            },
+            "1": {
+              "correct": 1380,
+              "count": 1706,
+              "accuracy": 0.8089097303634232
+            }
+          },
+          "by_pattern": {
+            "None": {
+              "correct": 2007,
+              "count": 2136,
+              "accuracy": 0.9396067415730337
+            },
+            "four_one_empty": {
+              "correct": 106,
+              "count": 114,
+              "accuracy": 0.9298245614035088
+            },
+            "closed_three_local": {
+              "correct": 180,
+              "count": 264,
+              "accuracy": 0.6818181818181818
+            },
+            "broken_three_blocked": {
+              "correct": 329,
+              "count": 496,
+              "accuracy": 0.6633064516129032
+            },
+            "blocked_four": {
+              "correct": 79,
+              "count": 138,
+              "accuracy": 0.572463768115942
+            },
+            "open_three_local": {
+              "correct": 24,
+              "count": 46,
+              "accuracy": 0.5217391304347826
+            },
+            "broken_three": {
+              "correct": 91,
+              "count": 162,
+              "accuracy": 0.5617283950617284
+            },
+            "edge_three_local": {
+              "correct": 24,
+              "count": 38,
+              "accuracy": 0.631578947368421
+            }
+          }
+        },
+        "best_validation": {
+          "count": 3394,
+          "expert_top1": 0.8270477312905127,
+          "cross_entropy": 1.376257816201178,
+          "source_balanced_top1": 0.886468416104792,
+          "by_source": {
+            "exact_endgame": {
+              "correct": 895,
+              "count": 908,
+              "accuracy": 0.98568281938326
+            },
+            "pattern": {
+              "correct": 794,
+              "count": 1258,
+              "accuracy": 0.6311605723370429
+            },
+            "tactical_win": {
+              "correct": 381,
+              "count": 386,
+              "accuracy": 0.9870466321243523
+            },
+            "tactical_block": {
+              "correct": 422,
+              "count": 422,
+              "accuracy": 1.0
+            },
+            "random_position": {
+              "correct": 168,
+              "count": 270,
+              "accuracy": 0.6222222222222222
+            },
+            "tactical_random": {
+              "correct": 6,
+              "count": 6,
+              "accuracy": 1.0
+            },
+            "tactical_loss": {
+              "correct": 141,
+              "count": 144,
+              "accuracy": 0.9791666666666666
+            }
+          },
+          "by_side": {
+            "2": {
+              "correct": 1390,
+              "count": 1697,
+              "accuracy": 0.8190925162050677
+            },
+            "1": {
+              "correct": 1417,
+              "count": 1697,
+              "accuracy": 0.8350029463759576
+            }
+          },
+          "by_outcome": {
+            "draw": {
+              "correct": 810,
+              "count": 814,
+              "accuracy": 0.995085995085995
+            },
+            "win": {
+              "correct": 623,
+              "count": 639,
+              "accuracy": 0.974960876369327
+            },
+            "unknown": {
+              "correct": 1301,
+              "count": 1866,
+              "accuracy": 0.6972132904608789
+            },
+            "loss": {
+              "correct": 73,
+              "count": 75,
+              "accuracy": 0.9733333333333334
+            }
+          },
+          "by_stage": {
+            "2": {
+              "correct": 1510,
+              "count": 1688,
+              "accuracy": 0.8945497630331753
+            },
+            "1": {
+              "correct": 1297,
+              "count": 1706,
+              "accuracy": 0.7602579132473622
+            }
+          },
+          "by_pattern": {
+            "None": {
+              "correct": 2013,
+              "count": 2136,
+              "accuracy": 0.9424157303370787
+            },
+            "four_one_empty": {
+              "correct": 114,
+              "count": 114,
+              "accuracy": 1.0
+            },
+            "closed_three_local": {
+              "correct": 187,
+              "count": 264,
+              "accuracy": 0.7083333333333334
+            },
+            "broken_three_blocked": {
+              "correct": 280,
+              "count": 496,
+              "accuracy": 0.5645161290322581
+            },
+            "blocked_four": {
+              "correct": 78,
+              "count": 138,
+              "accuracy": 0.5652173913043478
+            },
+            "open_three_local": {
+              "correct": 22,
+              "count": 46,
+              "accuracy": 0.4782608695652174
+            },
+            "broken_three": {
+              "correct": 91,
+              "count": 162,
+              "accuracy": 0.5617283950617284
+            },
+            "edge_three_local": {
+              "correct": 22,
+              "count": 38,
+              "accuracy": 0.5789473684210527
+            }
+          }
+        }
+      },
+      "play": {
+        "stage": 2,
+        "role": "play",
+        "best_epoch": 60,
+        "epochs_run": 60,
+        "elapsed_seconds": 80.78882070000691,
+        "initial_validation": {
+          "count": 3394,
+          "expert_top1": 0.8282262816735415,
+          "cross_entropy": 1.4156689554646076,
+          "source_balanced_top1": 0.88506869851611,
+          "by_source": {
+            "exact_endgame": {
+              "correct": 877,
+              "count": 908,
+              "accuracy": 0.9658590308370044
+            },
+            "pattern": {
+              "correct": 825,
+              "count": 1258,
+              "accuracy": 0.6558028616852146
+            },
+            "tactical_win": {
+              "correct": 376,
+              "count": 386,
+              "accuracy": 0.9740932642487047
+            },
+            "tactical_block": {
+              "correct": 417,
+              "count": 422,
+              "accuracy": 0.9881516587677726
+            },
+            "random_position": {
+              "correct": 167,
+              "count": 270,
+              "accuracy": 0.6185185185185185
+            },
+            "tactical_random": {
+              "correct": 6,
+              "count": 6,
+              "accuracy": 1.0
+            },
+            "tactical_loss": {
+              "correct": 143,
+              "count": 144,
+              "accuracy": 0.9930555555555556
+            }
+          },
+          "by_side": {
+            "2": {
+              "correct": 1381,
+              "count": 1697,
+              "accuracy": 0.8137890394814379
+            },
+            "1": {
+              "correct": 1430,
+              "count": 1697,
+              "accuracy": 0.8426635238656452
+            }
+          },
+          "by_outcome": {
+            "draw": {
+              "correct": 806,
+              "count": 814,
+              "accuracy": 0.9901719901719902
+            },
+            "win": {
+              "correct": 597,
+              "count": 639,
+              "accuracy": 0.9342723004694836
+            },
+            "unknown": {
+              "correct": 1333,
+              "count": 1866,
+              "accuracy": 0.7143622722400857
+            },
+            "loss": {
+              "correct": 75,
+              "count": 75,
+              "accuracy": 1.0
+            }
+          },
+          "by_stage": {
+            "2": {
+              "correct": 1479,
+              "count": 1688,
+              "accuracy": 0.8761848341232228
+            },
+            "1": {
+              "correct": 1332,
+              "count": 1706,
+              "accuracy": 0.7807737397420867
+            }
+          },
+          "by_pattern": {
+            "None": {
+              "correct": 1986,
+              "count": 2136,
+              "accuracy": 0.9297752808988764
+            },
+            "four_one_empty": {
+              "correct": 112,
+              "count": 114,
+              "accuracy": 0.9824561403508771
+            },
+            "closed_three_local": {
+              "correct": 177,
+              "count": 264,
+              "accuracy": 0.6704545454545454
+            },
+            "broken_three_blocked": {
+              "correct": 316,
+              "count": 496,
+              "accuracy": 0.6370967741935484
+            },
+            "blocked_four": {
+              "correct": 65,
+              "count": 138,
+              "accuracy": 0.47101449275362317
+            },
+            "open_three_local": {
+              "correct": 26,
+              "count": 46,
+              "accuracy": 0.5652173913043478
+            },
+            "broken_three": {
+              "correct": 103,
+              "count": 162,
+              "accuracy": 0.6358024691358025
+            },
+            "edge_three_local": {
+              "correct": 26,
+              "count": 38,
+              "accuracy": 0.6842105263157895
+            }
+          }
+        },
+        "best_validation": {
+          "count": 3394,
+          "expert_top1": 0.8629935179728934,
+          "cross_entropy": 1.3357581376467442,
+          "source_balanced_top1": 0.9100162281383893,
+          "by_source": {
+            "exact_endgame": {
+              "correct": 889,
+              "count": 908,
+              "accuracy": 0.9790748898678414
+            },
+            "pattern": {
+              "correct": 901,
+              "count": 1258,
+              "accuracy": 0.7162162162162162
+            },
+            "tactical_win": {
+              "correct": 382,
+              "count": 386,
+              "accuracy": 0.9896373056994818
+            },
+            "tactical_block": {
+              "correct": 422,
+              "count": 422,
+              "accuracy": 1.0
+            },
+            "random_position": {
+              "correct": 185,
+              "count": 270,
+              "accuracy": 0.6851851851851852
+            },
+            "tactical_random": {
+              "correct": 6,
+              "count": 6,
+              "accuracy": 1.0
+            },
+            "tactical_loss": {
+              "correct": 144,
+              "count": 144,
+              "accuracy": 1.0
+            }
+          },
+          "by_side": {
+            "2": {
+              "correct": 1456,
+              "count": 1697,
+              "accuracy": 0.8579846788450206
+            },
+            "1": {
+              "correct": 1473,
+              "count": 1697,
+              "accuracy": 0.868002357100766
+            }
+          },
+          "by_outcome": {
+            "draw": {
+              "correct": 811,
+              "count": 814,
+              "accuracy": 0.9963144963144963
+            },
+            "win": {
+              "correct": 618,
+              "count": 639,
+              "accuracy": 0.9671361502347418
+            },
+            "unknown": {
+              "correct": 1425,
+              "count": 1866,
+              "accuracy": 0.7636655948553055
+            },
+            "loss": {
+              "correct": 75,
+              "count": 75,
+              "accuracy": 1.0
+            }
+          },
+          "by_stage": {
+            "2": {
+              "correct": 1589,
+              "count": 1688,
+              "accuracy": 0.941350710900474
+            },
+            "1": {
+              "correct": 1340,
+              "count": 1706,
+              "accuracy": 0.7854630715123095
+            }
+          },
+          "by_pattern": {
+            "None": {
+              "correct": 2028,
+              "count": 2136,
+              "accuracy": 0.949438202247191
+            },
+            "four_one_empty": {
+              "correct": 114,
+              "count": 114,
+              "accuracy": 1.0
+            },
+            "closed_three_local": {
+              "correct": 203,
+              "count": 264,
+              "accuracy": 0.7689393939393939
+            },
+            "broken_three_blocked": {
+              "correct": 330,
+              "count": 496,
+              "accuracy": 0.6653225806451613
+            },
+            "blocked_four": {
+              "correct": 86,
+              "count": 138,
+              "accuracy": 0.6231884057971014
+            },
+            "open_three_local": {
+              "correct": 31,
+              "count": 46,
+              "accuracy": 0.6739130434782609
+            },
+            "broken_three": {
+              "correct": 108,
+              "count": 162,
+              "accuracy": 0.6666666666666666
+            },
+            "edge_three_local": {
+              "correct": 29,
+              "count": 38,
+              "accuracy": 0.7631578947368421
+            }
+          }
+        }
+      }
+    },
+    {
+      "stage": 3,
+      "base_distribution": {
+        "count": 4096,
+        "side": {
+          "1": 2033,
+          "2": 2063
+        },
+        "source": {
+          "exact_endgame": 1123,
+          "random_position": 225,
+          "pattern": 1422,
+          "tactical_win": 474,
+          "tactical_block": 472,
+          "tactical_loss": 378,
+          "tactical_random": 2
+        },
+        "outcome": {
+          "draw": 1645,
+          "unknown": 1531,
+          "win": 542,
+          "loss": 378
+        },
+        "value_kind": {
+          "exact": 2565,
+          "heuristic": 1531
+        },
+        "pattern": {
+          "None": 2674,
+          "edge_three_local": 25,
+          "broken_three": 100,
+          "open_three_local": 25,
+          "four_one_empty": 75,
+          "closed_three_local": 322,
+          "broken_three_blocked": 725,
+          "blocked_four": 150
+        },
+        "forbidden_count": {
+          "1": 223,
+          "2": 216,
+          "3": 235,
+          "4": 262,
+          "5": 262,
+          "6": 244,
+          "7": 264,
+          "8": 234,
+          "9": 224,
+          "10": 184,
+          "11": 206,
+          "12": 206,
+          "13": 213,
+          "14": 188,
+          "15": 204,
+          "16": 192,
+          "17": 152,
+          "18": 106,
+          "19": 67,
+          "20": 58,
+          "21": 67,
+          "22": 47,
+          "23": 36,
+          "24": 6
+        }
+      },
+      "pattern_coverage": {
+        "covered": [
+          "p_00111",
+          "p_01011",
+          "p_01101",
+          "p_01110",
+          "p_01111",
+          "p_01112",
+          "p_01113",
+          "p_01121",
+          "p_01131",
+          "p_01211",
+          "p_01311",
+          "p_02111",
+          "p_03111",
+          "p_10011",
+          "p_10101",
+          "p_10111",
+          "p_10112",
+          "p_10113",
+          "p_10121",
+          "p_10131",
+          "p_10211",
+          "p_10311",
+          "p_11011",
+          "p_11012",
+          "p_11013",
+          "p_11021",
+          "p_11031",
+          "p_11102",
+          "p_11103",
+          "p_11112",
+          "p_11113",
+          "p_11121",
+          "p_11122",
+          "p_11123",
+          "p_11131",
+          "p_11132",
+          "p_11133",
+          "p_11211",
+          "p_11212",
+          "p_11213",
+          "p_11221",
+          "p_11231",
+          "p_11311",
+          "p_11312",
+          "p_11313",
+          "p_11321",
+          "p_11331",
+          "p_12112",
+          "p_12113",
+          "p_12121",
+          "p_12131",
+          "p_13112",
+          "p_13113",
+          "p_13131",
+          "p_21112",
+          "p_21113",
+          "p_31113"
+        ],
+        "covered_count": 57,
+        "feasible_count": 57,
+        "missing": []
+      },
+      "training_base_with_replay": 4956,
+      "validation_base": 2489,
+      "training_actor_labels": 9912,
+      "validation_actor_labels": 4978,
+      "opponent": {
+        "stage": 3,
+        "role": "opponent",
+        "best_epoch": 33,
+        "epochs_run": 49,
+        "elapsed_seconds": 69.07008789999236,
+        "initial_validation": {
+          "count": 4978,
+          "expert_top1": 0.8475291281639212,
+          "cross_entropy": 1.3459152830035008,
+          "source_balanced_top1": 0.8887644230858543,
+          "by_source": {
+            "exact_endgame": {
+              "correct": 1329,
+              "count": 1342,
+              "accuracy": 0.9903129657228018
+            },
+            "random_position": {
+              "correct": 239,
+              "count": 364,
+              "accuracy": 0.6565934065934066
+            },
+            "pattern": {
+              "correct": 1196,
+              "count": 1782,
+              "accuracy": 0.6711560044893379
+            },
+            "tactical_block": {
+              "correct": 590,
+              "count": 592,
+              "accuracy": 0.9966216216216216
+            },
+            "tactical_win": {
+              "correct": 575,
+              "count": 584,
+              "accuracy": 0.9845890410958904
+            },
+            "tactical_loss": {
+              "correct": 284,
+              "count": 308,
+              "accuracy": 0.922077922077922
+            },
+            "tactical_random": {
+              "correct": 6,
+              "count": 6,
+              "accuracy": 1.0
+            }
+          },
+          "by_side": {
+            "1": {
+              "correct": 2120,
+              "count": 2489,
+              "accuracy": 0.8517476898352752
+            },
+            "2": {
+              "correct": 2099,
+              "count": 2489,
+              "accuracy": 0.8433105664925673
+            }
+          },
+          "by_outcome": {
+            "draw": {
+              "correct": 1427,
+              "count": 1431,
+              "accuracy": 0.9972047519217331
+            },
+            "unknown": {
+              "correct": 1752,
+              "count": 2464,
+              "accuracy": 0.711038961038961
+            },
+            "win": {
+              "correct": 905,
+              "count": 926,
+              "accuracy": 0.9773218142548596
+            },
+            "loss": {
+              "correct": 135,
+              "count": 157,
+              "accuracy": 0.8598726114649682
+            }
+          },
+          "by_stage": {
+            "3": {
+              "correct": 1412,
+              "count": 1584,
+              "accuracy": 0.8914141414141414
+            },
+            "1": {
+              "correct": 1297,
+              "count": 1706,
+              "accuracy": 0.7602579132473622
+            },
+            "2": {
+              "correct": 1510,
+              "count": 1688,
+              "accuracy": 0.8945497630331753
+            }
+          },
+          "by_pattern": {
+            "None": {
+              "correct": 3023,
+              "count": 3196,
+              "accuracy": 0.9458698372966208
+            },
+            "open_three_local": {
+              "correct": 33,
+              "count": 58,
+              "accuracy": 0.5689655172413793
+            },
+            "broken_three_blocked": {
+              "correct": 505,
+              "count": 788,
+              "accuracy": 0.6408629441624365
+            },
+            "closed_three_local": {
+              "correct": 274,
+              "count": 384,
+              "accuracy": 0.7135416666666666
+            },
+            "blocked_four": {
+              "correct": 115,
+              "count": 184,
+              "accuracy": 0.625
+            },
+            "broken_three": {
+              "correct": 113,
+              "count": 194,
+              "accuracy": 0.5824742268041238
+            },
+            "four_one_empty": {
+              "correct": 130,
+              "count": 132,
+              "accuracy": 0.9848484848484849
+            },
+            "edge_three_local": {
+              "correct": 26,
+              "count": 42,
+              "accuracy": 0.6190476190476191
+            }
+          }
+        },
+        "best_validation": {
+          "count": 4978,
+          "expert_top1": 0.8648051426275613,
+          "cross_entropy": 1.2571374004075881,
+          "source_balanced_top1": 0.8857364948269421,
+          "by_source": {
+            "exact_endgame": {
+              "correct": 1336,
+              "count": 1342,
+              "accuracy": 0.9955290611028316
+            },
+            "random_position": {
+              "correct": 250,
+              "count": 364,
+              "accuracy": 0.6868131868131868
+            },
+            "pattern": {
+              "correct": 1235,
+              "count": 1782,
+              "accuracy": 0.6930415263748597
+            },
+            "tactical_block": {
+              "correct": 592,
+              "count": 592,
+              "accuracy": 1.0
+            },
+            "tactical_win": {
+              "correct": 579,
+              "count": 584,
+              "accuracy": 0.9914383561643836
+            },
+            "tactical_loss": {
+              "correct": 308,
+              "count": 308,
+              "accuracy": 1.0
+            },
+            "tactical_random": {
+              "correct": 5,
+              "count": 6,
+              "accuracy": 0.8333333333333334
+            }
+          },
+          "by_side": {
+            "1": {
+              "correct": 2171,
+              "count": 2489,
+              "accuracy": 0.8722378465247087
+            },
+            "2": {
+              "correct": 2134,
+              "count": 2489,
+              "accuracy": 0.8573724387304138
+            }
+          },
+          "by_outcome": {
+            "draw": {
+              "correct": 1430,
+              "count": 1431,
+              "accuracy": 0.9993011879804332
+            },
+            "unknown": {
+              "correct": 1804,
+              "count": 2464,
+              "accuracy": 0.7321428571428571
+            },
+            "win": {
+              "correct": 914,
+              "count": 926,
+              "accuracy": 0.9870410367170627
+            },
+            "loss": {
+              "correct": 157,
+              "count": 157,
+              "accuracy": 1.0
+            }
+          },
+          "by_stage": {
+            "3": {
+              "correct": 1460,
+              "count": 1584,
+              "accuracy": 0.9217171717171717
+            },
+            "1": {
+              "correct": 1323,
+              "count": 1706,
+              "accuracy": 0.7754982415005862
+            },
+            "2": {
+              "correct": 1522,
+              "count": 1688,
+              "accuracy": 0.9016587677725119
+            }
+          },
+          "by_pattern": {
+            "None": {
+              "correct": 3070,
+              "count": 3196,
+              "accuracy": 0.9605757196495619
+            },
+            "open_three_local": {
+              "correct": 35,
+              "count": 58,
+              "accuracy": 0.603448275862069
+            },
+            "broken_three_blocked": {
+              "correct": 536,
+              "count": 788,
+              "accuracy": 0.6802030456852792
+            },
+            "closed_three_local": {
+              "correct": 269,
+              "count": 384,
+              "accuracy": 0.7005208333333334
+            },
+            "blocked_four": {
+              "correct": 113,
+              "count": 184,
+              "accuracy": 0.6141304347826086
+            },
+            "broken_three": {
+              "correct": 123,
+              "count": 194,
+              "accuracy": 0.634020618556701
+            },
+            "four_one_empty": {
+              "correct": 132,
+              "count": 132,
+              "accuracy": 1.0
+            },
+            "edge_three_local": {
+              "correct": 27,
+              "count": 42,
+              "accuracy": 0.6428571428571429
+            }
+          }
+        }
+      },
+      "play": {
+        "stage": 3,
+        "role": "play",
+        "best_epoch": 17,
+        "epochs_run": 33,
+        "elapsed_seconds": 47.06704889998946,
+        "initial_validation": {
+          "count": 4978,
+          "expert_top1": 0.8842908798714343,
+          "cross_entropy": 1.258514255105659,
+          "source_balanced_top1": 0.8959845885620911,
+          "by_source": {
+            "exact_endgame": {
+              "correct": 1330,
+              "count": 1342,
+              "accuracy": 0.9910581222056631
+            },
+            "random_position": {
+              "correct": 260,
+              "count": 364,
+              "accuracy": 0.7142857142857143
+            },
+            "pattern": {
+              "correct": 1331,
+              "count": 1782,
+              "accuracy": 0.7469135802469136
+            },
+            "tactical_block": {
+              "correct": 592,
+              "count": 592,
+              "accuracy": 1.0
+            },
+            "tactical_win": {
+              "correct": 576,
+              "count": 584,
+              "accuracy": 0.9863013698630136
+            },
+            "tactical_loss": {
+              "correct": 308,
+              "count": 308,
+              "accuracy": 1.0
+            },
+            "tactical_random": {
+              "correct": 5,
+              "count": 6,
+              "accuracy": 0.8333333333333334
+            }
+          },
+          "by_side": {
+            "1": {
+              "correct": 2216,
+              "count": 2489,
+              "accuracy": 0.8903173965447971
+            },
+            "2": {
+              "correct": 2186,
+              "count": 2489,
+              "accuracy": 0.8782643631980716
+            }
+          },
+          "by_outcome": {
+            "draw": {
+              "correct": 1430,
+              "count": 1431,
+              "accuracy": 0.9993011879804332
+            },
+            "unknown": {
+              "correct": 1908,
+              "count": 2464,
+              "accuracy": 0.7743506493506493
+            },
+            "win": {
+              "correct": 907,
+              "count": 926,
+              "accuracy": 0.9794816414686826
+            },
+            "loss": {
+              "correct": 157,
+              "count": 157,
+              "accuracy": 1.0
+            }
+          },
+          "by_stage": {
+            "3": {
+              "correct": 1459,
+              "count": 1584,
+              "accuracy": 0.9210858585858586
+            },
+            "1": {
+              "correct": 1349,
+              "count": 1706,
+              "accuracy": 0.7907385697538101
+            },
+            "2": {
+              "correct": 1594,
+              "count": 1688,
+              "accuracy": 0.9443127962085308
+            }
+          },
+          "by_pattern": {
+            "None": {
+              "correct": 3071,
+              "count": 3196,
+              "accuracy": 0.9608886107634543
+            },
+            "open_three_local": {
+              "correct": 44,
+              "count": 58,
+              "accuracy": 0.7586206896551724
+            },
+            "broken_three_blocked": {
+              "correct": 561,
+              "count": 788,
+              "accuracy": 0.7119289340101523
+            },
+            "closed_three_local": {
+              "correct": 298,
+              "count": 384,
+              "accuracy": 0.7760416666666666
+            },
+            "blocked_four": {
+              "correct": 120,
+              "count": 184,
+              "accuracy": 0.6521739130434783
+            },
+            "broken_three": {
+              "correct": 143,
+              "count": 194,
+              "accuracy": 0.7371134020618557
+            },
+            "four_one_empty": {
+              "correct": 132,
+              "count": 132,
+              "accuracy": 1.0
+            },
+            "edge_three_local": {
+              "correct": 33,
+              "count": 42,
+              "accuracy": 0.7857142857142857
+            }
+          }
+        },
+        "best_validation": {
+          "count": 4978,
+          "expert_top1": 0.883688228204098,
+          "cross_entropy": 1.2494128707327867,
+          "source_balanced_top1": 0.8991530813871024,
+          "by_source": {
+            "exact_endgame": {
+              "correct": 1329,
+              "count": 1342,
+              "accuracy": 0.9903129657228018
+            },
+            "random_position": {
+              "correct": 271,
+              "count": 364,
+              "accuracy": 0.7445054945054945
+            },
+            "pattern": {
+              "correct": 1318,
+              "count": 1782,
+              "accuracy": 0.7396184062850729
+            },
+            "tactical_block": {
+              "correct": 592,
+              "count": 592,
+              "accuracy": 1.0
+            },
+            "tactical_win": {
+              "correct": 576,
+              "count": 584,
+              "accuracy": 0.9863013698630136
+            },
+            "tactical_loss": {
+              "correct": 308,
+              "count": 308,
+              "accuracy": 1.0
+            },
+            "tactical_random": {
+              "correct": 5,
+              "count": 6,
+              "accuracy": 0.8333333333333334
+            }
+          },
+          "by_side": {
+            "1": {
+              "correct": 2212,
+              "count": 2489,
+              "accuracy": 0.8887103254319003
+            },
+            "2": {
+              "correct": 2187,
+              "count": 2489,
+              "accuracy": 0.8786661309762958
+            }
+          },
+          "by_outcome": {
+            "draw": {
+              "correct": 1430,
+              "count": 1431,
+              "accuracy": 0.9993011879804332
+            },
+            "unknown": {
+              "correct": 1909,
+              "count": 2464,
+              "accuracy": 0.7747564935064936
+            },
+            "win": {
+              "correct": 903,
+              "count": 926,
+              "accuracy": 0.9751619870410367
+            },
+            "loss": {
+              "correct": 157,
+              "count": 157,
+              "accuracy": 1.0
+            }
+          },
+          "by_stage": {
+            "3": {
+              "correct": 1472,
+              "count": 1584,
+              "accuracy": 0.9292929292929293
+            },
+            "1": {
+              "correct": 1339,
+              "count": 1706,
+              "accuracy": 0.7848769050410317
+            },
+            "2": {
+              "correct": 1588,
+              "count": 1688,
+              "accuracy": 0.9407582938388626
+            }
+          },
+          "by_pattern": {
+            "None": {
+              "correct": 3081,
+              "count": 3196,
+              "accuracy": 0.964017521902378
+            },
+            "open_three_local": {
+              "correct": 43,
+              "count": 58,
+              "accuracy": 0.7413793103448276
+            },
+            "broken_three_blocked": {
+              "correct": 553,
+              "count": 788,
+              "accuracy": 0.7017766497461929
+            },
+            "closed_three_local": {
+              "correct": 290,
+              "count": 384,
+              "accuracy": 0.7552083333333334
+            },
+            "blocked_four": {
+              "correct": 118,
+              "count": 184,
+              "accuracy": 0.6413043478260869
+            },
+            "broken_three": {
+              "correct": 148,
+              "count": 194,
+              "accuracy": 0.7628865979381443
+            },
+            "four_one_empty": {
+              "correct": 132,
+              "count": 132,
+              "accuracy": 1.0
+            },
+            "edge_three_local": {
+              "correct": 34,
+              "count": 42,
+              "accuracy": 0.8095238095238095
+            }
+          }
+        }
+      }
+    }
+  ],
+  "unique_base_samples": 12288,
+  "equivalence": "D4 rotations/reflections + black/white and predicted-side exchange",
+  "exhaustive_all_boards": false,
+  "base_contains_both_actor_labels": true,
+  "elapsed_seconds": 430.01231890000054,
+  "final_validation": {
+    "opponent": {
+      "count": 4978,
+      "expert_top1": 0.8648051426275613,
+      "cross_entropy": 1.2571374103217394,
+      "source_balanced_top1": 0.8857364948269421,
+      "by_source": {
+        "pattern": {
+          "correct": 1235,
+          "count": 1782,
+          "accuracy": 0.6930415263748597
+        },
+        "exact_endgame": {
+          "correct": 1336,
+          "count": 1342,
+          "accuracy": 0.9955290611028316
+        },
+        "tactical_block": {
+          "correct": 592,
+          "count": 592,
+          "accuracy": 1.0
+        },
+        "tactical_random": {
+          "correct": 5,
+          "count": 6,
+          "accuracy": 0.8333333333333334
+        },
+        "tactical_loss": {
+          "correct": 308,
+          "count": 308,
+          "accuracy": 1.0
+        },
+        "tactical_win": {
+          "correct": 579,
+          "count": 584,
+          "accuracy": 0.9914383561643836
+        },
+        "random_position": {
+          "correct": 250,
+          "count": 364,
+          "accuracy": 0.6868131868131868
+        }
+      },
+      "by_side": {
+        "1": {
+          "correct": 2171,
+          "count": 2489,
+          "accuracy": 0.8722378465247087
+        },
+        "2": {
+          "correct": 2134,
+          "count": 2489,
+          "accuracy": 0.8573724387304138
+        }
+      },
+      "by_outcome": {
+        "unknown": {
+          "correct": 1804,
+          "count": 2464,
+          "accuracy": 0.7321428571428571
+        },
+        "draw": {
+          "correct": 1430,
+          "count": 1431,
+          "accuracy": 0.9993011879804332
+        },
+        "win": {
+          "correct": 914,
+          "count": 926,
+          "accuracy": 0.9870410367170627
+        },
+        "loss": {
+          "correct": 157,
+          "count": 157,
+          "accuracy": 1.0
+        }
+      },
+      "by_stage": {
+        "1": {
+          "correct": 1323,
+          "count": 1706,
+          "accuracy": 0.7754982415005862
+        },
+        "2": {
+          "correct": 1522,
+          "count": 1688,
+          "accuracy": 0.9016587677725119
+        },
+        "3": {
+          "correct": 1460,
+          "count": 1584,
+          "accuracy": 0.9217171717171717
+        }
+      },
+      "by_pattern": {
+        "broken_three": {
+          "correct": 123,
+          "count": 194,
+          "accuracy": 0.634020618556701
+        },
+        "closed_three_local": {
+          "correct": 269,
+          "count": 384,
+          "accuracy": 0.7005208333333334
+        },
+        "None": {
+          "correct": 3070,
+          "count": 3196,
+          "accuracy": 0.9605757196495619
+        },
+        "four_one_empty": {
+          "correct": 132,
+          "count": 132,
+          "accuracy": 1.0
+        },
+        "blocked_four": {
+          "correct": 113,
+          "count": 184,
+          "accuracy": 0.6141304347826086
+        },
+        "broken_three_blocked": {
+          "correct": 536,
+          "count": 788,
+          "accuracy": 0.6802030456852792
+        },
+        "open_three_local": {
+          "correct": 35,
+          "count": 58,
+          "accuracy": 0.603448275862069
+        },
+        "edge_three_local": {
+          "correct": 27,
+          "count": 42,
+          "accuracy": 0.6428571428571429
+        }
+      }
+    },
+    "play": {
+      "count": 4978,
+      "expert_top1": 0.883688228204098,
+      "cross_entropy": 1.2494128832332385,
+      "source_balanced_top1": 0.8991530813871024,
+      "by_source": {
+        "pattern": {
+          "correct": 1318,
+          "count": 1782,
+          "accuracy": 0.7396184062850729
+        },
+        "exact_endgame": {
+          "correct": 1329,
+          "count": 1342,
+          "accuracy": 0.9903129657228018
+        },
+        "tactical_block": {
+          "correct": 592,
+          "count": 592,
+          "accuracy": 1.0
+        },
+        "tactical_random": {
+          "correct": 5,
+          "count": 6,
+          "accuracy": 0.8333333333333334
+        },
+        "tactical_loss": {
+          "correct": 308,
+          "count": 308,
+          "accuracy": 1.0
+        },
+        "tactical_win": {
+          "correct": 576,
+          "count": 584,
+          "accuracy": 0.9863013698630136
+        },
+        "random_position": {
+          "correct": 271,
+          "count": 364,
+          "accuracy": 0.7445054945054945
+        }
+      },
+      "by_side": {
+        "1": {
+          "correct": 2212,
+          "count": 2489,
+          "accuracy": 0.8887103254319003
+        },
+        "2": {
+          "correct": 2187,
+          "count": 2489,
+          "accuracy": 0.8786661309762958
+        }
+      },
+      "by_outcome": {
+        "unknown": {
+          "correct": 1909,
+          "count": 2464,
+          "accuracy": 0.7747564935064936
+        },
+        "draw": {
+          "correct": 1430,
+          "count": 1431,
+          "accuracy": 0.9993011879804332
+        },
+        "win": {
+          "correct": 903,
+          "count": 926,
+          "accuracy": 0.9751619870410367
+        },
+        "loss": {
+          "correct": 157,
+          "count": 157,
+          "accuracy": 1.0
+        }
+      },
+      "by_stage": {
+        "1": {
+          "correct": 1339,
+          "count": 1706,
+          "accuracy": 0.7848769050410317
+        },
+        "2": {
+          "correct": 1588,
+          "count": 1688,
+          "accuracy": 0.9407582938388626
+        },
+        "3": {
+          "correct": 1472,
+          "count": 1584,
+          "accuracy": 0.9292929292929293
+        }
+      },
+      "by_pattern": {
+        "broken_three": {
+          "correct": 148,
+          "count": 194,
+          "accuracy": 0.7628865979381443
+        },
+        "closed_three_local": {
+          "correct": 290,
+          "count": 384,
+          "accuracy": 0.7552083333333334
+        },
+        "None": {
+          "correct": 3081,
+          "count": 3196,
+          "accuracy": 0.964017521902378
+        },
+        "four_one_empty": {
+          "correct": 132,
+          "count": 132,
+          "accuracy": 1.0
+        },
+        "blocked_four": {
+          "correct": 118,
+          "count": 184,
+          "accuracy": 0.6413043478260869
+        },
+        "broken_three_blocked": {
+          "correct": 553,
+          "count": 788,
+          "accuracy": 0.7017766497461929
+        },
+        "open_three_local": {
+          "correct": 43,
+          "count": 58,
+          "accuracy": 0.7413793103448276
+        },
+        "edge_three_local": {
+          "correct": 34,
+          "count": 42,
+          "accuracy": 0.8095238095238095
+        }
+      }
+    }
+  },
+  "validation_base_samples": 2489,
+  "actor_labels": 24576
+}

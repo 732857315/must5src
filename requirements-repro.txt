@@ -1,0 +1,8 @@
+# Current verified Windows x64 environment, not a historical training lock.
+# Install the CPU torch wheel first using the command in REPRODUCE.md.
+torch==2.13.0+cpu
+numpy==2.5.1
+onnx==1.22.0
+onnxruntime==1.28.0
+onnxscript==0.7.1
+Pillow==12.2.0

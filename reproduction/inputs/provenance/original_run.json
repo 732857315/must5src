@@ -1,0 +1,12 @@
+{
+  "started_utc": "2026-09-06T08:14:56.382157+00:00",
+  "plan_sha256": "c16618269466fc820c0bf1fe81cc68db835496717381a9e02e6460067d42a5de",
+  "launcher_pid": 118968,
+  "status": "completed",
+  "training_pid": 110912,
+  "exit_code": 0,
+  "elapsed_seconds": 200.39993669997784,
+  "finished_utc": "2026-09-06T08:18:16.782356+00:00",
+  "inputs_unchanged": true,
+  "source_unchanged": true
+}
