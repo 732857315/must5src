@@ -69,7 +69,8 @@ class PublishStageTests(unittest.TestCase):
     def test_repository_boundaries_and_portable_inputs(self):
         plan = self.plan()
         web, source = plan.repos['must5'], plan.repos['must5src']
-        self.assertEqual(len(web), 39)
+        self.assertEqual(len(web), 40)
+        self.assertEqual(web[".gitattributes"], b"* -text\n")
         self.assertNotIn('DEPLOY.md', web)
         self.assertNotIn('site.zip', web)
         self.assertNotIn('manifest.json', web)
