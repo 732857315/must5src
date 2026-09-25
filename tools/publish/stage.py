@@ -23,8 +23,8 @@ EXCLUDED = {'.git', '.repo', 'exports', 'training_runs', 'web_acceptance', 'node
 EXCLUDED_PROBES = {'tests/browser_input_probe.py', 'tests/browser_large_receipt_probe.py'}
 REQUIRED = ('requirements-repro.txt', 'REPRODUCE.md', 'reproduction/run.py',
             'reproduction/manifest.json', 'package.json', 'package-lock.json',
-            'tools/publish/templates/web-README.md', 'tools/publish/templates/source-README.md',
-            'tools/publish/templates/REFERENCE-LICENSE', 'web/browser/DEPLOY.md',
+            'tools/publish/templates/web-README.md', 'README.md',
+            'REFERENCE-LICENSE', 'web/browser/DEPLOY.md',
             'web/browser/ONNX-RUNTIME-LICENSE.txt', 'web/browser/ONNX-RUNTIME-ThirdPartyNotices.txt')
 
 
@@ -144,11 +144,13 @@ def inventory(root=ROOT, *, tracked=None):
         data = files[name]
         if type(item.get('bytes')) is not int or len(data) != item['bytes'] or sha(data) != item.get('sha256'):
             raise ValueError('Missing or changed reproduction input: ' + name)
-    files['README.md'] = files['tools/publish/templates/source-README.md']
-    files['REFERENCE-LICENSE'] = files['tools/publish/templates/REFERENCE-LICENSE']
     files['.gitattributes'] = b'* -text\n'
     ignore = source_file(root, '.gitignore').read_bytes() if (root / '.gitignore').is_file() else b''
-    files['.gitignore'] = ignore.rstrip() + b'\n\n# Fixed inputs are versioned; new reproduction results are disposable.\n!/reproduction/\n!/reproduction/inputs/\n!/reproduction/inputs/**\n/reproduction/runs/\n/reproduction/outputs/\n/reproduction/prepared/\n/reproduction/prepared_v2/\n'
+    rules = (b'!/reproduction/', b'!/reproduction/inputs/', b'!/reproduction/inputs/**',
+             b'/reproduction/runs/', b'/reproduction/outputs/',
+             b'/reproduction/prepared/', b'/reproduction/prepared_v2/')
+    missing = [rule for rule in rules if rule not in ignore.splitlines()]
+    files['.gitignore'] = ignore.rstrip() + b'\n' + b''.join(rule + b'\n' for rule in missing)
     area = root / 'exports/browser'
     verified = validate_archive(area / 'must5-browser.zip', json.loads((area / 'release.json').read_text(encoding='utf-8-sig')))
     assets = json.loads(verified.files['assets.json'].decode('utf-8-sig'))['assets']
@@ -156,7 +158,7 @@ def inventory(root=ROOT, *, tracked=None):
     web['.nojekyll'] = b''
     web['.gitattributes'] = b'* -text\n'
     web['README.md'] = files['tools/publish/templates/web-README.md']
-    web['REFERENCE-LICENSE'] = files['tools/publish/templates/REFERENCE-LICENSE']
+    web['REFERENCE-LICENSE'] = files['REFERENCE-LICENSE']
     findings = absolute_json_paths(files)
     unsafe = [row for row in findings if not row['preserved_input_provenance']]
     web_findings = absolute_json_paths(web)

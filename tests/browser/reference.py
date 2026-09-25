@@ -22,8 +22,8 @@ def load_reference_models(manifest):
     return opponent, play, global_model
 
 
-def main():
-    manifest = json.loads((ROOT/'web/browser/assets.json').read_text(encoding='utf-8-sig'))
+def reference_cases(manifest):
+    """Generate fresh comparisons from the checkpoints named by this release."""
     torch.set_num_threads(2)
     opponent, play, global_model = load_reference_models(manifest)
     small=np.zeros((5,5),dtype=np.uint8);small[0,:]=3;small[1,1]=1;small[2,2]=2
@@ -40,6 +40,12 @@ def main():
           opponent=local['opponent_policy'].reshape(-1).tolist(),play=local['raw_play_policy'].reshape(-1).tolist(),
           global_policy=global_result['global_policy'].reshape(-1).tolist(),combined=global_result['combined_policy'].reshape(-1).tolist(),
           coverage=local['coverage'].reshape(-1).tolist(),window_count=local['window_count'],value=global_result['value']))
+    return cases
+
+
+def main():
+    manifest = json.loads((ROOT/'web/browser/assets.json').read_text(encoding='utf-8-sig'))
+    cases = reference_cases(manifest)
     p=ROOT/'exports/browser/reference.json';p.parent.mkdir(parents=True,exist_ok=True)
     p.write_text(json.dumps(cases),encoding='utf-8')
     print('Reference cases:',len(cases))

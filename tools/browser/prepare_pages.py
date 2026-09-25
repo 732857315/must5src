@@ -63,7 +63,7 @@ def _name(name):
     return name
 
 
-def _required_assets():
+def required_assets():
     names = set('index.html style.css app.mjs core.mjs geometry.mjs star-points.mjs '
                 'search-budget.mjs engine-worker.mjs app.webmanifest icon.svg search.wasm'.split())
     names.update({'models/opponent.onnx', 'models/play.onnx'})
@@ -135,7 +135,7 @@ def validate_archive(archive, release, *, portable=False):
     if not isinstance(manifest, dict) or not isinstance(manifest.get('assets'), dict):
         raise ValueError('Invalid assets.json')
     assets = manifest['assets']
-    if not _required_assets().issubset(assets):
+    if not required_assets().issubset(assets):
         raise ValueError('Missing required runtime/model assets')
     for name, record in assets.items():
         _name(name)

@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-import ncnn
 import numpy as np
 
 from game import BLACK, WHITE, EMPTY, FORBIDDEN, N, validate_state
@@ -46,6 +45,8 @@ def load_net(param, bin):
     for path in (param, bin):
         if not path.is_file():
             raise FileNotFoundError(path)
+    import ncnn
+
     net = ncnn.Net()
     net.opt.use_fp16_packed = False
     net.opt.use_fp16_storage = False
@@ -59,6 +60,8 @@ def load_net(param, bin):
 def np_to_mat(x):
     """Copy NCHW input into owned ncnn storage, preserving channel layout."""
     x = validate_input(x)
+    import ncnn
+
     return ncnn.Mat(x[0]).clone()
 
 

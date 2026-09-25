@@ -22,6 +22,7 @@ from unet_pipeline import load_model
 from global_inference import load_global_model
 from tools.browser.model_sources import (DEFAULT_CHECKPOINTS, resolve_checkpoint,
                                          checkpoint_metadata, verified_checkpoint_paths)
+from tools.browser.prepare_pages import required_assets
 
 OUT = ROOT / 'web/browser'
 
@@ -155,10 +156,9 @@ def main(argv=None):
                   models=sources,numerical_checks=checks,default_time_seconds=1.0)
     (ROOT/'exports/browser').mkdir(parents=True,exist_ok=True)
     (ROOT/'exports/browser/model_export_audit.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
-    names = ['index.html','style.css','app.mjs','core.mjs','geometry.mjs','star-points.mjs','search-budget.mjs','engine-worker.mjs',
-             'app.webmanifest','icon.svg','search.wasm']
-    names += [str(p.relative_to(OUT)).replace('\\','/') for folder in ('models','vendor')
-              for p in sorted((OUT/folder).iterdir()) if p.is_file()]
+    # Only declared runtime files belong in the release. Old exports or local
+    # files left in models/vendor must never enter the ZIP or offline cache.
+    names = sorted(required_assets())
     assets = {name:dict(sha256=digest(OUT/name),bytes=(OUT/name).stat().st_size) for name in names}
     version = hashlib.sha256(json.dumps(assets,sort_keys=True).encode()).hexdigest()[:20]
     (OUT/'assets.json').write_text(json.dumps(dict(version=version,assets=assets,models=sources),indent=2),encoding='utf-8')

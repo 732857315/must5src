@@ -146,6 +146,11 @@ def main(argv=None):
         if args.url:
             remote_bytes,report['online_assets']=verify_online_assets(url,manifest)
             (out/'online_assets.json').write_bytes(remote_bytes)
+        # A clean checkout has no precomputed reference.json. Generate it from
+        # this release's verified checkpoints, and retain it with this QA run.
+        from tests.browser.reference import reference_cases
+        reference = reference_cases(manifest)
+        (out/'reference.json').write_text(json.dumps(reference), encoding='utf-8')
         if server_command is not None:
             server=subprocess.Popen(server_command,cwd=ROOT,stdout=log,stderr=log,creationflags=flags)
             report['local_static_server_started']=True
@@ -228,7 +233,6 @@ def main(argv=None):
         state=js('__gomokuSnapshot()');assert state['seconds']==1 and state['n']==15 and state['cols']==15 and len(state['board'])==225 and not state['history']
         check('default_15_and_1_second',True)
         # Actual independent browser Worker execution; no server inference exists.
-        reference=json.loads((ROOT/'exports/browser/reference.json').read_text(encoding='utf-8'))
         for case in reference:
             request=dict(type='analyze',id=123,n=case['n'],cols=case.get('cols',case['n']),side=case['side'],board=case['board'],seconds=.1)
             code="""new Promise((resolve,reject)=>{const w=new Worker('./engine-worker.mjs',{type:'module'});w.onerror=e=>{w.terminate();reject(Error(e.message))};w.onmessage=({data})=>{if(data.type==='ready')w.postMessage(REQUEST);else if(data.type==='result'){w.terminate();resolve({...data,opponent:Array.from(data.opponent),play:Array.from(data.play),global:Array.from(data.global),combined:Array.from(data.combined),coverage:Array.from(data.coverage)});}else if(data.type==='error'){w.terminate();reject(Error(data.error));}};})""".replace('REQUEST',json.dumps(request))

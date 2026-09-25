@@ -1,4 +1,4 @@
-import { validate, validateSeconds, facts, legal } from "./core.mjs";
+import { validate, validateSeconds, facts } from "./core.mjs";
 import { starPoints } from "./star-points.mjs";
 const $ = (id) => document.getElementById(id),
   KEY = "must5.browser.v1";
@@ -18,6 +18,8 @@ let board = new Uint8Array(225),
   storageError = null,
   pendingCommit = null,
   deferredResult = null;
+let boardView = { rows: 0, cols: 0, cells: [], stars: new Map() },
+  scaleIsRed;
 function boardSize() {
   return { rows: n, cols };
 }
@@ -203,7 +205,20 @@ function draw() {
   $("board").setAttribute("aria-rowcount", n);
   $("board").setAttribute("aria-colcount", cols);
   $("board").setAttribute("aria-label", `${n} 行 ${cols} 列五子棋棋盘`);
-  const stars = new Map(starPoints(boardSize()).map(mark => [mark.point, mark.kind]));
+  if (boardView.rows !== n || boardView.cols !== cols) {
+    const cells = Array.from({ length: board.length }, (_, p) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.point = p;
+      button.setAttribute("role", "gridcell");
+      button.onclick = () => clickCell(p);
+      return { button, decoration: null };
+    });
+    boardView = { rows: n, cols, cells,
+      stars: new Map(starPoints(boardSize()).map(mark => [mark.point, mark.kind])) };
+    $("board").replaceChildren(...cells.map(cell => cell.button));
+  }
+  const stars = boardView.stars;
   $("board").classList.toggle("zoomed", zoom);
   const mode = $("overlay").value,
     policy = analysis?.[mode],
@@ -211,50 +226,52 @@ function draw() {
     red = mode === "opponent";
   $("legend-policy").textContent =
     mode === "none" ? "不显示预测" : red ? "红：对手下一步" : "绿：推荐落子";
-  $("scale").replaceChildren(
+  if (scaleIsRed !== red) {
+    scaleIsRed = red;
+    $("scale").replaceChildren(
     ...Array.from({ length: 25 }, (_, i) => {
       const el = document.createElement("i");
       el.style.background = color((i + 1) / 25, red);
       return el;
     }),
-  );
-  const nodes = [];
+    );
+  }
   for (let p = 0; p < board.length; p++) {
-    const b = document.createElement("button");
+    const cell = boardView.cells[p], b = cell.button;
     b.className = "cell";
-    b.type = "button";
-    b.dataset.point = p;
-    b.setAttribute("role", "gridcell");
     const name = ["空位", "黑棋", "白棋", "禁下"][board[p]],
       pos = `${Math.floor(p / cols) + 1} 行 ${(p % cols) + 1} 列`;
     const star = board[p] !== 3 ? stars.get(p) : null;
     const markName = star === "tianyuan" ? "天元" : star ? "星位" : "";
     b.setAttribute("aria-label", `${pos}，${name}${markName ? "，" + markName : ""}`);
-    if (star) {
-      const mark = document.createElement("span");
-      mark.className = `star-point ${star}`;
-      mark.setAttribute("aria-hidden", "true");
-      b.dataset.star = star;
-      b.append(mark);
+    const last = history.at(-1) === p,
+      decoration = `${board[p]}:${star || ""}:${last}`;
+    if (cell.decoration !== decoration) {
+      cell.decoration = decoration;
+      const children = [];
+      delete b.dataset.star;
+      if (star) {
+        const mark = document.createElement("span");
+        mark.className = `star-point ${star}`;
+        mark.setAttribute("aria-hidden", "true");
+        b.dataset.star = star;
+        children.push(mark);
+      }
+      if (board[p] === 1 || board[p] === 2) {
+        const stone = document.createElement("span");
+        stone.className = `stone ${board[p] === 1 ? "black" : "white"}${last ? " last" : ""}`;
+        children.push(stone);
+      }
+      b.replaceChildren(...children);
     }
     b.title = `${pos} · ${name}${policy && board[p] === 0 ? " · 偏好 " + (policy[p] * 100).toFixed(2) + "%" : ""}`;
-    if (board[p] === 1 || board[p] === 2) {
-      const stone = document.createElement("span");
-      stone.className = `stone ${board[p] === 1 ? "black" : "white"}${history.at(-1) === p ? " last" : ""}`;
-      b.append(stone);
-    } else if (board[p] === 3) b.classList.add("forbidden");
-    else if (max > 0)
-      b.style.setProperty(
-        "--heat",
-        color(Math.ceil((policy[p] / max) * 25) / 25, red),
-      );
+    if (board[p] === 3) b.classList.add("forbidden");
+    b.style.setProperty("--heat", board[p] === 0 && max > 0
+      ? color(Math.ceil((policy[p] / max) * 25) / 25, red) : "");
     if (board[p] === 0 && analysis?.search?.move === p && mode !== "none")
       b.classList.add("recommended");
     b.disabled = blocked;
-    b.onclick = () => clickCell(p);
-    nodes.push(b);
   }
-  $("board").replaceChildren(...nodes);
   $("start").hidden = started;
   $("start").disabled = !ready || busy || !!outcome || blocked;
   $("undo").disabled = !history.length || busy || blocked;

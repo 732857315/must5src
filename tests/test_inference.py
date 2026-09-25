@@ -1,6 +1,8 @@
 import importlib
+import importlib.util
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
@@ -15,6 +17,12 @@ from game import BLACK, WHITE, FORBIDDEN
 
 
 class EncodingTests(unittest.TestCase):
+    def test_training_imports_work_without_optional_ncnn(self):
+        code = ('import sys; sys.modules["ncnn"] = None; '
+                'import inference, arena, unet_curriculum, train_unet; '
+                'assert inference.encode_state(0, 1).shape == (1, 1, 5, 5)')
+        subprocess.run([sys.executable, '-c', code], check=True, capture_output=True)
+
     def test_color_swap_and_two_channel_layout(self):
         state = BLACK | (WHITE << 2) | (BLACK << 48)
         black = inference.encode_state(state, BLACK)
@@ -47,6 +55,7 @@ class EncodingTests(unittest.TestCase):
             with self.subTest(me=me), self.assertRaisesRegex(ValueError, "does not support forbidden"):
                 inference.encode_state(FORBIDDEN << 48, me, "two")
 
+    @unittest.skipUnless(importlib.util.find_spec("ncnn"), "optional ncnn runtime is not installed")
     def test_mat_roundtrip_preserves_two_channels_and_owns_input(self):
         x = np.arange(50, dtype=np.float32).reshape(1, 2, 5, 5)
         expected = x[0].copy()
@@ -67,6 +76,11 @@ class EncodingTests(unittest.TestCase):
 
 class CheckedInferenceTests(unittest.TestCase):
     def setUp(self):
+        # These tests exercise extractor checks, independently of the optional
+        # native tensor conversion tested above with the real runtime.
+        self.conversion = patch("inference.np_to_mat", return_value=object())
+        self.conversion.start()
+        self.addCleanup(self.conversion.stop)
         self.x = np.zeros((1, 1, 5, 5), dtype=np.float32)
         self.extractor = Mock()
         self.extractor.input.return_value = 0
@@ -105,7 +119,8 @@ class CheckedInferenceTests(unittest.TestCase):
                 inference.validate_outputs(policy, value)
 
     def test_missing_files_fail_before_native_loading(self):
-        with tempfile.TemporaryDirectory() as directory, patch("inference.ncnn.Net") as constructor:
+        constructor = Mock()
+        with tempfile.TemporaryDirectory() as directory, patch.dict("sys.modules", {"ncnn": SimpleNamespace(Net=constructor)}):
             with self.assertRaises(FileNotFoundError):
                 inference.load_net(Path(directory) / "missing.param", Path(directory) / "missing.bin")
             constructor.assert_not_called()
@@ -116,7 +131,7 @@ class CheckedInferenceTests(unittest.TestCase):
             param.touch()
             binary.touch()
             for param_code, model_code, message in ((-1, 0, "load_param"), (0, -1, "load_model")):
-                with self.subTest(message=message), patch("inference.ncnn.Net", return_value=self.net):
+                with self.subTest(message=message), patch.dict("sys.modules", {"ncnn": SimpleNamespace(Net=Mock(return_value=self.net))}):
                     self.net.load_param.return_value = param_code
                     self.net.load_model.return_value = model_code
                     with self.assertRaisesRegex(RuntimeError, message):

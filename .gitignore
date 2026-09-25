@@ -9,6 +9,7 @@ __pycache__/
 .ruff_cache/
 .venv/
 venv/
+.kilo/
 
 # Local configuration and disposable outputs.
 .env

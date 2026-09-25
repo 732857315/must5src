@@ -16,7 +16,7 @@ class Element {
   constructor(id = "") {
     this.id = id;
     this.value = id === "overlay" || id === "edge" ? "none" : "";
-    this.style = { setProperty() {} };
+    this.style = { setProperty(name, value) { this[name] = value; } };
     this.classList = { toggle() {}, add() {} };
     this.dataset = {};
     this.attributes = {};
@@ -463,4 +463,54 @@ test("rectangular edge preset survives cold loads and width and height changes",
   secondReload.get("size").value = "10";
   secondReload.get("size").onchange();
   assertTop(secondReload, 10, 14);
+});
+
+test("redraws and committed moves retain board cells and unchanged decorations", () => {
+  const h = readyHuman(), cells = h.get("board").children.slice();
+  const scale = h.get("scale").children.slice();
+  const previousStone = cells[137].children.find(child => child.className.includes("stone"));
+  h.get("zoom").onclick();
+  h.get("overlay").onchange();
+  assert.ok(cells.every((cell, p) => h.get("board").children[p] === cell));
+  assert.ok(scale.every((cell, p) => h.get("scale").children[p] === cell));
+  assert.equal(cells[137].children.find(child => child.className.includes("stone")), previousStone);
+  h.click(119);
+  assert.ok(cells.every((cell, p) => h.get("board").children[p] === cell));
+  assert.match(cells[119].attributes["aria-label"], /黑棋/);
+  assert.equal(cells[119].children.find(child => child.className.includes("stone")).className, "stone black last");
+  assert.equal(cells[137].children.find(child => child.className.includes("stone")).className, "stone white");
+});
+
+test("reused cells clear heat and star decoration when their state changes", () => {
+  const h = app(storage(record([], { n: 9, cols: 13, started: false })));
+  const center = 4 * 13 + 6, cell = h.get("board").children[center];
+  assert.equal(cell.dataset.star, "tianyuan");
+  h.get("edit").checked = true;
+  h.click(center);
+  assert.equal(h.get("board").children[center], cell);
+  assert.equal(cell.dataset.star, undefined);
+  assert.equal(cell.children.length, 0);
+  assert.match(cell.attributes["aria-label"], /禁下/);
+  h.click(center);
+  assert.equal(cell.dataset.star, "tianyuan");
+  assert.equal(cell.children.length, 1);
+  h.get("overlay").value = "global";
+  h.worker.onmessage({ data: { type: "result", id: h.snapshot().revision,
+    global: Array(117).fill(1 / 117), value: 0, elapsedMs: 1, windowCount: 1,
+    search: { move: center, depth: 1, nodes: 1, reason: "fixture" } } });
+  assert.match(cell.style["--heat"], /^rgb/);
+  h.get("overlay").value = "none";
+  h.get("overlay").onchange();
+  assert.equal(cell.style["--heat"], "");
+});
+
+test("equal-area dimension changes rebuild cells with correct coordinates", () => {
+  const h = app(storage(record([], { n: 6, cols: 8, started: false })));
+  const old = h.get("board").children[7];
+  h.get("size").value = "8";
+  h.get("cols").value = "6";
+  h.get("new").onclick();
+  assert.equal(h.get("board").children.length, 48);
+  assert.notEqual(h.get("board").children[7], old);
+  assert.match(h.get("board").children[7].attributes["aria-label"], /^2 行 2 列/);
 });

@@ -18,6 +18,7 @@ import { searchNodeCap, mainNodeCap, SEARCH_BUDGET_VERSION } from "./search-budg
 ort.env.wasm.numThreads = 1;
 ort.env.wasm.wasmPaths = new URL("./vendor/", import.meta.url).href;
 const models = new Map();
+const MAX_GLOBAL_MODELS = 2;
 let native;
 const ready = (async () => {
   try {
@@ -168,6 +169,26 @@ async function runModel(model, feeds, consume) {
     ])) tensor.dispose();
   }
 }
+async function globalSession(key) {
+  // Retain only the two most recently used geometries. Rectangular boards have
+  // sixteen variants, each owning a separate native inference session.
+  let session = models.get(key);
+  if (!session) {
+    session = await ort.InferenceSession.create(
+      new URL(`./models/${key}.onnx`, import.meta.url).href,
+      { executionProviders: ["wasm"] },
+    );
+  }
+  models.delete(key);
+  models.set(key, session);
+  const globals = [...models.keys()].filter(name => name.startsWith("global"));
+  for (const name of globals.slice(0, -MAX_GLOBAL_MODELS)) {
+    const previous = models.get(name);
+    models.delete(name);
+    await previous.release();
+  }
+  return session;
+}
 async function infer(board, n, side) {
   const { rows, cols } = dimensions(n);
   const all = centers(board, n),
@@ -226,16 +247,8 @@ async function infer(board, n, side) {
     key = tokenRows === tokenCols
       ? (tokenRows < 8 ? `global${tokenRows}` : "global")
       : `global${tokenRows}x${tokenCols}`;
-  if (!models.has(key))
-    models.set(
-      key,
-      await ort.InferenceSession.create(
-        new URL(`./models/${key}.onnx`, import.meta.url).href,
-        { executionProviders: ["wasm"] },
-      ),
-    );
   const { global, value } = await runModel(
-    models.get(key),
+    await globalSession(key),
     {
       inputs: new ort.Tensor(
         "float32",

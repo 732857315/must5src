@@ -112,6 +112,14 @@ class PublishStageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'changed reproduction'):
             self.plan()
 
+    def test_repeated_staging_uses_canonical_docs_and_does_not_duplicate_ignores(self):
+        first = self.plan()
+        self.put('.gitignore', first.repos['must5src']['.gitignore'])
+        second = self.plan()
+        self.assertEqual(first.repos['must5src']['.gitignore'], second.repos['must5src']['.gitignore'])
+        self.assertEqual(second.repos['must5src']['README.md'], (self.root / 'README.md').read_bytes())
+        self.assertEqual(second.repos['must5']['REFERENCE-LICENSE'], (self.root / 'REFERENCE-LICENSE').read_bytes())
+
     def test_operational_absolute_json_path_rejects(self):
         self.put('examples/board.json', b'{"path":"C:/not-portable"}')
         with self.assertRaisesRegex(ValueError, 'absolute JSON paths'):

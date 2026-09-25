@@ -1,39 +1,43 @@
 # 五子棋 · 浏览器本地 AI
 
-将本目录全部内容放在同一个 HTTPS 静态站点目录，打开对应网址。
-手机和电脑都直接在浏览器内计算，无需 Python 或推理服务器，运行资源不依赖外部 CDN。
-首次打开等待“离线已就绪”，之后可断网刷新继续使用。
-首次需要 HTTPS，电脑开发可以用 localhost；直接双击本地 HTML 不支持完整运行和离线安装。
+将发布包解压后的文件整体上传到同一个 HTTPS 静态站点目录。页面、模型和搜索都在访问者的浏览器内运行，无需推理服务器或外部 CDN。首次打开等待“离线已就绪”，之后可以断网刷新继续使用。开发时可用 localhost，直接打开 HTML 文件不支持完整运行。
 
-默认 15×15，行数和列数可分别设为 5–32，支持方形和矩形棋盘。AI 推算时间默认 1 秒，可设 0.1–30 秒。
-棋局和时间设置只保存于当前浏览器，可导出棋谱；清理网站数据会删除本机存档。
-全局评估值只展示，目前尚未通过目标的 2000 局胜率验收。
-本步预算包含推理、主搜索与防守检查。优先检查候选落点的防守风险，剩余时间再尝试主动布局；达到预算的未知结果会明确显示为未决，不代表安全。
+默认棋盘为 15×15，行列可分别设置为 5–32；支持禁下编辑、悔棋、棋谱导出和手机放大棋盘。默认每步预算 1 秒，可设置为 0.1–30 秒，包含网络推理与搜索。超时未完成的验证会保持“未决”，不能据此判断落点安全。双方五子或更多相连获胜，双三、双四不是禁手。
 
-手机界面提供“放大棋盘”，放大后可横纵双向滑动。红色是对手预测，绿色是推荐，灰色是禁下。
-先分别设置行列尺寸和禁下，再开始对局。棋盘显示四个对称星位；行列均为奇数时另显示中心天元，偶数轴没有唯一的中心交点。星位只是位置标记，不占格，也不改变落子规则。双方规则相同：五子或更多相连获胜，双三、双四不是禁手。
+棋局只保存在当前浏览器；清理网站数据会删除本机存档。保存失败时暂停对局，点击“重试保存”会继续提交原动作。离线缓存按站点目录隔离，不同部署可以共存。更新版本在旧页面关闭后接管，再次打开即可使用新资源。
 
-所有运行资源及源模型路径、SHA-256 见 assets.json。构建当前候选使用 `python tools/browser/build.py --global-checkpoint training_runs/global_policy_v4/global.pt`；不带该参数时仍按兼容默认导出global_v3。发布核验和数值对照都先核对清单中实际源模型的SHA。
-主搜索及完整防守威胁验证都在本机 WASM 内串行执行；每个合法防守回复仍独立证明，验证未完成时保持未知。storage v2 将同一父节点下、完整续线相同的强制叶回复分组，并按完整内容去重线路；位图保留全部回复，子图引用逐条保存。这只是证书存储压缩，不是省略防守或跨局面复用胜证。
-上下文占用14,211,928字节，模块初始内存仍为16 MiB、上限32 MiB，模型运行时另需内存。范围入口允许在较浅quiet层完整检查后，仅尝试新的第3、第4层；这是新的有限调用，不恢复中断DFS。
-本版本总节点护栏按每秒100万计算，主搜索仍按每秒5万封顶；实际执行量受共同截止时间限制。默认每步1秒从网络推理开始，包含推理与全部搜索阶段。旧冻结比赛的时间、节点和对手配置保持原样，不因新版本改变或继承成绩。
-运行库版本为 ONNX Runtime Web 1.29.0；许可证与第三方声明在 vendor/ 中。
-手机首次访问的 HTTPS 部署需使用自己的静态托管地址；本地 localhost 链接仅供该电脑访问。
+## 从源码构建
 
-## 构建与验收状态
+源码位于 [must5src](https://github.com/732857315/must5src)，环境安装见 [REPRODUCE.md](https://github.com/732857315/must5src/blob/main/REPRODUCE.md)。在已配置 Python、Node.js 和 LLVM 的源码目录执行：
 
-`geometry.mjs` 统一验证行列尺寸和矩形索引，`star-points.mjs` 按两轴尺寸生成星位及天元。部署时须一起保留这些文件，不能仅替换 HTML。
+```powershell
+npm ci
+npm run build:browser
+python -m unittest discover -s tests -t . -p "test_*.py"
+npm run test:browser
+python -m tests.browser.offline_probe --base-path must5
+python tools/browser/check_release.py
+```
 
-构建从清单指定的三个 checkpoint 导出两个局部 ONNX 和 16 个全局 ONNX 变体；导出不会修改源权重。当前候选的两个局部模型来自 unet_curriculum_v2，大局模型来自 global_policy_v4（15轮动作约束实验保留的第12轮）。全局池化形状逐轴取 `min(8,rows)`、`min(8,cols)`；两个轴各有 5、6、7、8 四种取值，共 16 种组合。方形沿用 `global.onnx`、`global5.onnx`、`global6.onnx`、`global7.onnx`，其余使用 `global5x8.onnx`、`global8x5.onnx` 等名称。所有变体均须随静态资源部署，Worker 按尺寸加载，不能用短边的方形变体代替矩形变体。
+`npm run build:browser` 使用随源码提供的 `unet_curriculum_v2` 和 `global_policy_v4` 发布权重，执行 25 项 PyTorch/ONNX 数值校验并编译搜索 WASM。直接使用 `build.py` 时应显式指定与 npm 脚本相同的模型参数；其旧版默认路径仅用于兼容历史实验。
 
-发布时核对同版本的 `assets.json`、`exports/browser/release.json`、`exports/browser/model_export_audit.json` 与 `exports/browser/latest_qa.json` 指向的 QA 记录，并运行源码中的 `tools/browser/check_release.py`。历史包的大小和检查结果不能替代当前版本验证。星位/矩形适配本身没有训练；之后的动作约束实验和实战结果以源码仓库的训练报告与进度记录为准。
+输出包为 `exports/browser/must5-browser.zip`，资源版本与 SHA-256 见 `assets.json`。发布包只包含声明的运行文件，不收录 `models/`、`vendor/` 中的历史残留。模型许可证和第三方声明保留在 `vendor/` 中。
 
-## 验收状态与维护工具
+## 发布与验证
 
-验收成绩属于对应的冻结源码、资源、模型和对手配置。新浏览器版本不能继承其他浏览器版本或旧 Python 候选的成绩。先完成非正式完整对局和证据核验，再冻结独立的正式运行目录；非正式对局、功能检查和搜索证明都不增加正式局数。目标仍为先手前 1000 个唯一完整棋谱无负、后手前 1000 个唯一完整棋谱胜加平至少 501 局。
+```powershell
+python tools/browser/prepare_pages.py
+python tools/browser/prepare_pages.py --check --output exports/browser/pages-site
+```
 
-源码仓库中的 `tools/browser/match.py` 冻结网页资源、模型、对手与设置并管理逐局运行；`match_runtime.py` 使用独立浏览器存档及可信鼠标/键盘输入，记录页面和 Worker 消息；`match_verify.py` 按真实棋谱检查轮次、合法落子和终局；`match_evidence.py` 核对截图与记录哈希、页面/本机存档、输入事件和 AI 请求/返回对应关系。搜索返回的代表胜线及回复数量不是完整防守树，验收胜负只取实际走到的终局。
+输出目录必须为空或尚不存在。将校验后的静态文件发布到 [must5](https://github.com/732857315/must5)，沿用该仓库的 GitHub Pages 设置。实际站点为 [risc.ink/must5](https://risc.ink/must5/)。重新打包时使用新的输出目录，避免混合版本。
 
-这些工具用于开发者验收，不属于手机或电脑访问静态站点时的运行依赖。源码测试位于 `tests/browser/`，覆盖核心规则、预算记账、本机存储失败恢复、驱动状态及证据核验；数值对照和离线触控检查单独保留。完整使用命令及最新进展见源码仓库的 `README.md`、`PROJECT_MAP.md` 和 `GOAL_PROGRESS.md`。
+部署后核对远端资源版本，并运行实际 HTTPS 地址的检查：
 
-已存在的验收目录只能按原身份恢复，不能覆盖、重开未完成棋局或删除失败。旧结果保留在 `web_acceptance/guarded_global_v2_formal/`、`web_acceptance/recursive_global_v3_formal/` 等原目录；旧用户网页的服务和棋局不参与新浏览器候选计分。后续实际结果写入各运行目录和进度报告，不以部署说明代替实际成绩。
+```powershell
+python -m tests.browser.offline_probe --url https://risc.ink/must5/
+```
+
+两个局部模型和 16 个全局模型变体均须随包发布，支持全部方形和矩形尺寸。Worker 只保留最近使用的两个全局推理会话，加上两个局部会话，切换尺寸时释放不再使用的会话；磁盘离线缓存仍保留全部模型。棋盘在尺寸不变时复用格子和装饰节点。
+
+浏览器功能、导出数值与手机尺寸触控模拟检查不等同于棋力或真实手机验收；当前模型尚未完成先后手各千局的棋力目标。训练、对局证据和数值对照工具保留在源码仓库中。

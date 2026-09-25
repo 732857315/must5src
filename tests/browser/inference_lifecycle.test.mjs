@@ -83,7 +83,8 @@ test("rectangle inference selects per-axis global tokens and caches only session
     assert.equal(call.role, tr === tc ? (tr < 8 ? `global${tr}` : "global") : `global${tr}x${tc}`);
     assert.deepEqual(call.feeds.inputs.dims, [1, 9, rows, cols]);
   }
-  assert.deepEqual(h.created, ["opponent", "play", "global", "global5x8", "global8x5", "global6x8", "global8x6", "global7x8", "global8x7"]);
+  assert.deepEqual(h.created, ["opponent", "play", "global", "global5x8", "global8x5", "global6x8", "global8x6", "global7x8", "global8x7", "global"]);
+  assert.equal(h.models.size, 4);
   allDisposed(h);
 });
 test("rectangle native bridge supplies real rows/cols and leaves input board unchanged", async () => {
@@ -166,9 +167,45 @@ test("all sixteen token geometries retain per-axis model identity", async () => 
     const expected = rows === cols ? (rows === 8 ? "global" : `global${rows}`) : `global${rows}x${cols}`;
     assert.equal(h.calls.at(-1).role, expected);
     checkPrediction(prediction, position(rows, cols));
+    assert.ok(h.models.size <= 4);
   }
-  assert.equal(h.models.size, 18); // Two local sessions and sixteen global variants.
-  assert.equal(new Set(h.created).size, h.created.length);
+  assert.equal(h.models.size, 4); // Two local sessions and two recent global variants.
+  assert.equal(new Set(h.created).size, 18);
+  assert.equal(h.sessions.filter(session => session.released === 1).length, h.sessions.length - 4);
+  allDisposed(h);
+});
+
+test("recent geometry sessions are reused and evicted models reload identical predictions", async () => {
+  const h = harness();
+  await h.ready;
+  const board = position(5, 9), size = { rows: 5, cols: 9 };
+  const first = await h.infer(board, size, 2);
+  const old = h.models.get("global5x8");
+  await h.infer(position(), 16, 2); // Touch the default geometry.
+  await h.infer(position(6, 9), { rows: 6, cols: 9 }, 2);
+  assert.equal(old.released, 1);
+  assert.equal(h.models.has("global5x8"), false);
+  assert.equal(h.models.has("global"), true);
+  assert.deepEqual(await h.infer(board, size, 2), first);
+  assert.notEqual(h.models.get("global5x8"), old);
+  assert.equal(h.models.size, 4);
+  assert.ok(h.sessions.filter(session => ["opponent", "play"].includes(session.role))
+    .every(session => session.released === 0));
+  allDisposed(h);
+});
+
+test("a failed new geometry preserves both cached models for retry", async () => {
+  const options = {}, h = harness(options);
+  await h.ready;
+  await h.infer(position(5, 9), { rows: 5, cols: 9 }, 2);
+  const retained = [...h.models.values()];
+  options.createFailure = "global6x8";
+  await assert.rejects(h.infer(position(6, 9), { rows: 6, cols: 9 }, 2), /create failed/);
+  assert.deepEqual([...h.models.values()], retained);
+  assert.ok(retained.every(session => session.released === 0));
+  options.createFailure = null;
+  checkPrediction(await h.infer(position(6, 9), { rows: 6, cols: 9 }, 2), position(6, 9));
+  assert.equal(h.models.size, 4);
   allDisposed(h);
 });
 test("a failed queued inference reports its id and allows the next request to run", async () => {
