@@ -16,6 +16,19 @@
 
 网页在棋盘尺寸不变时复用格子节点；只保留两个局部和最近使用的两个全局推理会话。离线缓存按部署目录隔离，完整模型文件仍支持所有棋盘尺寸。旧 ncnn 演示按需加载可选依赖，不影响 U-Net 训练入口。发布脚本直接使用根目录说明和许可证，避免维护重复模板。
 
+## 搜索棋力对照
+
+主搜索按落子增量维护棋形，并在单次请求内缓存相同局面的搜索结果，让相同预算覆盖更深的变化。缓存的估值不作为必胜或安全证明；独立威胁验证仍决定证明状态。网络权重、候选宽度和每步时间设置保持原值。
+
+2026-09-26 在同一台电脑的真实 Edge Worker 中，以 15×15、每步 1 秒与旧网页版本 `04fbc4d57176c0c87229` 对弈。固定开局交换先后手：种子 `20260926` 的 4 组为 6 胜 2 负；未参与调整的种子 `20261003` 的 6 组为 8 胜 4 负。共 20 局全部走至终局，新版 14 胜 6 负。这是小样本旧版对照，不代表对人类的胜率或千局棋力验收，也不表示网络已重新训练。
+
+保留旧版完整网页目录（含 `assets.json`）后，可复测两个构建。工具校验并冻结双方资源，记录每手搜索结果、网络偏好和完整棋谱，拒绝覆盖已有输出：
+
+```powershell
+python tools/browser/strength_bench.py --baseline path/to/old-browser --output exports/strength/run-a --pairs 4 --seed 20260926
+python tools/browser/strength_bench.py --baseline path/to/old-browser --output exports/strength/run-b --pairs 6 --seed 20261003 --skip-probes
+```
+
 ## 参考与许可
 
 开发参考 [732857315/Gomoku-AI](https://github.com/732857315/Gomoku-AI) 及其上游 [whyb/Gomoku-AI](https://github.com/whyb/Gomoku-AI)，固定参考版本为 `bdfe39fa5aee404483976bfdfd03f13cfc6e585a`。参考项目用于早期代码与 ONNX 对照研究；本项目的 U-Net、全盘策略和网页搜索实现与上游 AlphaZero 模型不同。参考仓库不是当前复现流程的运行依赖，未整份重复上传。

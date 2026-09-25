@@ -32,6 +32,26 @@ EXPORT void fixture_result(int move,int score,int proof) {
 EXPORT int fixture_board_at(void *context,int point) {
     return ((Context*)context)->board[point];
 }
+EXPORT void fixture_set_point(void *context,int point,int value) {
+    set_point((Context*)context,point,value);
+}
+EXPORT int fixture_verify_incremental(void *context) {
+    Context *c=(Context*)context;
+    static Work expected,actual;
+    analyse_full(c,&expected);analyse(c,&actual);
+    if(expected.empty_count!=actual.empty_count) return 1;
+    u64 hash=piece_key(c->rows*65+c->cols,0);
+    for(int i=0;i<c->cells;i++) if(c->board[i]) hash^=piece_key(i,c->board[i]);
+    if(hash!=c->hash) return 2;
+    for(int s=0;s<2;s++) {
+        if(expected.evaluation[s]!=actual.evaluation[s]||expected.win_count[s]!=actual.win_count[s]) return 3;
+        for(int i=0;i<c->cells;i++)
+            if(expected.score[s][i]!=actual.score[s][i]||expected.wins[s][i]!=actual.wins[s][i]||
+               expected.upgrades[s][i]!=actual.upgrades[s][i]) return 4;
+    }
+    for(int i=0;i<c->cells;i++) if(expected.frontier[i]!=actual.frontier[i]) return 5;
+    return 0;
+}
 static Result search(Context *c,int side,int depth,int alpha,int beta,int ply,int last,int quiescence) {
     Result result={0,UNKNOWN};
     if(!check(c)) return result;
@@ -71,6 +91,10 @@ class NativeRootSelectionTests(unittest.TestCase):
             cls.library.fixture_result.restype = None
             cls.library.fixture_board_at.argtypes = [ctypes.c_void_p, ctypes.c_int]
             cls.library.fixture_board_at.restype = ctypes.c_int
+            cls.library.fixture_set_point.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_int]
+            cls.library.fixture_set_point.restype = None
+            cls.library.fixture_verify_incremental.argtypes = [ctypes.c_void_p]
+            cls.library.fixture_verify_incremental.restype = ctypes.c_int
             cls.library.native_select.argtypes = [
                 ctypes.c_void_p, ctypes.POINTER(ctypes.c_ubyte), ctypes.c_int,
                 ctypes.c_int, ctypes.c_int, ctypes.POINTER(ctypes.c_double),
@@ -191,6 +215,30 @@ class NativeRootSelectionTests(unittest.TestCase):
         self.assertEqual(result.move, 5)
         self.assertEqual(result.proof, 1)
         self.assertEqual(result.nodes, 0)
+
+    def test_incremental_patterns_and_hash_match_full_scan_after_moves_and_undo(self):
+        import random
+        rng = random.Random(20260926)
+        context = ctypes.create_string_buffer(self.library.native_context_size())
+        for rows, cols in ((5, 5), (8, 12), (15, 15), (32, 32), (64, 64)):
+            cells = rows * cols
+            board = (ctypes.c_ubyte * cells)(*(3 if rng.random() < .12 else 0 for _ in range(cells)))
+            original = list(board)
+            priors = (ctypes.c_double * cells)()
+            output = NativeOutput()
+            self.assertEqual(self.library.native_select(context, board, rows, cols, 1, priors,
+                1, 16, 0, None, ctypes.byref(output)), 0)
+            self.assertEqual(self.library.fixture_verify_incremental(context), 0)
+            moves = [i for i in range(cells) if not board[i]]
+            rng.shuffle(moves)
+            moves = moves[:256]
+            for i, point in enumerate(moves):
+                self.library.fixture_set_point(context, point, 1 + i % 2)
+                self.assertEqual(self.library.fixture_verify_incremental(context), 0, (rows, cols, i, 'play'))
+            for point in reversed(moves):
+                self.library.fixture_set_point(context, point, 0)
+                self.assertEqual(self.library.fixture_verify_incremental(context), 0, (rows, cols, point, 'undo'))
+            self.assertEqual([self.library.fixture_board_at(context, i) for i in range(cells)], original)
 
 
 if __name__ == "__main__":

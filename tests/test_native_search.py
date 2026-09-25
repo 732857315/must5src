@@ -168,6 +168,21 @@ class NativeSearchTests(unittest.TestCase):
             self.assertEqual(board[result['move']], 0)
             self.assertLessEqual(result['nodes'], 2)
 
+    def test_transpositions_are_used_but_reset_for_the_next_request(self):
+        board = np.zeros((15, 15), dtype=np.uint8)
+        board[7, 7] = 1
+        result = select_native_move(board, 2, depth=6, candidate_width=8,
+                                    max_nodes=10000, time_limit=3)
+        library = native_library()
+        library.native_transposition_hits.argtypes = [ctypes.c_void_p]
+        library.native_transposition_hits.restype = ctypes.c_int
+        hits = library.native_transposition_hits(native_search._LOCAL.context)
+        self.assertGreater(hits, 0)
+        self.assertLessEqual(hits, result['nodes'])
+        self.assertEqual(board[result['move']], 0)
+        select_native_move(board, 2, max_nodes=0, time_limit=0)
+        self.assertEqual(library.native_transposition_hits(native_search._LOCAL.context), 0)
+
     def test_native_proofs_agree_with_independent_four_empty_minimax(self):
         rng = np.random.default_rng(9513)
         tested = proved = 0
