@@ -27,6 +27,10 @@ class Element {
   setAttribute(name, value) { this.attributes[name] = String(value); }
   append(e) { this.children.push(e); }
   replaceChildren(...children) { this.children = children; }
+  showModal() { this.open = true; }
+  close() { this.open = false; }
+  focus() { this.onfocus?.(); }
+  closest() { return this.dataset.point === undefined ? null : this; }
 }
 function record(moves = [136, 137], changes = {}) {
   const size = dimensions({ rows: changes.n ?? 16, cols: changes.cols ?? changes.n ?? 16 });
@@ -266,6 +270,7 @@ test("a failed explicit new game keeps the old board; retry discards only stale 
   h.ready();
   h.backend.fail = "before";
   h.get("new").onclick();
+  h.get("confirm-new").onclick();
   assert.equal(h.snapshot().history.length, 3);
   assert.equal(h.snapshot().started, true);
   assert.equal(h.snapshot().pendingCommit.kind, "new_game");
@@ -368,6 +373,7 @@ test("failed rectangular new game retries the same dimensions and rejects stale 
   h.get("size").value = "8"; h.get("cols").value = "12";
   h.backend.fail = "before";
   h.get("new").onclick();
+  h.get("confirm-new").onclick();
   const failed = h.snapshot();
   assert.equal(failed.n, 16);
   assert.equal(failed.cols, 16);
@@ -513,4 +519,86 @@ test("equal-area dimension changes rebuild cells with correct coordinates", () =
   assert.equal(h.get("board").children.length, 48);
   assert.notEqual(h.get("board").children[7], old);
   assert.match(h.get("board").children[7].attributes["aria-label"], /^2 行 2 列/);
+});
+
+test("new game confirmation protects the saved board when cancelled", () => {
+  const h = readyHuman(), before = h.snapshot(), jobs = h.worker.jobs.length;
+  h.get("new").onclick();
+  assert.equal(h.get("new-game-dialog").open, true);
+  assert.deepEqual(h.snapshot(), before);
+  h.get("cancel-new").onclick();
+  assert.equal(h.get("new-game-dialog").open, false);
+  assert.deepEqual(h.backend.saved().history, before.history);
+  assert.equal(h.worker.jobs.length, jobs);
+  h.get("new").onclick();
+  h.get("confirm-new").onclick();
+  assert.equal(h.get("new-game-dialog").open, false);
+  assert.deepEqual(h.snapshot().history, []);
+  assert.deepEqual(h.backend.saved().history, []);
+  assert.equal(h.snapshot().started, false);
+});
+
+test("a human can play during hint computation and stale hints never become AI moves", () => {
+  const h = app();
+  h.ready();
+  assert.equal(h.snapshot().busy, true);
+  const hintId = h.worker.jobs[0].id;
+  h.click(119);
+  assert.deepEqual(h.backend.saved().history, [136, 137, 119]);
+  h.click(120); // The second click is now on the AI's turn.
+  assert.deepEqual(h.snapshot().history, [136, 137, 119]);
+  h.send(120, hintId);
+  assert.equal(h.snapshot().board[120], 0);
+  assert.equal(h.worker.jobs.length, 2);
+  assert.equal(h.worker.jobs[1].side, 2);
+  assert.equal(h.worker.jobs[1].board[119], 1);
+  h.send(135);
+  assert.deepEqual(h.backend.saved().history, [136, 137, 119, 135]);
+  assert.equal(h.worker.jobs.filter(job => job.side === 2).length, 1);
+});
+
+test("retrying a human move with a held hint starts exactly one AI search", () => {
+  const h = app();
+  h.ready();
+  h.backend.fail = "before";
+  h.click(119);
+  h.send(120);
+  assert.deepEqual(h.snapshot().history, [136, 137]);
+  assert.equal(h.snapshot().storageBlocked, true);
+  h.backend.fail = null;
+  h.retry();
+  assert.deepEqual(h.snapshot().history, [136, 137, 119]);
+  assert.equal(h.worker.jobs.length, 2);
+  assert.equal(h.worker.jobs.filter(job => job.side === 2).length, 1);
+  assert.equal(h.snapshot().busy, true);
+});
+
+test("a failed stale hint still schedules the AI reply to the committed move", () => {
+  const h = app();
+  h.ready();
+  const hintId = h.worker.jobs[0].id;
+  h.click(119);
+  h.worker.onmessage({ data: { type: "error", id: hintId, error: "hint failed" } });
+  assert.deepEqual(h.backend.saved().history, [136, 137, 119]);
+  assert.equal(h.worker.jobs.length, 2);
+  assert.equal(h.worker.jobs[1].side, 2);
+  assert.equal(h.snapshot().busy, true);
+});
+
+test("keyboard navigation stays within rectangular board edges without playing", () => {
+  const h = app(storage(record([], { n: 5, cols: 7, started: false })));
+  const cells = h.get("board").children;
+  const active = () => cells.findIndex(cell => cell.tabIndex === 0);
+  assert.equal(active(), 17);
+  for (const [key, ctrlKey, point] of [["ArrowLeft", false, 16], ["Home", false, 14],
+    ["ArrowLeft", false, 14], ["End", false, 20], ["ArrowDown", false, 27],
+    ["End", true, 34], ["ArrowDown", false, 34], ["Home", true, 0], ["ArrowUp", false, 0]]) {
+    let prevented = false;
+    h.get("board").onkeydown({ key, ctrlKey, target: cells[active()], preventDefault() { prevented = true; } });
+    assert.equal(prevented, true);
+    assert.equal(active(), point);
+    assert.equal(cells.filter(cell => cell.tabIndex === 0).length, 1);
+  }
+  assert.deepEqual(h.snapshot().history, []);
+  assert.deepEqual(h.backend.saved().history, []);
 });

@@ -1,11 +1,11 @@
 {
-  "name": "五子棋 · 浏览器 AI",
+  "name": "五子棋 · MUST5",
   "short_name": "五子棋 AI",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f2f4ef",
-  "theme_color": "#173c30",
+  "background_color": "#f6f5f0",
+  "theme_color": "#f6f5f0",
   "icons": [
     {
       "src": "icon.svg",

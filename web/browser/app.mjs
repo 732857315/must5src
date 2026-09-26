@@ -19,7 +19,8 @@ let board = new Uint8Array(225),
   pendingCommit = null,
   deferredResult = null;
 let boardView = { rows: 0, cols: 0, cells: [], stars: new Map() },
-  scaleIsRed;
+  scaleIsRed,
+  focusPoint = 112;
 function boardSize() {
   return { rows: n, cols };
 }
@@ -86,12 +87,14 @@ function retryStorage() {
   $("seconds").value = seconds;
   say("保存成功。");
   draw();
-  pending.after?.();
+  // Drain the held result before an after-hook can launch the next request.
+  // Otherwise a stale hint could clear `busy` for the new AI search.
   if (deferredResult) {
     const data = deferredResult;
     deferredResult = null;
     handleWorkerMessage({ data });
   }
+  pending.after?.();
   return true;
 }
 function commitRecord(record, kind, after, options = {}) {
@@ -195,8 +198,24 @@ function draw() {
       : outcome
         ? `${outcome === 1 ? "黑" : "白"}方获胜`
         : !started
-          ? "设置棋盘，然后开始"
-          : `${turn() === 1 ? "黑" : "白"}方 · ${turn() === human ? "轮到你" : "AI 思考中"}`;
+          ? ready ? "准备好，开始一局" : "正在加载 AI…"
+          : `${turn() === human ? "轮到你" : "AI 思考中"} · ${turn() === 1 ? "黑棋" : "白棋"}`;
+  $("turn-dot").dataset.state = blocked ? "error" : outcome ? "ended"
+    : !started ? "ready" : turn() === human ? "playing" : "thinking";
+  $("move-count").textContent = `已下 ${history.length} 手`;
+  $("dimensions").textContent = `${n} × ${cols}`;
+  $("settings-note").textContent = started
+    ? "执棋与尺寸已锁定，新开一局即可调整。" : "执棋与尺寸在开局后锁定。";
+  for (const [name, side] of [["human", human], ["ai", 3 - human]]) {
+    $(name + "-stone").className = `player-stone ${side === 1 ? "black" : "white"}`;
+    $(name + "-color").textContent = side === 1 ? "黑棋 · 先手" : "白棋 · 后手";
+    $(name + "-player").classList.toggle("active", started && !outcome && !blocked && turn() === side);
+    $(name + "-state").textContent = blocked ? "暂停" : outcome === 3 ? "和棋"
+      : outcome ? outcome === side ? "获胜" : "结束"
+      : !started ? "准备" : turn() !== side ? "等待" : name === "human" ? "落子" : "思考中";
+  }
+  $("board").dataset.playable = String(ready && started && !blocked && !outcome && turn() === human);
+  $("board").setAttribute("aria-busy", String(busy && turn() !== human));
   for (const id of ["board", "board-scroll"]) {
     $(id).style.setProperty("--rows", n);
     $(id).style.setProperty("--cols", cols);
@@ -206,12 +225,18 @@ function draw() {
   $("board").setAttribute("aria-colcount", cols);
   $("board").setAttribute("aria-label", `${n} 行 ${cols} 列五子棋棋盘`);
   if (boardView.rows !== n || boardView.cols !== cols) {
+    focusPoint = Math.floor(n / 2) * cols + Math.floor(cols / 2);
     const cells = Array.from({ length: board.length }, (_, p) => {
       const button = document.createElement("button");
       button.type = "button";
       button.dataset.point = p;
+      button.dataset.left = String(p % cols === 0);
+      button.dataset.right = String(p % cols === cols - 1);
+      button.dataset.top = String(p < cols);
+      button.dataset.bottom = String(p >= (n - 1) * cols);
       button.setAttribute("role", "gridcell");
       button.onclick = () => clickCell(p);
+      button.onfocus = () => focusCell(p);
       return { button, decoration: null };
     });
     boardView = { rows: n, cols, cells,
@@ -225,7 +250,9 @@ function draw() {
     max = policy ? Math.max(...policy) : 0,
     red = mode === "opponent";
   $("legend-policy").textContent =
-    mode === "none" ? "不显示预测" : red ? "红：对手下一步" : "绿：推荐落子";
+    red ? "红：对手威胁" : "绿：落点参考";
+  $("legend-policy").hidden = mode === "none";
+  $("heat-key").hidden = mode === "none";
   if (scaleIsRed !== red) {
     scaleIsRed = red;
     $("scale").replaceChildren(
@@ -239,6 +266,8 @@ function draw() {
   for (let p = 0; p < board.length; p++) {
     const cell = boardView.cells[p], b = cell.button;
     b.className = "cell";
+    b.tabIndex = p === focusPoint ? 0 : -1;
+    b.dataset.empty = String(board[p] === 0);
     const name = ["空位", "黑棋", "白棋", "禁下"][board[p]],
       pos = `${Math.floor(p / cols) + 1} 行 ${(p % cols) + 1} 列`;
     const star = board[p] !== 3 ? stars.get(p) : null;
@@ -273,30 +302,59 @@ function draw() {
     b.disabled = blocked;
   }
   $("start").hidden = started;
+  $("start").textContent = ready ? "开始对局" : "正在加载 AI…";
+  $("actions").classList.toggle("in-progress", started);
   $("start").disabled = !ready || busy || !!outcome || blocked;
   $("undo").disabled = !history.length || busy || blocked;
   $("new").disabled = blocked;
   $("seconds").disabled = blocked;
   $("retry-save").hidden = !blocked;
   $("retry-save").disabled = pendingCommit === null;
-  for (const button of document.querySelectorAll("[data-time]"))
+  for (const button of document.querySelectorAll("[data-time]")) {
     button.disabled = blocked;
+    button.setAttribute("aria-pressed", String(Number(button.dataset.time) === seconds));
+  }
   for (const id of ["human", "size", "cols", "edge", "edit"])
     $(id).disabled = started || busy || blocked;
   if (analysis) {
+    $("analysis-reason").textContent = analysis.search.reason;
     $("elapsed").textContent =
       `${(analysis.elapsedMs / 1000).toFixed(2)} 秒${analysis.overrunMs > 100 ? "（超预算）" : ""}`;
     $("windows").textContent = String(analysis.windowCount);
     $("search").textContent =
       `${analysis.search.depth || 0} 层 / ${analysis.search.nodes} 节点`;
     $("value").textContent = analysis.value.toFixed(3);
-  } else
+  } else {
+    $("analysis-reason").textContent = busy ? "正在分析当前局面…" : "开局后显示当前分析。";
     for (const id of ["elapsed", "windows", "search", "value"])
       $(id).textContent = "—";
+  }
 }
+function focusCell(point, moveFocus = false) {
+  focusPoint = point;
+  for (const [p, cell] of boardView.cells.entries()) cell.button.tabIndex = p === point ? 0 : -1;
+  if (moveFocus) boardView.cells[point].button.focus();
+}
+$("board").onkeydown = (event) => {
+  const target = event.target.closest("[data-point]");
+  if (!target) return;
+  const point = Number(target.dataset.point), row = Math.floor(point / cols), col = point % cols;
+  let next;
+  switch (event.key) {
+    case "ArrowLeft": next = point - (col > 0 ? 1 : 0); break;
+    case "ArrowRight": next = point + (col < cols - 1 ? 1 : 0); break;
+    case "ArrowUp": next = point - (row > 0 ? cols : 0); break;
+    case "ArrowDown": next = point + (row < n - 1 ? cols : 0); break;
+    case "Home": next = event.ctrlKey ? 0 : row * cols; break;
+    case "End": next = event.ctrlKey ? board.length - 1 : row * cols + cols - 1; break;
+    default: return;
+  }
+  event.preventDefault();
+  focusCell(next, true);
+};
 function color(alpha, red) {
-  const base = [255, 244, 220],
-    target = red ? [230, 35, 45] : [20, 180, 80];
+  const base = [234, 211, 173],
+    target = red ? [186, 97, 80] : [101, 155, 103];
   return `rgb(${base.map((v, i) => Math.round(v * (1 - alpha) + target[i] * alpha)).join(",")})`;
 }
 const worker = new Worker("./engine-worker.mjs", { type: "module" });
@@ -307,8 +365,8 @@ function think() {
   draw();
   say(
     turn() === human
-      ? "正在计算本地推荐，请稍等…"
-      : `AI 正在本机推算，预算 ${seconds} 秒…`,
+      ? "轮到你了，点击交叉点落子。落点参考正在后台计算。"
+      : `AI 正在思考，预计 ${seconds} 秒…`,
   );
   worker.postMessage({
     type: "analyze",
@@ -325,11 +383,16 @@ function handleWorkerMessage({ data }) {
     ready = true;
     draw();
     if (started) think();
-    else say("模型已加载。设置棋盘后开始对局，或先点击空格设置禁下。");
+    else say("准备就绪。点击“开始对局”，下出你的第一手。");
     return;
   }
   if (data.type === "error") {
     busy = false;
+    if (data.id !== undefined && data.id !== revision) {
+      draw();
+      think();
+      return;
+    }
     say(`本地计算失败：${data.error}`);
     draw();
     return;
@@ -362,7 +425,7 @@ function handleWorkerMessage({ data }) {
     commitMove(p, "ai_move");
   } else {
     draw();
-    say(`${data.search.reason}。点击空位落子。`);
+    say("轮到你了，点击棋盘交叉点落子。");
   }
 }
 worker.onmessage = handleWorkerMessage;
@@ -376,6 +439,7 @@ function clickCell(p) {
     say(storageError);
     return;
   }
+  focusCell(p);
   if (!started) {
     if (!$("edit").checked) {
       say("先点击“开始对局”，或开启禁下编辑。");
@@ -400,7 +464,9 @@ function clickCell(p) {
     say("棋局已结束。");
     return;
   }
-  if (busy || turn() !== human) {
+  // Human-side analysis only supplies optional hints. Committing a move bumps
+  // revision, so its late result is discarded before the AI reply is searched.
+  if (!ready || turn() !== human) {
     say("AI 正在本地推算，请稍等。");
     return;
   }
@@ -471,7 +537,8 @@ for (const b of document.querySelectorAll("[data-time]"))
 $("overlay").onchange = draw;
 $("zoom").onclick = () => {
   zoom = !zoom;
-  $("zoom").textContent = zoom ? "适应屏幕" : "放大棋盘";
+  $("zoom-label").textContent = zoom ? "适应屏幕" : "放大棋盘";
+  $("zoom").setAttribute("aria-pressed", String(zoom));
   draw();
 };
 $("start").onclick = () => {
@@ -483,7 +550,19 @@ $("start").onclick = () => {
 };
 $("new").onclick = () => {
   if (storageBlocked()) return;
-  setup(true);
+  if (history.length) $("new-game-dialog").showModal();
+  else setup(true);
+};
+$("cancel-new").onclick = () => $("new-game-dialog").close();
+$("confirm-new").onclick = () => {
+  $("new-game-dialog").close();
+  if (!storageBlocked()) setup(true);
+};
+$("rules-link").onclick = (event) => {
+  event.preventDefault();
+  $("rules").open = true;
+  $("rules").scrollIntoView({ block: "center" });
+  $("rules").querySelector("summary").focus({ preventScroll: true });
 };
 $("undo").onclick = () => {
   if (busy || !history.length || storageBlocked()) return;
@@ -550,7 +629,8 @@ window.__gomokuSnapshot = () => ({
 });
 async function offline() {
   if (!("serviceWorker" in navigator) || !isSecureContext) {
-    $("offline").textContent = "本机计算 · 未启用离线";
+    $("offline").textContent = "当前需联网";
+    $("offline").dataset.state = "unavailable";
     $("cache-note").textContent =
       "离线缓存需要 HTTPS 或 localhost。当前仍在浏览器内计算。";
     return;
@@ -569,11 +649,13 @@ async function offline() {
     );
     const result = await status;
     if (!result.ready) throw Error("离线资源未完整保存");
-    $("offline").textContent = "本机计算 · 离线已就绪";
+    $("offline").textContent = "离线已就绪";
+    $("offline").dataset.state = "ready";
     $("cache-note").textContent =
       "全部模型和运行资源已保存，可以断网使用。棋局只保存在当前设备。";
   } catch (error) {
-    $("offline").textContent = "本机计算 · 离线未就绪";
+    $("offline").textContent = "离线未就绪";
+    $("offline").dataset.state = "unavailable";
     $("cache-note").textContent =
       `离线准备未完成：${error.message}。保持联网后刷新重试。`;
   }

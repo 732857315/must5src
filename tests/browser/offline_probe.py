@@ -214,8 +214,8 @@ def main(argv=None):
             assert details['boardHeight']<=min(.72*details['viewportHeight'],900)+1
             details['cell_sample']=details.pop('cellRects')[0]
             return details
-        def screenshot(name):
-            data=cdp('Page.captureScreenshot',{'format':'png','captureBeyondViewport':True})['data']
+        def screenshot(name,viewport=False):
+            data=cdp('Page.captureScreenshot',{'format':'png','captureBeyondViewport':not viewport})['data']
             (out/name).write_bytes(base64.b64decode(data))
         cdp('Page.enable');cdp('Runtime.enable');cdp('Network.enable')
         cdp('Page.addScriptToEvaluateOnNewDocument',{'source':"window.__errors=[];window.addEventListener('error',e=>__errors.push(e.message));window.addEventListener('unhandledrejection',e=>__errors.push(String(e.reason)));window.__trusted=[];document.addEventListener('click',e=>__trusted.push({trusted:e.isTrusted,target:e.target.id||e.target.closest('[data-point]')?.dataset.point}));"})
@@ -232,6 +232,34 @@ def main(argv=None):
             report['page_asset_version']=page_assets['version']
         state=js('__gomokuSnapshot()');assert state['seconds']==1 and state['n']==15 and state['cols']==15 and len(state['board'])==225 and not state['history']
         check('default_15_and_1_second',True)
+        ui=js("""(()=>({overlay:document.getElementById('overlay').value,
+            heatHidden:document.getElementById('heat-key').hidden,
+            advancedOpen:document.getElementById('board-options').open,
+            analysisOpen:document.getElementById('analysis-details').open,
+            boardTabStops:[...document.querySelectorAll('#board .cell')].filter(e=>e.tabIndex===0).length,
+            repositories:[...document.querySelectorAll('.github-link,.repo-link')].map(e=>({href:e.href,target:e.target,rel:e.rel}))}))()""")
+        assert ui['overlay']=='none' and ui['heatHidden'] and not ui['advancedOpen'] and not ui['analysisOpen']
+        assert ui['boardTabStops']==1
+        assert {link['href'] for link in ui['repositories']}=={'https://github.com/732857315/must5src','https://github.com/732857315/must5'}
+        assert all(link['target']=='_blank' and 'noopener' in link['rel'] for link in ui['repositories'])
+        check('clean_board_and_github_repository_index',ui)
+        for width,height in ((320,740),(390,844),(768,1024),(1360,1000)):
+            cdp('Emulation.setDeviceMetricsOverride',{'width':width,'height':height,'deviceScaleFactor':1,'mobile':width<800})
+            js('scrollTo(0,0)')
+            layout=geometry(15,15)
+            header=js("""(()=>{const r=document.querySelector('.github-link').getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom}})()""")
+            assert 0<=header['left']<header['right']<=width and 0<=header['top']<header['bottom']<=height
+            actions=js("document.getElementById('actions').getBoundingClientRect().bottom")
+            assert actions<=height, 'Primary game controls should be visible without scrolling'
+            check(f'responsive_layout_and_github_{width}',layout)
+            if width in (390,1360):screenshot(f'ready-{width}.png')
+        click('[data-point="112"]')
+        for kind in ('keyDown','keyUp'):
+            cdp('Input.dispatchKeyEvent',{'type':kind,'key':'ArrowRight','code':'ArrowRight','windowsVirtualKeyCode':39})
+        assert js('document.activeElement.dataset.point')=='113'
+        assert js('[...document.querySelectorAll("#board .cell")].filter(e=>e.tabIndex===0).length')==1
+        assert not js('__gomokuSnapshot().history.length')
+        check('keyboard_board_navigation_without_accidental_move',True)
         # Actual independent browser Worker execution; no server inference exists.
         for case in reference:
             request=dict(type='analyze',id=123,n=case['n'],cols=case.get('cols',case['n']),side=case['side'],board=case['board'],seconds=.1)
@@ -250,6 +278,7 @@ def main(argv=None):
             check(f'desktop_stars_and_geometry_{rows}x{cols}',details)
             if (rows,cols) in ((15,17),(5,32),(32,5)):screenshot(f'desktop-{rows}x{cols}.png')
         shape(16,16)
+        click('#board-options > summary')
         click('#edit');click('[data-point="51"]')
         assert js('__gomokuSnapshot().board[51]')==3
         assert js('document.querySelectorAll(".star-point").length')==3
@@ -258,16 +287,23 @@ def main(argv=None):
         assert js('document.querySelectorAll(".star-point").length')==4
         check('forbidden_star_hidden_and_restored',True)
         click('#edit');click('[data-point="0"]');assert js('__gomokuSnapshot().board[0]')==3
+        click('#board-options > summary')
         click('#start');wait('!__gomokuSnapshot().busy');click('[data-point="0"]')
         assert '禁下' in js("document.getElementById('message').textContent")
         check('forbidden_cell_feedback',True)
-        click('[data-point="136"]');wait('__gomokuSnapshot().history.length===2&&!__gomokuSnapshot().busy')
+        js('document.querySelector(\'[data-point="136"]\').focus()')
+        assert js('document.activeElement.dataset.point')=='136'
+        cdp('Input.dispatchKeyEvent',{'type':'keyDown','key':'Enter','code':'Enter',
+            'windowsVirtualKeyCode':13,'text':'\r','unmodifiedText':'\r'})
+        cdp('Input.dispatchKeyEvent',{'type':'keyUp','key':'Enter','code':'Enter','windowsVirtualKeyCode':13})
+        wait('__gomokuSnapshot().history.length===2&&!__gomokuSnapshot().busy')
         first=js('__gomokuSnapshot()');assert first['board'][136]==1 and len(first['history'])==2
-        check('real_desktop_move_ai_reply',{'plies':len(first['history']),'elapsed_ms':first['analysis']['elapsedMs']})
+        check('real_desktop_keyboard_move_ai_reply',{'plies':len(first['history']),'elapsed_ms':first['analysis']['elapsedMs']})
         screenshot('desktop.png')
         cdp('Emulation.setDeviceMetricsOverride',{'width':390,'height':844,'deviceScaleFactor':2,'mobile':True})
         cdp('Emulation.setTouchEmulationEnabled',{'enabled':True,'maxTouchPoints':5})
         click('[data-time="0.5"]',True);assert js('__gomokuSnapshot().seconds')==.5
+        assert js('document.querySelector("[data-time=\\\"0.5\\\"]").getAttribute("aria-pressed")')=='true'
         click('#zoom',True);assert js("document.getElementById('board').scrollWidth>document.getElementById('board-scroll').clientWidth")
         click('#zoom',True);assert js('document.documentElement.scrollWidth<=window.innerWidth')
         screenshot('mobile.png');check('mobile_touch_zoom_and_time',True)
@@ -291,8 +327,16 @@ def main(argv=None):
         assert all(x['trusted'] for x in js('window.__trusted'))
         screenshot('offline-mobile.png');check('offline_touch_move_and_ai_reply',{'plies':4,'errors':js('window.__errors'),'trusted_clicks':js('window.__trusted')})
         (out/'offline_state.json').write_text(json.dumps(offline,ensure_ascii=False),encoding='utf-8')
+        click('#new',True)
+        assert js('document.getElementById("new-game-dialog").open')
+        screenshot('mobile-new-game-confirmation.png',viewport=True)
+        click('#cancel-new',True)
+        assert not js('document.getElementById("new-game-dialog").open')
+        assert js('__gomokuSnapshot().history')==offline['history']
+        assert js('JSON.parse(localStorage.getItem("must5.browser.v1")).history')==offline['history']
+        check('cancel_new_game_preserves_board_and_saved_moves',True)
         for rows,cols in ((15,17),(5,19),(19,5)):
-            click('#new',True);shape(rows,cols,True)
+            click('#new',True);click('#confirm-new',True);shape(rows,cols,True)
             check(f'offline_mobile_stars_and_geometry_{rows}x{cols}',geometry(rows,cols))
             click('#start',True);wait('!__gomokuSnapshot().busy')
             move=rows//2*cols+cols//2

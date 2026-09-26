@@ -2,172 +2,102 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="theme-color" content="#173c30" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#f6f5f0" />
+    <meta name="description" content="打开就能玩的五子棋。与本地 AI 对弈，自动保存棋局，支持离线使用。" />
     <link rel="manifest" href="./app.webmanifest" />
     <link rel="icon" href="./icon.svg" type="image/svg+xml" />
-    <title>五子棋 · 浏览器 AI</title>
+    <title>五子棋 · MUST5</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <main>
-      <header>
-        <div>
-          <span class="eyebrow">LOCAL GOMOKU</span>
-          <h1>五子棋 · 浏览器 AI</h1>
-          <p>大局网络 × 双 5×5 U-Net</p>
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.56.1.76-.24.76-.54v-2.07c-3.1.68-3.75-1.32-3.75-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.6 1.21 3.23.93.1-.72.39-1.21.71-1.49-2.47-.28-5.07-1.24-5.07-5.5 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.95 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.15 1.77 1.15 2.99 0 4.27-2.6 5.22-5.08 5.5.4.34.76 1.02.76 2.06v3.04c0 .3.2.65.77.54A11.1 11.1 0 0 0 12 .9Z"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+      <symbol id="i-zoom" viewBox="0 0 24 24"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="m9 5-5 5 5 5M4 10h9a6 6 0 0 1 0 12" transform="translate(0 -2)"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v.5"/></symbol>
+    </svg>
+    <a class="skip-link" href="#game">跳到棋盘</a>
+    <main class="app-shell">
+      <header class="site-header">
+        <div class="brand">
+          <img src="./icon.svg" width="40" height="40" alt="" />
+          <div><h1>五子棋<span>MUST5</span></h1><p>一方棋盘，随时开局。</p></div>
         </div>
-        <span class="badge" id="offline">准备本地模型</span>
+        <nav class="header-links" aria-label="项目导航">
+          <a href="#rules" id="rules-link">怎么玩</a>
+          <a class="github-link" href="https://github.com/732857315/must5src" target="_blank" rel="noopener noreferrer" aria-label="在 GitHub 查看源码仓库（新标签页）">
+            <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>GitHub
+            <svg class="icon small" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+        </nav>
       </header>
+      <div class="page-heading">
+        <div><p class="eyebrow">PLAY A LITTLE. THINK AHEAD.</p><h2>和 AI 下一局</h2></div>
+        <span class="badge" id="offline" role="status">准备离线资源</span>
+      </div>
       <div class="layout">
-        <section class="play-panel" aria-label="棋局">
+        <section class="play-panel" id="game" aria-label="棋局" tabindex="-1">
           <div class="board-heading">
-            <strong id="turn">准备棋局</strong
-            ><button id="zoom" type="button" class="subtle">放大棋盘</button>
+            <div class="turn-heading"><span class="turn-dot" id="turn-dot" aria-hidden="true"></span><strong id="turn">正在准备棋局</strong></div>
+            <button id="zoom" type="button" class="subtle" aria-pressed="false">
+              <svg class="icon" aria-hidden="true"><use href="#i-zoom"/></svg><span id="zoom-label">放大棋盘</span>
+            </button>
           </div>
-          <div id="board-scroll">
-            <div id="board" role="grid" aria-label="五子棋棋盘"></div>
+          <div class="players" aria-label="对弈双方">
+            <div class="player" id="human-player"><i class="player-stone black" id="human-stone" aria-hidden="true"></i><div><strong>你</strong><span id="human-color">黑棋 · 先手</span></div><span class="player-tag" id="human-state">准备</span></div>
+            <div class="player" id="ai-player"><i class="player-stone white" id="ai-stone" aria-hidden="true"></i><div><strong>本地 AI</strong><span id="ai-color">白棋 · 后手</span></div><span class="player-tag" id="ai-state">准备</span></div>
           </div>
-          <div class="legend">
-            <span><i class="black"></i>黑棋</span
-            ><span><i class="white"></i>白棋</span
-            ><span><i class="gray"></i>禁下</span
-            ><span id="legend-policy">绿：推荐落子</span>
+          <div class="actions" id="actions">
+            <button id="start" type="button" class="primary" disabled>正在加载 AI…</button>
+            <button id="undo" type="button" class="secondary" disabled><svg class="icon" aria-hidden="true"><use href="#i-undo"/></svg>悔棋</button>
+            <button id="new" type="button" class="secondary"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>新对局</button>
+            <button id="export" type="button" class="icon-button secondary" title="导出棋谱" aria-label="导出当前棋谱"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></button>
           </div>
-          <p id="message" role="status" aria-live="polite">
-            正在载入模型，首次加载需要稍等。
-          </p>
+          <div class="board-surface">
+            <div id="board-scroll"><div id="board" role="grid" aria-label="五子棋棋盘" aria-describedby="board-help"></div></div>
+          </div>
+          <div class="board-meta">
+            <div class="legend"><span><i class="last-mark"></i>上一手</span><span id="legend-policy" hidden>推荐落点</span></div>
+            <span id="move-count">已下 0 手</span>
+            <a href="#settings" id="dimensions" title="前往对局设置">15 × 15</a>
+          </div>
+          <div class="status-line"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg><p id="message" role="status" aria-live="polite">正在载入 AI，首次打开请稍等。</p></div>
           <button id="retry-save" type="button" hidden>重试保存</button>
-          <div class="actions">
-            <button id="start" disabled>开始对局</button
-            ><button id="undo" class="secondary" disabled>悔棋</button
-            ><button id="new" class="secondary">新棋局</button>
-          </div>
+          <p id="board-help" class="sr-only">点击交叉点落子。键盘可使用方向键移动，Enter 或空格落子；Home、End 跳至本行两端。</p>
         </section>
-        <aside>
-          <section class="card">
-            <h2>对局设置</h2>
-            <label
-              >AI 推算时间
-              <span class="field"
-                ><input
-                  id="seconds"
-                  type="number"
-                  min="0.1"
-                  max="30"
-                  step="0.1"
-                  value="1"
-                  inputmode="decimal"
-                /><span>秒 / 步</span></span
-              ></label
-            >
-            <div class="presets">
-              <button data-time="0.5">0.5 秒</button
-              ><button data-time="1">1 秒</button
-              ><button data-time="3">3 秒</button
-              ><button data-time="5">5 秒</button>
-            </div>
-            <p class="hint">
-              默认 1 秒，范围 0.1–30
-              秒。包含本步网络推理和搜索，慢设备可能略超时。
-            </p>
-            <label
-              >执棋
-              <select id="human">
-                <option value="1">我执黑，先手</option>
-                <option value="2">AI 执黑，先手</option>
-              </select></label
-            >
-            <label
-              >纵向（高）
-              <span class="field"
-                ><input
-                  id="size"
-                  type="number"
-                  min="5"
-                  max="32"
-                  step="1"
-                  value="15"
-                  inputmode="numeric"
-                /><span>行</span></span
-              ></label
-            >
-            <label
-              >横向（宽）
-              <span class="field"><input id="cols" type="number" min="5" max="32" step="1" value="15" inputmode="numeric" /><span>列</span></span>
-            </label>
-            <p class="hint">星位对称分布；横纵均为奇数时显示中央天元。</p>
-            <label
-              >边界禁下
-              <select id="edge">
-                <option value="none">无</option>
-                <option value="top">上边</option>
-                <option value="bottom">下边</option>
-                <option value="left">左边</option>
-                <option value="right">右边</option>
-                <option value="all">四边</option>
-              </select></label
-            >
-            <label class="toggle"
-              ><input id="edit" type="checkbox" />点击空格设置 / 取消禁下</label
-            >
-            <p class="hint">
-              先设置棋盘，再开始对局。黑白规则相同；双三、双四作为组合威胁处理。
-            </p>
+        <aside aria-label="设置与项目信息">
+          <section class="card settings-card" id="settings" aria-labelledby="settings-title" tabindex="-1">
+            <div class="card-heading"><h2 id="settings-title">对局设置</h2><a class="back-to-board" href="#game">回到棋盘 ↑</a><span class="section-number" aria-hidden="true">01</span></div>
+            <label class="control-row" for="human"><span>我的执棋</span><select id="human"><option value="1">黑棋 · 我先手</option><option value="2">白棋 · AI 先手</option></select></label>
+            <label class="control-row" for="seconds"><span>AI 思考时间</span><span class="field"><input id="seconds" type="number" min="0.1" max="30" step="0.1" value="1" inputmode="decimal" /><span>秒 / 步</span></span></label>
+            <div class="presets" role="group" aria-label="思考时间快捷选择"><button type="button" data-time="0.5">0.5 秒</button><button type="button" data-time="1" aria-pressed="true">1 秒</button><button type="button" data-time="3">3 秒</button><button type="button" data-time="5">5 秒</button></div>
+            <p class="hint">可随时调整，下一步生效。支持 0.1–30 秒。</p>
+            <fieldset class="size-fields"><legend>棋盘尺寸</legend><label for="size"><span class="sr-only">纵向行数</span><input id="size" type="number" min="5" max="32" step="1" value="15" inputmode="numeric" /><span>行</span></label><span class="times" aria-hidden="true">×</span><label for="cols"><span class="sr-only">横向列数</span><input id="cols" type="number" min="5" max="32" step="1" value="15" inputmode="numeric" /><span>列</span></label></fieldset>
+            <p class="hint" id="settings-note">执棋与尺寸在开局后锁定。</p>
+            <details class="disclosure" id="board-options"><summary>自定义禁下区域<span aria-hidden="true">+</span></summary><div class="disclosure-content"><label class="control-row" for="edge"><span>边界禁下</span><select id="edge"><option value="none">无</option><option value="top">上边</option><option value="bottom">下边</option><option value="left">左边</option><option value="right">右边</option><option value="all">四边</option></select></label><label class="toggle"><input id="edit" type="checkbox" />点击棋盘设置禁下点</label><p class="hint">灰色位置不能落子。开局前可点击添加或取消。</p></div></details>
           </section>
-          <section class="card">
-            <h2>看 AI 的判断</h2>
-            <label
-              >棋盘叠加
-              <select id="overlay">
-                <option value="combined">绿色 · 综合推荐</option>
-                <option value="opponent">红色 · 对手下一步</option>
-                <option value="global">绿色 · 大局网络</option>
-                <option value="play">绿色 · 5×5 网络</option>
-                <option value="none">只看棋子</option>
-              </select></label
-            >
-            <div class="scale" id="scale"></div>
-            <p class="hint">
-              25 级色阶，按本图最高偏好缩放。越深越推荐；显示偏好并非校准胜率。
-            </p>
-            <dl>
-              <div>
-                <dt>当前分析耗时</dt>
-                <dd id="elapsed">—</dd>
-              </div>
-              <div>
-                <dt>局部窗口</dt>
-                <dd id="windows">—</dd>
-              </div>
-              <div>
-                <dt>搜索</dt>
-                <dd id="search">—</dd>
-              </div>
-              <div>
-                <dt>大局评估</dt>
-                <dd id="value">—</dd>
-              </div>
-            </dl>
-            <p class="hint">
-              评估值仅展示，暂不参与搜索。当前模型尚未通过 2000 局胜率验收。
-            </p>
+          <section class="card analysis-card" aria-labelledby="analysis-title">
+            <div class="card-heading"><h2 id="analysis-title">落点参考</h2><span class="optional-label">可选</span></div>
+            <label class="sr-only" for="overlay">棋盘分析叠加</label>
+            <select id="overlay" class="full-width"><option value="none">只看棋子</option><option value="combined">显示推荐落点</option><option value="opponent">查看对手威胁</option><option value="global">大局网络偏好</option><option value="play">局部网络偏好</option></select>
+            <div id="heat-key" hidden><div class="scale" id="scale" aria-hidden="true"></div><p class="hint">颜色越深，偏好越高；不代表获胜概率。</p></div>
+            <details class="disclosure" id="analysis-details"><summary>查看分析详情<span aria-hidden="true">+</span></summary><div class="disclosure-content"><p id="analysis-reason" class="hint">开局后显示当前分析。</p><dl><div><dt>分析耗时</dt><dd id="elapsed">—</dd></div><div><dt>局部窗口</dt><dd id="windows">—</dd></div><div><dt>搜索深度 / 节点</dt><dd id="search">—</dd></div><div><dt>网络评估值</dt><dd id="value">—</dd></div></dl><p class="hint">评估值仅供观察，不参与搜索；未完成的验证保持未决。</p></div></details>
           </section>
-          <section class="card compact">
-            <h2>在设备上运行</h2>
-            <p>
-              模型和搜索在当前浏览器内计算。棋局自动保存在本机，可关闭网页后继续。
-            </p>
-            <p id="cache-note">正在准备离线资源。</p>
-            <button id="export" class="secondary">导出棋谱</button>
+          <section class="card project-card" aria-labelledby="project-title">
+            <div class="card-heading"><h2 id="project-title"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>开源与帮助</h2><span class="open-source-label">OPEN SOURCE</span></div>
+            <a class="repo-link" href="https://github.com/732857315/must5src" target="_blank" rel="noopener noreferrer"><span><strong>源码仓库</strong><small>must5src · 开发与训练</small></span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="repo-link" href="https://github.com/732857315/must5" target="_blank" rel="noopener noreferrer"><span><strong>网页仓库</strong><small>must5 · 构建与部署</small></span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <details class="disclosure" id="rules"><summary>玩法与保存<span aria-hidden="true">+</span></summary><div class="disclosure-content"><p>黑棋先行，双方轮流落子。横、竖或斜向连成五子及以上即获胜。双三、双四不算禁手。</p><p>棋局自动保存在当前设备。悔棋会退回到你的上一回合；需要保留棋谱时，使用棋盘上方的导出按钮。</p><p id="cache-note">正在准备离线资源。</p><a href="https://github.com/732857315/must5src/blob/main/README.md" target="_blank" rel="noopener noreferrer">项目说明与使用文档 ↗</a></div></details>
           </section>
         </aside>
       </div>
-      <footer>
-        首次访问完成离线准备后，可断网重新打开此网页。手机首次访问需要 HTTPS
-        地址。
-      </footer>
+      <footer><span><i class="footer-dot" aria-hidden="true"></i>本地计算 · 棋局自动保存</span><span>MUST5 <span class="footer-separator">/</span> 享受每一步思考</span></footer>
     </main>
+    <dialog id="new-game-dialog" aria-labelledby="new-game-title" aria-describedby="new-game-note"><div class="dialog-mark" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></div><h2 id="new-game-title">开始新的一局？</h2><p id="new-game-note">当前棋局会被替换。想保留棋谱，可以先取消并导出。</p><div class="dialog-actions"><button id="cancel-new" type="button" class="secondary" autofocus>继续当前棋局</button><button id="confirm-new" type="button">开始新局</button></div></dialog>
     <script type="module" src="./app.mjs"></script>
   </body>
 </html>
