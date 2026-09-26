@@ -196,6 +196,14 @@ dialog h2 { font-size: 21px; margin: 0 0 10px; }
 dialog p { color: var(--muted); font-size: 13px; margin: 0; line-height: 1.8; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 24px; }
 .dialog-actions button { flex: 1; padding-inline: 8px; font-size: 12px; }
+#result-dialog .dialog-mark { width: 52px; height: 52px; border-radius: 16px; margin-bottom: 20px; }
+#result-dialog .dialog-mark .icon { width: 27px; height: 27px; }
+#result-dialog[data-result="loss"] .dialog-mark { background: #f3e9df; color: #8b6147; }
+#result-dialog[data-result="draw"] .dialog-mark { background: #e8eeee; color: #567374; }
+.result-eyebrow { display: block; margin-bottom: 7px; font-size: 11px; letter-spacing: 2px; color: var(--muted); }
+#result-dialog h2 { font-size: 28px; }
+#result-summary { margin-top: 17px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; }
+#result-dialog .rematch-note { margin-top: 11px; font-size: 11px; text-align: center; }
 @keyframes pulse { 50% { opacity: .4; } }
 @media (hover: hover) {
   button:hover:not(:disabled):not(.cell) { background: #224c39; color: #fff; }

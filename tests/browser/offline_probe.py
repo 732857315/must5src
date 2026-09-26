@@ -355,6 +355,85 @@ def main(argv=None):
             assert not js('window.__errors.length') and all(x['trusted'] for x in js('window.__trusted'))
             check(f'offline_mobile_rectangular_play_and_restore_{rows}x{cols}',{'plies':2,'move':move,'cells':rows*cols,'elapsed_ms':after['analysis']['elapsedMs']})
             screenshot(f'offline-mobile-{rows}x{cols}.png')
+        # Legal near-terminal fixtures exercise real final moves and native
+        # dialogs offline. They are UI checks, not strength-match evidence.
+        def load_endgame(moves,rows=16,cols=16,human=1,forbidden=(),edge='none'):
+            board=[0]*(rows*cols)
+            for point in forbidden:board[point]=3
+            for index,point in enumerate(moves):
+                assert board[point]==0
+                board[point]=1+index%2
+            saved=dict(version=1,n=rows,cols=cols,board=board,history=moves,
+                       human=human,seconds=.5,started=True,edge=edge)
+            js('localStorage.setItem("must5.browser.v1",'+json.dumps(json.dumps(saved))+')')
+            # Clear only the test's read-only accessor so reload cannot match
+            # the previous document's ready flag while navigation is pending.
+            js('delete window.__gomokuSnapshot')
+            cdp('Page.reload');wait('window.__gomokuSnapshot?.().ready&&!__gomokuSnapshot().busy',60)
+            return saved
+        def result_dialog(expected):
+            details=js("""(()=>{const d=document.getElementById('result-dialog'),r=d.getBoundingClientRect();return {open:d.open,result:d.dataset.result,title:document.getElementById('result-title').textContent,summary:document.getElementById('result-summary').textContent,focus:document.activeElement.id,insideViewport:r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight}})()""")
+            assert details['open'] and details['result']==expected and details['insideViewport'],details
+            assert not js('window.__errors.length')
+            return details
+        cdp('Emulation.setDeviceMetricsOverride',{'width':1360,'height':1000,'deviceScaleFactor':1,'mobile':False})
+        load_endgame([136,0,137,2,138,4,139,6])
+        js('document.querySelector(\'[data-point="140"]\').focus()')
+        cdp('Input.dispatchKeyEvent',{'type':'keyDown','key':'Enter','code':'Enter',
+            'windowsVirtualKeyCode':13,'text':'\r','unmodifiedText':'\r'})
+        cdp('Input.dispatchKeyEvent',{'type':'keyUp','key':'Enter','code':'Enter','windowsVirtualKeyCode':13})
+        win=result_dialog('win');assert win['title']=='你赢了！' and win['focus']=='view-board'
+        assert js('__gomokuSnapshot().history.length')==9
+        screenshot('result-win-desktop.png',viewport=True)
+        check('endgame_human_win_keyboard_and_modal_focus',win)
+        final=js('JSON.parse(localStorage.getItem("must5.browser.v1"))')
+        click('#view-board');click('#zoom');click('#zoom')
+        assert not js('document.getElementById("result-dialog").open')
+        assert js('JSON.parse(localStorage.getItem("must5.browser.v1"))')==final
+        check('endgame_view_board_preserves_final_game_without_repeated_dialog',True)
+        cdp('Emulation.setDeviceMetricsOverride',{'width':320,'height':740,'deviceScaleFactor':2,'mobile':True})
+        blocked=[*range(17),133]
+        load_endgame([17,87,34,88,51,89,68,90,102],rows=8,cols=17,human=2,forbidden=blocked,edge='top')
+        click('[data-point="91"]',True)
+        win=result_dialog('win');assert '你执白棋' in win['summary']
+        screenshot('result-win-mobile.png',viewport=True)
+        click('#play-again',True);wait('__gomokuSnapshot().history.length===1&&!__gomokuSnapshot().busy',60)
+        replay=js('__gomokuSnapshot()')
+        assert replay['started'] and (replay['n'],replay['cols'],replay['human'],replay['seconds'])==(8,17,2,.5)
+        assert [p for p,value in enumerate(replay['board']) if value==3]==blocked
+        assert replay['board'][replay['history'][0]]==1
+        assert js('JSON.parse(localStorage.getItem("must5.browser.v1")).edge')=='top'
+        assert not js('document.getElementById("result-dialog").open')
+        check('endgame_mobile_white_win_and_rematch_preserve_settings_start_ai',{'result':win,'plies':len(replay['history'])})
+        cdp('Emulation.setDeviceMetricsOverride',{'width':390,'height':844,'deviceScaleFactor':2,'mobile':True})
+        load_endgame([136,0,137,2,138,4,139,6],human=2)
+        loss=result_dialog('loss');assert loss['title']=='AI 获胜'
+        assert '本局你输了' in js('document.getElementById("result-note").textContent')
+        state=js('__gomokuSnapshot()');assert len(state['history'])==9 and (state['board'][135]==1 or state['board'][140]==1)
+        screenshot('result-loss-mobile.png',viewport=True)
+        check('endgame_real_ai_win_notifies_human_loss',loss)
+        load_endgame([0,2,1,3,4,5,7,6,8,9,10,12,11,13,14,15,17,16,18,19,20,22,21,23],rows=5,cols=5)
+        click('[data-point="24"]',True)
+        draw=result_dialog('draw');assert draw['title']=='本局和棋'
+        final=js('JSON.parse(localStorage.getItem("must5.browser.v1"))')
+        assert len(final['history'])==25 and 0 not in final['board']
+        screenshot('result-draw-mobile.png',viewport=True)
+        for kind in ('keyDown','keyUp'):
+            cdp('Input.dispatchKeyEvent',{'type':kind,'key':'Escape','code':'Escape','windowsVirtualKeyCode':27})
+        click('#zoom')
+        assert not js('document.getElementById("result-dialog").open')
+        assert js('JSON.parse(localStorage.getItem("must5.browser.v1"))')==final
+        js('delete window.__gomokuSnapshot')
+        cdp('Page.reload');wait('window.__gomokuSnapshot?.().ready&&!__gomokuSnapshot().busy',60)
+        result_dialog('draw')
+        assert js('JSON.parse(localStorage.getItem("must5.browser.v1"))')==final
+        check('endgame_draw_escape_and_offline_restore',draw)
+        click('#play-again',True);wait('!__gomokuSnapshot().busy',60)
+        assert js('__gomokuSnapshot().started&&!__gomokuSnapshot().history.length')
+        click('[data-point="12"]',True)
+        wait('__gomokuSnapshot().history.length===2&&!__gomokuSnapshot().busy',60)
+        assert not js('window.__errors.length') and all(x['trusted'] for x in js('window.__trusted'))
+        check('endgame_black_rematch_immediately_playable',{'plies':2})
         report['passed']=True
     except BaseException as exc:
         report['error']=str(exc)

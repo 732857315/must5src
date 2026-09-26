@@ -17,7 +17,8 @@ let board = new Uint8Array(225),
   zoom = false,
   storageError = null,
   pendingCommit = null,
-  deferredResult = null;
+  deferredResult = null,
+  resultAnnounced = false;
 let boardView = { rows: 0, cols: 0, cells: [], stars: new Map() },
   scaleIsRed,
   focusPoint = 112;
@@ -188,6 +189,32 @@ function turn() {
 function terminal() {
   return facts(board, boardSize(), turn()).winner || (!board.includes(0) ? 3 : 0);
 }
+function showResult(outcome, blocked) {
+  const dialog = $("result-dialog");
+  $("play-again").disabled = !ready || blocked;
+  if (!started || !history.length || !outcome) {
+    resultAnnounced = false;
+    if (dialog.open) dialog.close();
+    return;
+  }
+  // Only committed positions reach this point. Dismissal survives redraws,
+  // settings changes and late Worker replies until play resumes.
+  if (blocked || resultAnnounced) return;
+  const result = outcome === 3 ? "draw" : outcome === human ? "win" : "loss",
+    color = outcome === 1 ? "黑棋" : "白棋";
+  dialog.dataset.result = result;
+  $("result-title").textContent = { win: "你赢了！", loss: "AI 获胜", draw: "本局和棋" }[result];
+  $("result-note").textContent = {
+    win: `你的${color}连成五子，拿下这一局。`,
+    loss: `AI 的${color}连成五子，本局你输了。再挑战一次吧。`,
+    draw: "棋盘已满，双方都未连成五子。再来一局分出胜负吧。",
+  }[result];
+  $("result-summary").textContent = `${n} × ${cols} 棋盘 · 共 ${history.length} 手 · 你执${human === 1 ? "黑棋" : "白棋"}`;
+  $("result-icon").setAttribute("href", { win: "#i-trophy", loss: "#i-info", draw: "#i-draw" }[result]);
+  if ($("new-game-dialog").open) $("new-game-dialog").close();
+  dialog.showModal();
+  resultAnnounced = true;
+}
 function draw() {
   const outcome = terminal(),
     blocked = storageBlocked();
@@ -329,6 +356,7 @@ function draw() {
     for (const id of ["elapsed", "windows", "search", "value"])
       $(id).textContent = "—";
   }
+  showResult(outcome, blocked);
 }
 function focusCell(point, moveFocus = false) {
   focusPoint = point;
@@ -557,6 +585,23 @@ $("cancel-new").onclick = () => $("new-game-dialog").close();
 $("confirm-new").onclick = () => {
   $("new-game-dialog").close();
   if (!storageBlocked()) setup(true);
+};
+$("view-board").onclick = () => {
+  $("result-dialog").close();
+  focusCell(history.at(-1) ?? focusPoint, true);
+};
+$("play-again").onclick = () => {
+  if (!ready || storageBlocked() || !started || !terminal()) return;
+  $("result-dialog").close();
+  commitRecord(
+    savedRecord({ board: Array.from(board, value => value === 3 ? 3 : 0), history: [], started: true }),
+    "rematch",
+    () => {
+      $("edit").checked = false;
+      focusCell(Math.floor(n / 2) * cols + Math.floor(cols / 2), true);
+      think();
+    },
+  );
 };
 $("rules-link").onclick = (event) => {
   event.preventDefault();

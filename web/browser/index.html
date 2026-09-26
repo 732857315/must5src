@@ -19,6 +19,8 @@
       <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
       <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></symbol>
       <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v.5"/></symbol>
+      <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 3h10v6a5 5 0 0 1-10 0V3Zm0 2H3v3a4 4 0 0 0 4 4m10-7h4v3a4 4 0 0 1-4 4m-5 2v6m-4 1h8"/></symbol>
+      <symbol id="i-draw" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 9h8M8 15h8"/></symbol>
     </svg>
     <a class="skip-link" href="#game">跳到棋盘</a>
     <main class="app-shell">
@@ -98,6 +100,15 @@
       <footer><span><i class="footer-dot" aria-hidden="true"></i>本地计算 · 棋局自动保存</span><span>MUST5 <span class="footer-separator">/</span> 享受每一步思考</span></footer>
     </main>
     <dialog id="new-game-dialog" aria-labelledby="new-game-title" aria-describedby="new-game-note"><div class="dialog-mark" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></div><h2 id="new-game-title">开始新的一局？</h2><p id="new-game-note">当前棋局会被替换。想保留棋谱，可以先取消并导出。</p><div class="dialog-actions"><button id="cancel-new" type="button" class="secondary" autofocus>继续当前棋局</button><button id="confirm-new" type="button">开始新局</button></div></dialog>
+    <dialog id="result-dialog" aria-labelledby="result-title" aria-describedby="result-note result-summary">
+      <div class="dialog-mark" aria-hidden="true"><svg class="icon"><use id="result-icon" href="#i-trophy"/></svg></div>
+      <span class="result-eyebrow">对局结束</span>
+      <h2 id="result-title"></h2>
+      <p id="result-note"></p>
+      <p id="result-summary"></p>
+      <div class="dialog-actions"><button id="view-board" type="button" class="secondary" autofocus>查看棋盘</button><button id="play-again" type="button">再来一局</button></div>
+      <p class="rematch-note">再来一局将沿用本局设置。</p>
+    </dialog>
     <script type="module" src="./app.mjs"></script>
   </body>
 </html>

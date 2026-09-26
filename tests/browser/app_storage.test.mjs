@@ -23,11 +23,13 @@ class Element {
     this.children = [];
     this.textContent = "";
     this.disabled = false;
+    this.open = false;
+    this.showCount = 0;
   }
   setAttribute(name, value) { this.attributes[name] = String(value); }
   append(e) { this.children.push(e); }
   replaceChildren(...children) { this.children = children; }
-  showModal() { this.open = true; }
+  showModal() { this.open = true; this.showCount++; }
   close() { this.open = false; }
   focus() { this.onfocus?.(); }
   closest() { return this.dataset.point === undefined ? null : this; }
@@ -183,12 +185,15 @@ test("a terminal human move is neither shown nor countable before storage succee
   h.click(140);
   assert.equal(facts(h.snapshot().board, 16, 1).winner, 0);
   assert.equal(h.snapshot().history.length, 8);
+  assert.equal(h.get("result-dialog").open, false);
   assert.equal(h.snapshot().storageBlocked, true);
   assert.equal(h.worker.jobs.length, 1);
   h.backend.fail = null;
   h.retry();
   assert.equal(facts(h.snapshot().board, 16, 1).winner, 1);
   assert.equal(h.snapshot().history.length, 9);
+  assert.equal(h.get("result-dialog").open, true);
+  assert.equal(h.get("result-title").textContent, "你赢了！");
   assert.equal(h.backend.saved().history.length, 9);
   assert.equal(h.snapshot().storageBlocked, false);
   assert.equal(h.worker.jobs.length, 1);
@@ -203,15 +208,128 @@ test("a terminal AI move is published once after retry with no extra search", ()
   assert.equal(facts(h.snapshot().board, 16, 2).winner, 0);
   assert.equal(h.snapshot().history.length, 9);
   assert.equal(h.snapshot().pendingCommit.move, 140);
+  assert.equal(h.get("result-dialog").open, false);
   h.backend.fail = null;
   h.retry();
   assert.equal(facts(h.snapshot().board, 16, 2).winner, 2);
   assert.equal(h.snapshot().history.length, 10);
   assert.equal(h.backend.saved().history.length, 10);
+  assert.equal(h.get("result-dialog").open, true);
+  assert.equal(h.get("result-title").textContent, "AI 获胜");
+  assert.match(h.get("result-note").textContent, /本局你输了/);
   assert.equal(h.worker.jobs.length, 1);
   h.retry();
   assert.equal(h.snapshot().history.length, 10);
   assert.equal(h.worker.jobs.length, 1);
+});
+
+test("result messages follow the human's color when playing white", () => {
+  const win = readyHuman(storage(record([0, 136, 32, 137, 64, 138, 96, 139, 16], { human: 2 })));
+  win.click(140);
+  assert.equal(win.get("result-title").textContent, "你赢了！");
+  assert.match(win.get("result-note").textContent, /你的白棋/);
+  const loss = app(storage(record([136, 0, 137, 2, 138, 4, 139, 6], { human: 2 })));
+  loss.ready(); loss.send(140);
+  assert.equal(loss.get("result-title").textContent, "AI 获胜");
+  assert.match(loss.get("result-note").textContent, /AI 的黑棋/);
+});
+
+test("the last legal cell announces a draw, including after a cold restore", () => {
+  const moves = [0, 2, 1, 3, 4, 5, 7, 6, 8, 9, 10, 12, 11, 13, 14, 15, 17, 16, 18, 19, 20, 22, 21, 23];
+  const h = readyHuman(storage(record(moves, { n: 5 })));
+  h.click(24);
+  assert.equal(facts(h.snapshot().board, 5, 1).winner, 0);
+  assert.equal(h.snapshot().board.includes(0), false);
+  assert.equal(h.get("result-dialog").open, true);
+  assert.equal(h.get("result-dialog").dataset.result, "draw");
+  assert.equal(h.get("result-title").textContent, "本局和棋");
+  assert.match(h.get("result-summary").textContent, /共 25 手/);
+  const restored = app(storage(h.backend.saved()));
+  assert.equal(restored.get("result-dialog").open, true);
+  assert.equal(restored.get("play-again").disabled, true);
+  restored.ready();
+  assert.equal(restored.get("play-again").disabled, false);
+  assert.equal(restored.get("result-dialog").showCount, 1);
+  assert.equal(restored.worker.jobs.length, 0);
+});
+
+test("dismissed results stay dismissed across redraws, but undo permits another result", () => {
+  const h = readyHuman(storage(record([136, 0, 137, 2, 138, 4, 139, 6])));
+  h.click(140);
+  h.get("view-board").onclick();
+  const final = h.backend.saved();
+  assert.equal(h.get("board").children[140].tabIndex, 0);
+  h.get("overlay").onchange();
+  h.presets[2].onclick();
+  h.send(119, 0); // An old hint must not reopen the result or start a search.
+  assert.equal(h.get("result-dialog").open, false);
+  assert.equal(h.get("result-dialog").showCount, 1);
+  assert.deepEqual(h.backend.saved().board, final.board);
+  assert.deepEqual(h.backend.saved().history, final.history);
+  assert.equal(h.worker.jobs.length, 1);
+  h.get("undo").onclick(); h.send(140); h.click(140);
+  assert.equal(h.get("result-dialog").showCount, 2);
+  h.get("result-dialog").close(); // Native Escape closes without a button handler.
+  h.get("zoom").onclick();
+  assert.equal(h.get("result-dialog").open, false);
+  assert.equal(h.get("result-dialog").showCount, 2);
+});
+
+test("rematch preserves rectangular settings and custom forbidden cells and starts AI once", () => {
+  const saved = record([17, 87, 34, 88, 51, 89, 68, 90, 102, 91],
+    { n: 8, cols: 17, human: 2, seconds: 3, edge: "top" });
+  saved.board.fill(3, 0, 17); saved.board[133] = 3;
+  const h = app(storage(saved));
+  assert.equal(h.get("result-title").textContent, "你赢了！");
+  h.ready();
+  h.get("play-again").onclick();
+  const fresh = h.backend.saved();
+  assert.deepEqual([fresh.n, fresh.cols, fresh.human, fresh.seconds, fresh.edge], [8, 17, 2, 3, "top"]);
+  assert.deepEqual(fresh.board, saved.board.map(value => value === 3 ? 3 : 0));
+  assert.deepEqual(fresh.history, []);
+  assert.equal(fresh.started, true);
+  assert.equal(h.get("result-dialog").open, false);
+  assert.equal(h.worker.jobs.length, 1);
+  assert.equal(h.worker.jobs[0].side, 1);
+  h.get("play-again").onclick(); // A repeated click cannot reset the new game.
+  assert.equal(h.worker.jobs.length, 1);
+  h.send(70);
+  assert.deepEqual(h.backend.saved().history, [70]);
+  assert.equal(h.snapshot().board[70], 1);
+});
+
+test("failed rematch preserves the terminal game and retries once despite a held old hint", () => {
+  const h = app(storage(record([136, 0, 137, 2, 138, 4, 139, 6])));
+  h.ready(); h.click(140); // Finish before the optional hint returns.
+  const final = h.backend.saved();
+  h.backend.fail = "before";
+  h.get("play-again").onclick();
+  assert.equal(h.snapshot().pendingCommit.kind, "rematch");
+  assert.deepEqual(h.backend.saved(), final);
+  assert.deepEqual(h.snapshot().board, final.board);
+  assert.equal(h.get("result-dialog").open, false);
+  assert.equal(h.get("retry-save").hidden, false);
+  h.send(119);
+  assert.equal(h.worker.jobs.length, 1);
+  h.backend.fail = null; h.retry();
+  assert.equal(h.backend.attempts.at(-1).text, h.backend.attempts.at(-2).text);
+  assert.deepEqual(h.backend.saved().history, []);
+  assert.equal(h.snapshot().board.every(value => value === 0), true);
+  assert.equal(h.snapshot().started, true);
+  assert.equal(h.get("result-dialog").open, false);
+  assert.equal(h.worker.jobs.length, 2);
+  h.retry();
+  assert.equal(h.worker.jobs.length, 2);
+});
+
+test("a finishing AI move replaces an open new-game prompt with one result dialog", () => {
+  const h = app(storage(record([0, 136, 32, 137, 64, 138, 96, 139, 16])));
+  h.ready(); h.get("new").onclick();
+  assert.equal(h.get("new-game-dialog").open, true);
+  h.send(140);
+  assert.equal(h.get("new-game-dialog").open, false);
+  assert.equal(h.get("result-dialog").open, true);
+  assert.equal(h.get("result-dialog").showCount, 1);
 });
 
 test("an uncertain write acknowledgement retries identical data and publishes once", () => {
